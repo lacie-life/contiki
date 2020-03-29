@@ -1,0 +1,2438 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module frame802154
+                                      6 	.optsdcc -mmcs51 --model-huge
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _rimeaddr_copy
+                                     12 	.globl ___memcpy
+                                     13 	.globl _memset
+                                     14 	.globl _frame802154_hdrlen
+                                     15 	.globl _frame802154_create
+                                     16 	.globl _frame802154_parse
+                                     17 ;--------------------------------------------------------
+                                     18 ; special function registers
+                                     19 ;--------------------------------------------------------
+                                     20 	.area RSEG    (ABS,DATA)
+      000000                         21 	.org 0x0000
+                                     22 ;--------------------------------------------------------
+                                     23 ; special function bits
+                                     24 ;--------------------------------------------------------
+                                     25 	.area RSEG    (ABS,DATA)
+      000000                         26 	.org 0x0000
+                                     27 ;--------------------------------------------------------
+                                     28 ; overlayable register banks
+                                     29 ;--------------------------------------------------------
+                                     30 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                         31 	.ds 8
+                                     32 ;--------------------------------------------------------
+                                     33 ; internal ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area DSEG    (DATA)
+                                     36 ;--------------------------------------------------------
+                                     37 ; overlayable items in internal ram 
+                                     38 ;--------------------------------------------------------
+                                     39 ;--------------------------------------------------------
+                                     40 ; indirectly addressable internal ram data
+                                     41 ;--------------------------------------------------------
+                                     42 	.area ISEG    (DATA)
+                                     43 ;--------------------------------------------------------
+                                     44 ; absolute internal ram data
+                                     45 ;--------------------------------------------------------
+                                     46 	.area IABS    (ABS,DATA)
+                                     47 	.area IABS    (ABS,DATA)
+                                     48 ;--------------------------------------------------------
+                                     49 ; bit data
+                                     50 ;--------------------------------------------------------
+                                     51 	.area BSEG    (BIT)
+                                     52 ;--------------------------------------------------------
+                                     53 ; paged external ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area PSEG    (PAG,XDATA)
+                                     56 ;--------------------------------------------------------
+                                     57 ; external ram data
+                                     58 ;--------------------------------------------------------
+                                     59 	.area XSEG    (XDATA)
+      000000                         60 _flen:
+      000000                         61 	.ds 5
+      000005                         62 _fcf:
+      000005                         63 	.ds 8
+                                     64 ;--------------------------------------------------------
+                                     65 ; absolute external ram data
+                                     66 ;--------------------------------------------------------
+                                     67 	.area XABS    (ABS,XDATA)
+                                     68 ;--------------------------------------------------------
+                                     69 ; external initialized ram data
+                                     70 ;--------------------------------------------------------
+                                     71 	.area XISEG   (XDATA)
+                                     72 	.area HOME    (CODE)
+                                     73 	.area GSINIT0 (CODE)
+                                     74 	.area GSINIT1 (CODE)
+                                     75 	.area GSINIT2 (CODE)
+                                     76 	.area GSINIT3 (CODE)
+                                     77 	.area GSINIT4 (CODE)
+                                     78 	.area GSINIT5 (CODE)
+                                     79 	.area GSINIT  (CODE)
+                                     80 	.area GSFINAL (CODE)
+                                     81 	.area CSEG    (CODE)
+                                     82 ;--------------------------------------------------------
+                                     83 ; global & static initialisations
+                                     84 ;--------------------------------------------------------
+                                     85 	.area HOME    (CODE)
+                                     86 	.area GSINIT  (CODE)
+                                     87 	.area GSFINAL (CODE)
+                                     88 	.area GSINIT  (CODE)
+                                     89 ;--------------------------------------------------------
+                                     90 ; Home
+                                     91 ;--------------------------------------------------------
+                                     92 	.area HOME    (CODE)
+                                     93 	.area HOME    (CODE)
+                                     94 ;--------------------------------------------------------
+                                     95 ; code
+                                     96 ;--------------------------------------------------------
+                                     97 	.area BANK1   (CODE)
+                                     98 ;------------------------------------------------------------
+                                     99 ;Allocation info for local variables in function 'addr_len'
+                                    100 ;------------------------------------------------------------
+                                    101 ;mode                      Allocated to registers r7 
+                                    102 ;------------------------------------------------------------
+                                    103 ;	../../../core/net/mac/frame802154.c:84: addr_len(uint8_t mode)
+                                    104 ;	-----------------------------------------
+                                    105 ;	 function addr_len
+                                    106 ;	-----------------------------------------
+      000000                        107 _addr_len:
+                           000007   108 	ar7 = 0x07
+                           000006   109 	ar6 = 0x06
+                           000005   110 	ar5 = 0x05
+                           000004   111 	ar4 = 0x04
+                           000003   112 	ar3 = 0x03
+                           000002   113 	ar2 = 0x02
+                           000001   114 	ar1 = 0x01
+                           000000   115 	ar0 = 0x00
+      000000 AF 82            [24]  116 	mov	r7,dpl
+                                    117 ;	../../../core/net/mac/frame802154.c:86: switch(mode) {
+      000002 BF 02 02         [24]  118 	cjne	r7,#0x02,00115$
+      000005 80 05            [24]  119 	sjmp	00101$
+      000007                        120 00115$:
+                                    121 ;	../../../core/net/mac/frame802154.c:87: case FRAME802154_SHORTADDRMODE:  /* 16-bit address */
+      000007 BF 03 0C         [24]  122 	cjne	r7,#0x03,00103$
+      00000A 80 05            [24]  123 	sjmp	00102$
+      00000C                        124 00101$:
+                                    125 ;	../../../core/net/mac/frame802154.c:88: return 2;
+      00000C 75 82 02         [24]  126 	mov	dpl,#0x02
+                                    127 ;	../../../core/net/mac/frame802154.c:89: case FRAME802154_LONGADDRMODE:   /* 64-bit address */
+      00000F 80 08            [24]  128 	sjmp	00105$
+      000011                        129 00102$:
+                                    130 ;	../../../core/net/mac/frame802154.c:90: return 8;
+      000011 75 82 08         [24]  131 	mov	dpl,#0x08
+                                    132 ;	../../../core/net/mac/frame802154.c:91: default:
+      000014 80 03            [24]  133 	sjmp	00105$
+      000016                        134 00103$:
+                                    135 ;	../../../core/net/mac/frame802154.c:92: return 0;
+      000016 75 82 00         [24]  136 	mov	dpl,#0x00
+                                    137 ;	../../../core/net/mac/frame802154.c:93: }
+      000019                        138 00105$:
+                                    139 ;	../../../core/net/mac/frame802154.c:94: }
+      000019 02r00r00         [24]  140 	ljmp	__sdcc_banked_ret
+                                    141 ;------------------------------------------------------------
+                                    142 ;Allocation info for local variables in function 'field_len'
+                                    143 ;------------------------------------------------------------
+                                    144 ;flen                      Allocated to stack - sp -16
+                                    145 ;p                         Allocated to stack - sp -10
+                                    146 ;sloc0                     Allocated to stack - sp -7
+                                    147 ;sloc1                     Allocated to stack - sp -5
+                                    148 ;sloc2                     Allocated to stack - sp -2
+                                    149 ;------------------------------------------------------------
+                                    150 ;	../../../core/net/mac/frame802154.c:97: field_len(frame802154_t *p, field_length_t *flen)
+                                    151 ;	-----------------------------------------
+                                    152 ;	 function field_len
+                                    153 ;	-----------------------------------------
+      00001C                        154 _field_len:
+      00001C C0 82            [24]  155 	push	dpl
+      00001E C0 83            [24]  156 	push	dph
+      000020 C0 F0            [24]  157 	push	b
+      000022 E5 81            [12]  158 	mov	a,sp
+      000024 24 08            [12]  159 	add	a,#0x08
+                                    160 ;	../../../core/net/mac/frame802154.c:100: memset(flen, 0, sizeof(field_length_t));
+      000026 F5 81            [12]  161 	mov	sp,a
+      000028 24 F0            [12]  162 	add	a,#0xf0
+      00002A F8               [12]  163 	mov	r0,a
+      00002B 86 02            [24]  164 	mov	ar2,@r0
+      00002D 08               [12]  165 	inc	r0
+      00002E 86 03            [24]  166 	mov	ar3,@r0
+      000030 08               [12]  167 	inc	r0
+      000031 86 04            [24]  168 	mov	ar4,@r0
+      000033 74 05            [12]  169 	mov	a,#0x05
+      000035 C0 E0            [24]  170 	push	acc
+      000037 E4               [12]  171 	clr	a
+      000038 C0 E0            [24]  172 	push	acc
+      00003A C0 E0            [24]  173 	push	acc
+      00003C 8A 82            [24]  174 	mov	dpl,r2
+      00003E 8B 83            [24]  175 	mov	dph,r3
+      000040 8C F0            [24]  176 	mov	b,r4
+      000042 78r00            [12]  177 	mov	r0,#_memset
+      000044 79s00            [12]  178 	mov	r1,#(_memset >> 8)
+      000046 7As00            [12]  179 	mov	r2,#(_memset >> 16)
+      000048 12r00r00         [24]  180 	lcall	__sdcc_banked_call
+      00004B 15 81            [12]  181 	dec	sp
+      00004D 15 81            [12]  182 	dec	sp
+      00004F 15 81            [12]  183 	dec	sp
+                                    184 ;	../../../core/net/mac/frame802154.c:103: if(p->fcf.dest_addr_mode & 3) {
+      000051 E5 81            [12]  185 	mov	a,sp
+      000053 24 F6            [12]  186 	add	a,#0xf6
+      000055 F8               [12]  187 	mov	r0,a
+      000056 74 05            [12]  188 	mov	a,#0x05
+      000058 26               [12]  189 	add	a,@r0
+      000059 FA               [12]  190 	mov	r2,a
+      00005A E4               [12]  191 	clr	a
+      00005B 08               [12]  192 	inc	r0
+      00005C 36               [12]  193 	addc	a,@r0
+      00005D FB               [12]  194 	mov	r3,a
+      00005E 08               [12]  195 	inc	r0
+      00005F 86 04            [24]  196 	mov	ar4,@r0
+      000061 8A 82            [24]  197 	mov	dpl,r2
+      000063 8B 83            [24]  198 	mov	dph,r3
+      000065 8C F0            [24]  199 	mov	b,r4
+      000067 12r00r00         [24]  200 	lcall	__gptrget
+      00006A FF               [12]  201 	mov	r7,a
+      00006B 54 03            [12]  202 	anl	a,#0x03
+      00006D 60 18            [24]  203 	jz	00102$
+                                    204 ;	../../../core/net/mac/frame802154.c:104: flen->dest_pid_len = 2;
+      00006F E5 81            [12]  205 	mov	a,sp
+      000071 24 F0            [12]  206 	add	a,#0xf0
+      000073 F8               [12]  207 	mov	r0,a
+      000074 86 05            [24]  208 	mov	ar5,@r0
+      000076 08               [12]  209 	inc	r0
+      000077 86 06            [24]  210 	mov	ar6,@r0
+      000079 08               [12]  211 	inc	r0
+      00007A 86 07            [24]  212 	mov	ar7,@r0
+      00007C 8D 82            [24]  213 	mov	dpl,r5
+      00007E 8E 83            [24]  214 	mov	dph,r6
+      000080 8F F0            [24]  215 	mov	b,r7
+      000082 74 02            [12]  216 	mov	a,#0x02
+      000084 12r00r00         [24]  217 	lcall	__gptrput
+      000087                        218 00102$:
+                                    219 ;	../../../core/net/mac/frame802154.c:106: if(p->fcf.src_addr_mode & 3) {
+      000087 C0 02            [24]  220 	push	ar2
+      000089 C0 03            [24]  221 	push	ar3
+      00008B C0 04            [24]  222 	push	ar4
+      00008D E5 81            [12]  223 	mov	a,sp
+      00008F 24 F3            [12]  224 	add	a,#0xf3
+      000091 F8               [12]  225 	mov	r0,a
+      000092 E5 81            [12]  226 	mov	a,sp
+      000094 24 F8            [12]  227 	add	a,#0xf8
+      000096 F9               [12]  228 	mov	r1,a
+      000097 74 07            [12]  229 	mov	a,#0x07
+      000099 26               [12]  230 	add	a,@r0
+      00009A F7               [12]  231 	mov	@r1,a
+      00009B E4               [12]  232 	clr	a
+      00009C 08               [12]  233 	inc	r0
+      00009D 36               [12]  234 	addc	a,@r0
+      00009E 09               [12]  235 	inc	r1
+      00009F F7               [12]  236 	mov	@r1,a
+      0000A0 08               [12]  237 	inc	r0
+      0000A1 09               [12]  238 	inc	r1
+      0000A2 E6               [12]  239 	mov	a,@r0
+      0000A3 F7               [12]  240 	mov	@r1,a
+      0000A4 E5 81            [12]  241 	mov	a,sp
+      0000A6 24 F8            [12]  242 	add	a,#0xf8
+      0000A8 F8               [12]  243 	mov	r0,a
+      0000A9 86 82            [24]  244 	mov	dpl,@r0
+      0000AB 08               [12]  245 	inc	r0
+      0000AC 86 83            [24]  246 	mov	dph,@r0
+      0000AE 08               [12]  247 	inc	r0
+      0000AF 86 F0            [24]  248 	mov	b,@r0
+      0000B1 12r00r00         [24]  249 	lcall	__gptrget
+      0000B4 54 03            [12]  250 	anl	a,#0x03
+      0000B6 70 08            [24]  251 	jnz	00133$
+      0000B8 D0 04            [24]  252 	pop	ar4
+      0000BA D0 03            [24]  253 	pop	ar3
+      0000BC D0 02            [24]  254 	pop	ar2
+      0000BE 80 25            [24]  255 	sjmp	00104$
+      0000C0                        256 00133$:
+      0000C0 D0 04            [24]  257 	pop	ar4
+      0000C2 D0 03            [24]  258 	pop	ar3
+      0000C4 D0 02            [24]  259 	pop	ar2
+                                    260 ;	../../../core/net/mac/frame802154.c:107: flen->src_pid_len = 2;
+      0000C6 E5 81            [12]  261 	mov	a,sp
+      0000C8 24 F0            [12]  262 	add	a,#0xf0
+      0000CA F8               [12]  263 	mov	r0,a
+      0000CB 86 05            [24]  264 	mov	ar5,@r0
+      0000CD 08               [12]  265 	inc	r0
+      0000CE 86 06            [24]  266 	mov	ar6,@r0
+      0000D0 08               [12]  267 	inc	r0
+      0000D1 86 07            [24]  268 	mov	ar7,@r0
+      0000D3 74 02            [12]  269 	mov	a,#0x02
+      0000D5 2D               [12]  270 	add	a,r5
+      0000D6 FD               [12]  271 	mov	r5,a
+      0000D7 E4               [12]  272 	clr	a
+      0000D8 3E               [12]  273 	addc	a,r6
+      0000D9 FE               [12]  274 	mov	r6,a
+      0000DA 8D 82            [24]  275 	mov	dpl,r5
+      0000DC 8E 83            [24]  276 	mov	dph,r6
+      0000DE 8F F0            [24]  277 	mov	b,r7
+      0000E0 74 02            [12]  278 	mov	a,#0x02
+      0000E2 12r00r00         [24]  279 	lcall	__gptrput
+                                    280 ;	../../../core/net/mac/frame802154.c:126: if(p->fcf.security_enabled & 1) {
+                                    281 ;	../../../core/net/mac/frame802154.c:107: flen->src_pid_len = 2;
+      0000E5                        282 00104$:
+                                    283 ;	../../../core/net/mac/frame802154.c:111: if(p->fcf.dest_addr_mode & 3 && p->fcf.src_addr_mode & 3 &&
+      0000E5 8A 82            [24]  284 	mov	dpl,r2
+      0000E7 8B 83            [24]  285 	mov	dph,r3
+      0000E9 8C F0            [24]  286 	mov	b,r4
+      0000EB 12r00r00         [24]  287 	lcall	__gptrget
+      0000EE FF               [12]  288 	mov	r7,a
+      0000EF 54 03            [12]  289 	anl	a,#0x03
+      0000F1 70 03            [24]  290 	jnz	00134$
+      0000F3 02r01rB0         [24]  291 	ljmp	00106$
+      0000F6                        292 00134$:
+      0000F6 C0 02            [24]  293 	push	ar2
+      0000F8 C0 03            [24]  294 	push	ar3
+      0000FA C0 04            [24]  295 	push	ar4
+      0000FC E5 81            [12]  296 	mov	a,sp
+      0000FE 24 F8            [12]  297 	add	a,#0xf8
+      000100 F8               [12]  298 	mov	r0,a
+      000101 86 82            [24]  299 	mov	dpl,@r0
+      000103 08               [12]  300 	inc	r0
+      000104 86 83            [24]  301 	mov	dph,@r0
+      000106 08               [12]  302 	inc	r0
+      000107 86 F0            [24]  303 	mov	b,@r0
+      000109 12r00r00         [24]  304 	lcall	__gptrget
+      00010C 54 03            [12]  305 	anl	a,#0x03
+      00010E 70 09            [24]  306 	jnz	00135$
+      000110 D0 04            [24]  307 	pop	ar4
+      000112 D0 03            [24]  308 	pop	ar3
+      000114 D0 02            [24]  309 	pop	ar2
+      000116 02r01rB0         [24]  310 	ljmp	00106$
+      000119                        311 00135$:
+      000119 D0 04            [24]  312 	pop	ar4
+      00011B D0 03            [24]  313 	pop	ar3
+      00011D D0 02            [24]  314 	pop	ar2
+                                    315 ;	../../../core/net/mac/frame802154.c:112: p->src_pid == p->dest_pid) {
+      00011F E5 81            [12]  316 	mov	a,sp
+      000121 24 F6            [12]  317 	add	a,#0xf6
+      000123 F8               [12]  318 	mov	r0,a
+      000124 74 13            [12]  319 	mov	a,#0x13
+      000126 26               [12]  320 	add	a,@r0
+      000127 FD               [12]  321 	mov	r5,a
+      000128 E4               [12]  322 	clr	a
+      000129 08               [12]  323 	inc	r0
+      00012A 36               [12]  324 	addc	a,@r0
+      00012B FE               [12]  325 	mov	r6,a
+      00012C 08               [12]  326 	inc	r0
+      00012D 86 07            [24]  327 	mov	ar7,@r0
+      00012F 8D 82            [24]  328 	mov	dpl,r5
+      000131 8E 83            [24]  329 	mov	dph,r6
+      000133 8F F0            [24]  330 	mov	b,r7
+      000135 E5 81            [12]  331 	mov	a,sp
+      000137 24 F9            [12]  332 	add	a,#0xf9
+      000139 F8               [12]  333 	mov	r0,a
+      00013A 12r00r00         [24]  334 	lcall	__gptrget
+      00013D F6               [12]  335 	mov	@r0,a
+      00013E A3               [24]  336 	inc	dptr
+      00013F 12r00r00         [24]  337 	lcall	__gptrget
+      000142 08               [12]  338 	inc	r0
+      000143 F6               [12]  339 	mov	@r0,a
+      000144 E5 81            [12]  340 	mov	a,sp
+      000146 24 F6            [12]  341 	add	a,#0xf6
+      000148 F8               [12]  342 	mov	r0,a
+      000149 74 09            [12]  343 	mov	a,#0x09
+      00014B 26               [12]  344 	add	a,@r0
+      00014C FD               [12]  345 	mov	r5,a
+      00014D E4               [12]  346 	clr	a
+      00014E 08               [12]  347 	inc	r0
+      00014F 36               [12]  348 	addc	a,@r0
+      000150 FE               [12]  349 	mov	r6,a
+      000151 08               [12]  350 	inc	r0
+      000152 86 07            [24]  351 	mov	ar7,@r0
+      000154 8D 82            [24]  352 	mov	dpl,r5
+      000156 8E 83            [24]  353 	mov	dph,r6
+      000158 8F F0            [24]  354 	mov	b,r7
+      00015A 12r00r00         [24]  355 	lcall	__gptrget
+      00015D FD               [12]  356 	mov	r5,a
+      00015E A3               [24]  357 	inc	dptr
+      00015F 12r00r00         [24]  358 	lcall	__gptrget
+      000162 FE               [12]  359 	mov	r6,a
+      000163 E5 81            [12]  360 	mov	a,sp
+      000165 24 F9            [12]  361 	add	a,#0xf9
+      000167 F8               [12]  362 	mov	r0,a
+      000168 E6               [12]  363 	mov	a,@r0
+      000169 B5 05 07         [24]  364 	cjne	a,ar5,00136$
+      00016C 08               [12]  365 	inc	r0
+      00016D E6               [12]  366 	mov	a,@r0
+      00016E B5 06 02         [24]  367 	cjne	a,ar6,00136$
+      000171 80 02            [24]  368 	sjmp	00137$
+      000173                        369 00136$:
+      000173 80 3B            [24]  370 	sjmp	00106$
+      000175                        371 00137$:
+                                    372 ;	../../../core/net/mac/frame802154.c:113: p->fcf.panid_compression = 1;
+      000175 E5 81            [12]  373 	mov	a,sp
+      000177 24 F6            [12]  374 	add	a,#0xf6
+      000179 F8               [12]  375 	mov	r0,a
+      00017A 74 04            [12]  376 	mov	a,#0x04
+      00017C 26               [12]  377 	add	a,@r0
+      00017D FD               [12]  378 	mov	r5,a
+      00017E E4               [12]  379 	clr	a
+      00017F 08               [12]  380 	inc	r0
+      000180 36               [12]  381 	addc	a,@r0
+      000181 FE               [12]  382 	mov	r6,a
+      000182 08               [12]  383 	inc	r0
+      000183 86 07            [24]  384 	mov	ar7,@r0
+      000185 8D 82            [24]  385 	mov	dpl,r5
+      000187 8E 83            [24]  386 	mov	dph,r6
+      000189 8F F0            [24]  387 	mov	b,r7
+      00018B 74 01            [12]  388 	mov	a,#0x01
+      00018D 12r00r00         [24]  389 	lcall	__gptrput
+                                    390 ;	../../../core/net/mac/frame802154.c:116: flen->src_pid_len = 0;
+      000190 E5 81            [12]  391 	mov	a,sp
+      000192 24 F0            [12]  392 	add	a,#0xf0
+      000194 F8               [12]  393 	mov	r0,a
+      000195 86 05            [24]  394 	mov	ar5,@r0
+      000197 08               [12]  395 	inc	r0
+      000198 86 06            [24]  396 	mov	ar6,@r0
+      00019A 08               [12]  397 	inc	r0
+      00019B 86 07            [24]  398 	mov	ar7,@r0
+      00019D 74 02            [12]  399 	mov	a,#0x02
+      00019F 2D               [12]  400 	add	a,r5
+      0001A0 FD               [12]  401 	mov	r5,a
+      0001A1 E4               [12]  402 	clr	a
+      0001A2 3E               [12]  403 	addc	a,r6
+      0001A3 FE               [12]  404 	mov	r6,a
+      0001A4 8D 82            [24]  405 	mov	dpl,r5
+      0001A6 8E 83            [24]  406 	mov	dph,r6
+      0001A8 8F F0            [24]  407 	mov	b,r7
+      0001AA E4               [12]  408 	clr	a
+      0001AB 12r00r00         [24]  409 	lcall	__gptrput
+      0001AE 80 1A            [24]  410 	sjmp	00107$
+      0001B0                        411 00106$:
+                                    412 ;	../../../core/net/mac/frame802154.c:118: p->fcf.panid_compression = 0;
+      0001B0 E5 81            [12]  413 	mov	a,sp
+      0001B2 24 F6            [12]  414 	add	a,#0xf6
+      0001B4 F8               [12]  415 	mov	r0,a
+      0001B5 74 04            [12]  416 	mov	a,#0x04
+      0001B7 26               [12]  417 	add	a,@r0
+      0001B8 FD               [12]  418 	mov	r5,a
+      0001B9 E4               [12]  419 	clr	a
+      0001BA 08               [12]  420 	inc	r0
+      0001BB 36               [12]  421 	addc	a,@r0
+      0001BC FE               [12]  422 	mov	r6,a
+      0001BD 08               [12]  423 	inc	r0
+      0001BE 86 07            [24]  424 	mov	ar7,@r0
+      0001C0 8D 82            [24]  425 	mov	dpl,r5
+      0001C2 8E 83            [24]  426 	mov	dph,r6
+      0001C4 8F F0            [24]  427 	mov	b,r7
+      0001C6 E4               [12]  428 	clr	a
+      0001C7 12r00r00         [24]  429 	lcall	__gptrput
+      0001CA                        430 00107$:
+                                    431 ;	../../../core/net/mac/frame802154.c:122: flen->dest_addr_len = addr_len(p->fcf.dest_addr_mode & 3);
+      0001CA E5 81            [12]  432 	mov	a,sp
+      0001CC 24 F0            [12]  433 	add	a,#0xf0
+      0001CE F8               [12]  434 	mov	r0,a
+      0001CF A9 81            [24]  435 	mov	r1,sp
+      0001D1 19               [12]  436 	dec	r1
+      0001D2 19               [12]  437 	dec	r1
+      0001D3 E6               [12]  438 	mov	a,@r0
+      0001D4 F7               [12]  439 	mov	@r1,a
+      0001D5 08               [12]  440 	inc	r0
+      0001D6 09               [12]  441 	inc	r1
+      0001D7 E6               [12]  442 	mov	a,@r0
+      0001D8 F7               [12]  443 	mov	@r1,a
+      0001D9 08               [12]  444 	inc	r0
+      0001DA 09               [12]  445 	inc	r1
+      0001DB E6               [12]  446 	mov	a,@r0
+      0001DC F7               [12]  447 	mov	@r1,a
+      0001DD A8 81            [24]  448 	mov	r0,sp
+      0001DF 18               [12]  449 	dec	r0
+      0001E0 18               [12]  450 	dec	r0
+      0001E1 74 01            [12]  451 	mov	a,#0x01
+      0001E3 26               [12]  452 	add	a,@r0
+      0001E4 FD               [12]  453 	mov	r5,a
+      0001E5 E4               [12]  454 	clr	a
+      0001E6 08               [12]  455 	inc	r0
+      0001E7 36               [12]  456 	addc	a,@r0
+      0001E8 FE               [12]  457 	mov	r6,a
+      0001E9 08               [12]  458 	inc	r0
+      0001EA 86 07            [24]  459 	mov	ar7,@r0
+      0001EC 8A 82            [24]  460 	mov	dpl,r2
+      0001EE 8B 83            [24]  461 	mov	dph,r3
+      0001F0 8C F0            [24]  462 	mov	b,r4
+      0001F2 12r00r00         [24]  463 	lcall	__gptrget
+      0001F5 FA               [12]  464 	mov	r2,a
+      0001F6 53 02 03         [24]  465 	anl	ar2,#0x03
+      0001F9 8A 82            [24]  466 	mov	dpl,r2
+      0001FB C0 07            [24]  467 	push	ar7
+      0001FD C0 06            [24]  468 	push	ar6
+      0001FF C0 05            [24]  469 	push	ar5
+      000201 78r00            [12]  470 	mov	r0,#_addr_len
+      000203 79s00            [12]  471 	mov	r1,#(_addr_len >> 8)
+      000205 7As00            [12]  472 	mov	r2,#(_addr_len >> 16)
+      000207 12r00r00         [24]  473 	lcall	__sdcc_banked_call
+      00020A AC 82            [24]  474 	mov	r4,dpl
+      00020C D0 05            [24]  475 	pop	ar5
+      00020E D0 06            [24]  476 	pop	ar6
+      000210 D0 07            [24]  477 	pop	ar7
+      000212 8D 82            [24]  478 	mov	dpl,r5
+      000214 8E 83            [24]  479 	mov	dph,r6
+      000216 8F F0            [24]  480 	mov	b,r7
+      000218 EC               [12]  481 	mov	a,r4
+      000219 12r00r00         [24]  482 	lcall	__gptrput
+                                    483 ;	../../../core/net/mac/frame802154.c:123: flen->src_addr_len = addr_len(p->fcf.src_addr_mode & 3);
+      00021C A8 81            [24]  484 	mov	r0,sp
+      00021E 18               [12]  485 	dec	r0
+      00021F 18               [12]  486 	dec	r0
+      000220 74 03            [12]  487 	mov	a,#0x03
+      000222 26               [12]  488 	add	a,@r0
+      000223 FD               [12]  489 	mov	r5,a
+      000224 E4               [12]  490 	clr	a
+      000225 08               [12]  491 	inc	r0
+      000226 36               [12]  492 	addc	a,@r0
+      000227 FE               [12]  493 	mov	r6,a
+      000228 08               [12]  494 	inc	r0
+      000229 86 07            [24]  495 	mov	ar7,@r0
+      00022B E5 81            [12]  496 	mov	a,sp
+      00022D 24 FB            [12]  497 	add	a,#0xfb
+      00022F F8               [12]  498 	mov	r0,a
+      000230 86 82            [24]  499 	mov	dpl,@r0
+      000232 08               [12]  500 	inc	r0
+      000233 86 83            [24]  501 	mov	dph,@r0
+      000235 08               [12]  502 	inc	r0
+      000236 86 F0            [24]  503 	mov	b,@r0
+      000238 12r00r00         [24]  504 	lcall	__gptrget
+      00023B FC               [12]  505 	mov	r4,a
+      00023C 53 04 03         [24]  506 	anl	ar4,#0x03
+      00023F 8C 82            [24]  507 	mov	dpl,r4
+      000241 C0 07            [24]  508 	push	ar7
+      000243 C0 06            [24]  509 	push	ar6
+      000245 C0 05            [24]  510 	push	ar5
+      000247 78r00            [12]  511 	mov	r0,#_addr_len
+      000249 79s00            [12]  512 	mov	r1,#(_addr_len >> 8)
+      00024B 7As00            [12]  513 	mov	r2,#(_addr_len >> 16)
+      00024D 12r00r00         [24]  514 	lcall	__sdcc_banked_call
+      000250 AC 82            [24]  515 	mov	r4,dpl
+      000252 D0 05            [24]  516 	pop	ar5
+      000254 D0 06            [24]  517 	pop	ar6
+      000256 D0 07            [24]  518 	pop	ar7
+      000258 8D 82            [24]  519 	mov	dpl,r5
+      00025A 8E 83            [24]  520 	mov	dph,r6
+      00025C 8F F0            [24]  521 	mov	b,r7
+      00025E EC               [12]  522 	mov	a,r4
+      00025F 12r00r00         [24]  523 	lcall	__gptrput
+                                    524 ;	../../../core/net/mac/frame802154.c:126: if(p->fcf.security_enabled & 1) {
+                                    525 ;	../../../core/net/mac/frame802154.c:147: }
+      000262 E5 81            [12]  526 	mov	a,sp
+      000264 24 F5            [12]  527 	add	a,#0xf5
+      000266 F5 81            [12]  528 	mov	sp,a
+      000268 02r00r00         [24]  529 	ljmp	__sdcc_banked_ret
+                                    530 ;------------------------------------------------------------
+                                    531 ;Allocation info for local variables in function 'frame802154_hdrlen'
+                                    532 ;------------------------------------------------------------
+                                    533 ;p                         Allocated to registers r5 r6 r7 
+                                    534 ;------------------------------------------------------------
+                                    535 ;	../../../core/net/mac/frame802154.c:159: frame802154_hdrlen(frame802154_t *p)
+                                    536 ;	-----------------------------------------
+                                    537 ;	 function frame802154_hdrlen
+                                    538 ;	-----------------------------------------
+      00026B                        539 _frame802154_hdrlen:
+      00026B AD 82            [24]  540 	mov	r5,dpl
+      00026D AE 83            [24]  541 	mov	r6,dph
+      00026F AF F0            [24]  542 	mov	r7,b
+                                    543 ;	../../../core/net/mac/frame802154.c:161: field_len(p, &flen);
+      000271 74r00            [12]  544 	mov	a,#_flen
+      000273 C0 E0            [24]  545 	push	acc
+      000275 74s00            [12]  546 	mov	a,#(_flen >> 8)
+      000277 C0 E0            [24]  547 	push	acc
+      000279 E4               [12]  548 	clr	a
+      00027A C0 E0            [24]  549 	push	acc
+      00027C 8D 82            [24]  550 	mov	dpl,r5
+      00027E 8E 83            [24]  551 	mov	dph,r6
+      000280 8F F0            [24]  552 	mov	b,r7
+      000282 78r1C            [12]  553 	mov	r0,#_field_len
+      000284 79s00            [12]  554 	mov	r1,#(_field_len >> 8)
+      000286 7As00            [12]  555 	mov	r2,#(_field_len >> 16)
+      000288 12r00r00         [24]  556 	lcall	__sdcc_banked_call
+      00028B 15 81            [12]  557 	dec	sp
+      00028D 15 81            [12]  558 	dec	sp
+      00028F 15 81            [12]  559 	dec	sp
+                                    560 ;	../../../core/net/mac/frame802154.c:162: return 3 + flen.dest_pid_len + flen.dest_addr_len +
+      000291 90r00r00         [24]  561 	mov	dptr,#_flen
+      000294 E0               [24]  562 	movx	a,@dptr
+      000295 FF               [12]  563 	mov	r7,a
+      000296 0F               [12]  564 	inc	r7
+      000297 0F               [12]  565 	inc	r7
+      000298 0F               [12]  566 	inc	r7
+      000299 90r00r01         [24]  567 	mov	dptr,#(_flen + 0x0001)
+      00029C E0               [24]  568 	movx	a,@dptr
+      00029D 2F               [12]  569 	add	a,r7
+      00029E FF               [12]  570 	mov	r7,a
+                                    571 ;	../../../core/net/mac/frame802154.c:163: flen.src_pid_len + flen.src_addr_len + flen.aux_sec_len;
+      00029F 90r00r02         [24]  572 	mov	dptr,#(_flen + 0x0002)
+      0002A2 E0               [24]  573 	movx	a,@dptr
+      0002A3 2F               [12]  574 	add	a,r7
+      0002A4 FF               [12]  575 	mov	r7,a
+      0002A5 90r00r03         [24]  576 	mov	dptr,#(_flen + 0x0003)
+      0002A8 E0               [24]  577 	movx	a,@dptr
+      0002A9 2F               [12]  578 	add	a,r7
+      0002AA FF               [12]  579 	mov	r7,a
+      0002AB 90r00r04         [24]  580 	mov	dptr,#(_flen + 0x0004)
+      0002AE E0               [24]  581 	movx	a,@dptr
+      0002AF FE               [12]  582 	mov	r6,a
+      0002B0 2F               [12]  583 	add	a,r7
+      0002B1 FF               [12]  584 	mov	r7,a
+      0002B2 F5 82            [12]  585 	mov	dpl,a
+                                    586 ;	../../../core/net/mac/frame802154.c:164: }
+      0002B4 02r00r00         [24]  587 	ljmp	__sdcc_banked_ret
+                                    588 ;------------------------------------------------------------
+                                    589 ;Allocation info for local variables in function 'frame802154_create'
+                                    590 ;------------------------------------------------------------
+                                    591 ;buf                       Allocated to stack - sp -18
+                                    592 ;buf_len                   Allocated to stack - sp -19
+                                    593 ;p                         Allocated to stack - sp -12
+                                    594 ;c                         Allocated to registers 
+                                    595 ;tx_frame_buffer           Allocated to stack - sp -2
+                                    596 ;pos                       Allocated to registers r7 
+                                    597 ;sloc0                     Allocated to stack - sp -9
+                                    598 ;sloc1                     Allocated to stack - sp -8
+                                    599 ;sloc2                     Allocated to stack - sp -5
+                                    600 ;------------------------------------------------------------
+                                    601 ;	../../../core/net/mac/frame802154.c:181: frame802154_create(frame802154_t *p, uint8_t *buf, uint8_t buf_len)
+                                    602 ;	-----------------------------------------
+                                    603 ;	 function frame802154_create
+                                    604 ;	-----------------------------------------
+      0002B7                        605 _frame802154_create:
+      0002B7 C0 82            [24]  606 	push	dpl
+      0002B9 C0 83            [24]  607 	push	dph
+      0002BB C0 F0            [24]  608 	push	b
+      0002BD E5 81            [12]  609 	mov	a,sp
+      0002BF 24 0A            [12]  610 	add	a,#0x0a
+      0002C1 F5 81            [12]  611 	mov	sp,a
+                                    612 ;	../../../core/net/mac/frame802154.c:187: field_len(p, &flen);
+      0002C3 74r00            [12]  613 	mov	a,#_flen
+      0002C5 C0 E0            [24]  614 	push	acc
+      0002C7 74s00            [12]  615 	mov	a,#(_flen >> 8)
+      0002C9 C0 E0            [24]  616 	push	acc
+      0002CB E4               [12]  617 	clr	a
+      0002CC C0 E0            [24]  618 	push	acc
+      0002CE E5 81            [12]  619 	mov	a,sp
+      0002D0 24 F1            [12]  620 	add	a,#0xf1
+      0002D2 F8               [12]  621 	mov	r0,a
+      0002D3 86 82            [24]  622 	mov	dpl,@r0
+      0002D5 08               [12]  623 	inc	r0
+      0002D6 86 83            [24]  624 	mov	dph,@r0
+      0002D8 08               [12]  625 	inc	r0
+      0002D9 86 F0            [24]  626 	mov	b,@r0
+      0002DB 78r1C            [12]  627 	mov	r0,#_field_len
+      0002DD 79s00            [12]  628 	mov	r1,#(_field_len >> 8)
+      0002DF 7As00            [12]  629 	mov	r2,#(_field_len >> 16)
+      0002E1 12r00r00         [24]  630 	lcall	__sdcc_banked_call
+      0002E4 15 81            [12]  631 	dec	sp
+      0002E6 15 81            [12]  632 	dec	sp
+      0002E8 15 81            [12]  633 	dec	sp
+                                    634 ;	../../../core/net/mac/frame802154.c:189: if(3 + flen.dest_pid_len + flen.dest_addr_len +
+      0002EA 90r00r00         [24]  635 	mov	dptr,#_flen
+      0002ED E0               [24]  636 	movx	a,@dptr
+      0002EE FC               [12]  637 	mov	r4,a
+      0002EF 7B 00            [12]  638 	mov	r3,#0x00
+      0002F1 74 03            [12]  639 	mov	a,#0x03
+      0002F3 2C               [12]  640 	add	a,r4
+      0002F4 FC               [12]  641 	mov	r4,a
+      0002F5 E4               [12]  642 	clr	a
+      0002F6 3B               [12]  643 	addc	a,r3
+      0002F7 FB               [12]  644 	mov	r3,a
+      0002F8 90r00r01         [24]  645 	mov	dptr,#(_flen + 0x0001)
+      0002FB E0               [24]  646 	movx	a,@dptr
+      0002FC FA               [12]  647 	mov	r2,a
+      0002FD 7F 00            [12]  648 	mov	r7,#0x00
+      0002FF 2C               [12]  649 	add	a,r4
+      000300 FC               [12]  650 	mov	r4,a
+      000301 EF               [12]  651 	mov	a,r7
+      000302 3B               [12]  652 	addc	a,r3
+      000303 FB               [12]  653 	mov	r3,a
+                                    654 ;	../../../core/net/mac/frame802154.c:190: flen.src_pid_len + flen.src_addr_len + flen.aux_sec_len > buf_len) {
+      000304 90r00r02         [24]  655 	mov	dptr,#(_flen + 0x0002)
+      000307 E0               [24]  656 	movx	a,@dptr
+      000308 7E 00            [12]  657 	mov	r6,#0x00
+      00030A 2C               [12]  658 	add	a,r4
+      00030B FC               [12]  659 	mov	r4,a
+      00030C EE               [12]  660 	mov	a,r6
+      00030D 3B               [12]  661 	addc	a,r3
+      00030E FB               [12]  662 	mov	r3,a
+      00030F 90r00r03         [24]  663 	mov	dptr,#(_flen + 0x0003)
+      000312 E0               [24]  664 	movx	a,@dptr
+      000313 7E 00            [12]  665 	mov	r6,#0x00
+      000315 2C               [12]  666 	add	a,r4
+      000316 FC               [12]  667 	mov	r4,a
+      000317 EE               [12]  668 	mov	a,r6
+      000318 3B               [12]  669 	addc	a,r3
+      000319 FB               [12]  670 	mov	r3,a
+      00031A 90r00r04         [24]  671 	mov	dptr,#(_flen + 0x0004)
+      00031D E0               [24]  672 	movx	a,@dptr
+      00031E 7E 00            [12]  673 	mov	r6,#0x00
+      000320 2C               [12]  674 	add	a,r4
+      000321 FC               [12]  675 	mov	r4,a
+      000322 EE               [12]  676 	mov	a,r6
+      000323 3B               [12]  677 	addc	a,r3
+      000324 FB               [12]  678 	mov	r3,a
+      000325 E5 81            [12]  679 	mov	a,sp
+      000327 24 ED            [12]  680 	add	a,#0xed
+      000329 F8               [12]  681 	mov	r0,a
+      00032A 86 06            [24]  682 	mov	ar6,@r0
+      00032C 7F 00            [12]  683 	mov	r7,#0x00
+      00032E C3               [12]  684 	clr	c
+      00032F EE               [12]  685 	mov	a,r6
+      000330 9C               [12]  686 	subb	a,r4
+      000331 EF               [12]  687 	mov	a,r7
+      000332 64 80            [12]  688 	xrl	a,#0x80
+      000334 8B F0            [24]  689 	mov	b,r3
+      000336 63 F0 80         [24]  690 	xrl	b,#0x80
+      000339 95 F0            [12]  691 	subb	a,b
+      00033B 50 06            [24]  692 	jnc	00102$
+                                    693 ;	../../../core/net/mac/frame802154.c:192: return 0;
+      00033D 75 82 00         [24]  694 	mov	dpl,#0x00
+      000340 02r06rBB         [24]  695 	ljmp	00115$
+      000343                        696 00102$:
+                                    697 ;	../../../core/net/mac/frame802154.c:197: tx_frame_buffer = buf;
+      000343 E5 81            [12]  698 	mov	a,sp
+      000345 24 EE            [12]  699 	add	a,#0xee
+      000347 F8               [12]  700 	mov	r0,a
+      000348 A9 81            [24]  701 	mov	r1,sp
+      00034A 19               [12]  702 	dec	r1
+      00034B 19               [12]  703 	dec	r1
+      00034C E6               [12]  704 	mov	a,@r0
+      00034D F7               [12]  705 	mov	@r1,a
+      00034E 08               [12]  706 	inc	r0
+      00034F 09               [12]  707 	inc	r1
+      000350 E6               [12]  708 	mov	a,@r0
+      000351 F7               [12]  709 	mov	@r1,a
+      000352 08               [12]  710 	inc	r0
+      000353 09               [12]  711 	inc	r1
+      000354 E6               [12]  712 	mov	a,@r0
+      000355 F7               [12]  713 	mov	@r1,a
+                                    714 ;	../../../core/net/mac/frame802154.c:198: tx_frame_buffer[0] = (p->fcf.frame_type & 7) |
+      000356 E5 81            [12]  715 	mov	a,sp
+      000358 24 F4            [12]  716 	add	a,#0xf4
+      00035A F8               [12]  717 	mov	r0,a
+      00035B 86 82            [24]  718 	mov	dpl,@r0
+      00035D 08               [12]  719 	inc	r0
+      00035E 86 83            [24]  720 	mov	dph,@r0
+      000360 08               [12]  721 	inc	r0
+      000361 86 F0            [24]  722 	mov	b,@r0
+      000363 12r00r00         [24]  723 	lcall	__gptrget
+      000366 FC               [12]  724 	mov	r4,a
+      000367 53 04 07         [24]  725 	anl	ar4,#0x07
+                                    726 ;	../../../core/net/mac/frame802154.c:199: ((p->fcf.security_enabled & 1) << 3) |
+      00036A E5 81            [12]  727 	mov	a,sp
+      00036C 24 F4            [12]  728 	add	a,#0xf4
+      00036E F8               [12]  729 	mov	r0,a
+      00036F 74 01            [12]  730 	mov	a,#0x01
+      000371 26               [12]  731 	add	a,@r0
+      000372 FA               [12]  732 	mov	r2,a
+      000373 E4               [12]  733 	clr	a
+      000374 08               [12]  734 	inc	r0
+      000375 36               [12]  735 	addc	a,@r0
+      000376 FB               [12]  736 	mov	r3,a
+      000377 08               [12]  737 	inc	r0
+      000378 86 07            [24]  738 	mov	ar7,@r0
+      00037A 8A 82            [24]  739 	mov	dpl,r2
+      00037C 8B 83            [24]  740 	mov	dph,r3
+      00037E 8F F0            [24]  741 	mov	b,r7
+      000380 12r00r00         [24]  742 	lcall	__gptrget
+      000383 54 01            [12]  743 	anl	a,#0x01
+      000385 C4               [12]  744 	swap	a
+      000386 03               [12]  745 	rr	a
+      000387 54 F8            [12]  746 	anl	a,#0xf8
+      000389 42 04            [12]  747 	orl	ar4,a
+                                    748 ;	../../../core/net/mac/frame802154.c:200: ((p->fcf.frame_pending & 1) << 4) |
+      00038B E5 81            [12]  749 	mov	a,sp
+      00038D 24 F4            [12]  750 	add	a,#0xf4
+      00038F F8               [12]  751 	mov	r0,a
+      000390 74 02            [12]  752 	mov	a,#0x02
+      000392 26               [12]  753 	add	a,@r0
+      000393 FD               [12]  754 	mov	r5,a
+      000394 E4               [12]  755 	clr	a
+      000395 08               [12]  756 	inc	r0
+      000396 36               [12]  757 	addc	a,@r0
+      000397 FE               [12]  758 	mov	r6,a
+      000398 08               [12]  759 	inc	r0
+      000399 86 07            [24]  760 	mov	ar7,@r0
+      00039B 8D 82            [24]  761 	mov	dpl,r5
+      00039D 8E 83            [24]  762 	mov	dph,r6
+      00039F 8F F0            [24]  763 	mov	b,r7
+      0003A1 12r00r00         [24]  764 	lcall	__gptrget
+      0003A4 54 01            [12]  765 	anl	a,#0x01
+      0003A6 C4               [12]  766 	swap	a
+      0003A7 54 F0            [12]  767 	anl	a,#0xf0
+      0003A9 42 04            [12]  768 	orl	ar4,a
+                                    769 ;	../../../core/net/mac/frame802154.c:201: ((p->fcf.ack_required & 1) << 5) |
+      0003AB E5 81            [12]  770 	mov	a,sp
+      0003AD 24 F4            [12]  771 	add	a,#0xf4
+      0003AF F8               [12]  772 	mov	r0,a
+      0003B0 74 03            [12]  773 	mov	a,#0x03
+      0003B2 26               [12]  774 	add	a,@r0
+      0003B3 FD               [12]  775 	mov	r5,a
+      0003B4 E4               [12]  776 	clr	a
+      0003B5 08               [12]  777 	inc	r0
+      0003B6 36               [12]  778 	addc	a,@r0
+      0003B7 FE               [12]  779 	mov	r6,a
+      0003B8 08               [12]  780 	inc	r0
+      0003B9 86 07            [24]  781 	mov	ar7,@r0
+      0003BB 8D 82            [24]  782 	mov	dpl,r5
+      0003BD 8E 83            [24]  783 	mov	dph,r6
+      0003BF 8F F0            [24]  784 	mov	b,r7
+      0003C1 12r00r00         [24]  785 	lcall	__gptrget
+      0003C4 54 01            [12]  786 	anl	a,#0x01
+      0003C6 C4               [12]  787 	swap	a
+      0003C7 23               [12]  788 	rl	a
+      0003C8 54 E0            [12]  789 	anl	a,#0xe0
+      0003CA 42 04            [12]  790 	orl	ar4,a
+                                    791 ;	../../../core/net/mac/frame802154.c:202: ((p->fcf.panid_compression & 1) << 6);
+      0003CC E5 81            [12]  792 	mov	a,sp
+      0003CE 24 F4            [12]  793 	add	a,#0xf4
+      0003D0 F8               [12]  794 	mov	r0,a
+      0003D1 74 04            [12]  795 	mov	a,#0x04
+      0003D3 26               [12]  796 	add	a,@r0
+      0003D4 FD               [12]  797 	mov	r5,a
+      0003D5 E4               [12]  798 	clr	a
+      0003D6 08               [12]  799 	inc	r0
+      0003D7 36               [12]  800 	addc	a,@r0
+      0003D8 FE               [12]  801 	mov	r6,a
+      0003D9 08               [12]  802 	inc	r0
+      0003DA 86 07            [24]  803 	mov	ar7,@r0
+      0003DC 8D 82            [24]  804 	mov	dpl,r5
+      0003DE 8E 83            [24]  805 	mov	dph,r6
+      0003E0 8F F0            [24]  806 	mov	b,r7
+      0003E2 12r00r00         [24]  807 	lcall	__gptrget
+      0003E5 54 01            [12]  808 	anl	a,#0x01
+      0003E7 03               [12]  809 	rr	a
+      0003E8 03               [12]  810 	rr	a
+      0003E9 54 C0            [12]  811 	anl	a,#0xc0
+      0003EB 42 04            [12]  812 	orl	ar4,a
+      0003ED A8 81            [24]  813 	mov	r0,sp
+      0003EF 18               [12]  814 	dec	r0
+      0003F0 18               [12]  815 	dec	r0
+      0003F1 86 82            [24]  816 	mov	dpl,@r0
+      0003F3 08               [12]  817 	inc	r0
+      0003F4 86 83            [24]  818 	mov	dph,@r0
+      0003F6 08               [12]  819 	inc	r0
+      0003F7 86 F0            [24]  820 	mov	b,@r0
+      0003F9 EC               [12]  821 	mov	a,r4
+      0003FA 12r00r00         [24]  822 	lcall	__gptrput
+                                    823 ;	../../../core/net/mac/frame802154.c:203: tx_frame_buffer[1] = ((p->fcf.dest_addr_mode & 3) << 2) |
+      0003FD A8 81            [24]  824 	mov	r0,sp
+      0003FF 18               [12]  825 	dec	r0
+      000400 18               [12]  826 	dec	r0
+      000401 74 01            [12]  827 	mov	a,#0x01
+      000403 26               [12]  828 	add	a,@r0
+      000404 FD               [12]  829 	mov	r5,a
+      000405 E4               [12]  830 	clr	a
+      000406 08               [12]  831 	inc	r0
+      000407 36               [12]  832 	addc	a,@r0
+      000408 FE               [12]  833 	mov	r6,a
+      000409 08               [12]  834 	inc	r0
+      00040A 86 07            [24]  835 	mov	ar7,@r0
+      00040C E5 81            [12]  836 	mov	a,sp
+      00040E 24 F4            [12]  837 	add	a,#0xf4
+      000410 F8               [12]  838 	mov	r0,a
+      000411 74 05            [12]  839 	mov	a,#0x05
+      000413 26               [12]  840 	add	a,@r0
+      000414 FA               [12]  841 	mov	r2,a
+      000415 E4               [12]  842 	clr	a
+      000416 08               [12]  843 	inc	r0
+      000417 36               [12]  844 	addc	a,@r0
+      000418 FB               [12]  845 	mov	r3,a
+      000419 08               [12]  846 	inc	r0
+      00041A 86 04            [24]  847 	mov	ar4,@r0
+      00041C 8A 82            [24]  848 	mov	dpl,r2
+      00041E 8B 83            [24]  849 	mov	dph,r3
+      000420 8C F0            [24]  850 	mov	b,r4
+      000422 12r00r00         [24]  851 	lcall	__gptrget
+      000425 FA               [12]  852 	mov	r2,a
+      000426 53 02 03         [24]  853 	anl	ar2,#0x03
+      000429 E5 81            [12]  854 	mov	a,sp
+      00042B 24 F7            [12]  855 	add	a,#0xf7
+      00042D F8               [12]  856 	mov	r0,a
+      00042E EA               [12]  857 	mov	a,r2
+      00042F 2A               [12]  858 	add	a,r2
+      000430 25 E0            [12]  859 	add	a,acc
+      000432 F6               [12]  860 	mov	@r0,a
+                                    861 ;	../../../core/net/mac/frame802154.c:204: ((p->fcf.frame_version & 3) << 4) |
+      000433 E5 81            [12]  862 	mov	a,sp
+      000435 24 F4            [12]  863 	add	a,#0xf4
+      000437 F8               [12]  864 	mov	r0,a
+      000438 74 06            [12]  865 	mov	a,#0x06
+      00043A 26               [12]  866 	add	a,@r0
+      00043B FA               [12]  867 	mov	r2,a
+      00043C E4               [12]  868 	clr	a
+      00043D 08               [12]  869 	inc	r0
+      00043E 36               [12]  870 	addc	a,@r0
+      00043F FB               [12]  871 	mov	r3,a
+      000440 08               [12]  872 	inc	r0
+      000441 86 04            [24]  873 	mov	ar4,@r0
+      000443 8A 82            [24]  874 	mov	dpl,r2
+      000445 8B 83            [24]  875 	mov	dph,r3
+      000447 8C F0            [24]  876 	mov	b,r4
+      000449 12r00r00         [24]  877 	lcall	__gptrget
+      00044C 54 03            [12]  878 	anl	a,#0x03
+      00044E C4               [12]  879 	swap	a
+      00044F 54 F0            [12]  880 	anl	a,#0xf0
+      000451 FA               [12]  881 	mov	r2,a
+      000452 E5 81            [12]  882 	mov	a,sp
+      000454 24 F7            [12]  883 	add	a,#0xf7
+      000456 F8               [12]  884 	mov	r0,a
+      000457 EA               [12]  885 	mov	a,r2
+      000458 46               [12]  886 	orl	a,@r0
+      000459 F6               [12]  887 	mov	@r0,a
+                                    888 ;	../../../core/net/mac/frame802154.c:205: ((p->fcf.src_addr_mode & 3) << 6);
+      00045A E5 81            [12]  889 	mov	a,sp
+      00045C 24 F4            [12]  890 	add	a,#0xf4
+      00045E F8               [12]  891 	mov	r0,a
+      00045F 74 07            [12]  892 	mov	a,#0x07
+      000461 26               [12]  893 	add	a,@r0
+      000462 FA               [12]  894 	mov	r2,a
+      000463 E4               [12]  895 	clr	a
+      000464 08               [12]  896 	inc	r0
+      000465 36               [12]  897 	addc	a,@r0
+      000466 FB               [12]  898 	mov	r3,a
+      000467 08               [12]  899 	inc	r0
+      000468 86 04            [24]  900 	mov	ar4,@r0
+      00046A 8A 82            [24]  901 	mov	dpl,r2
+      00046C 8B 83            [24]  902 	mov	dph,r3
+      00046E 8C F0            [24]  903 	mov	b,r4
+      000470 12r00r00         [24]  904 	lcall	__gptrget
+      000473 54 03            [12]  905 	anl	a,#0x03
+      000475 03               [12]  906 	rr	a
+      000476 03               [12]  907 	rr	a
+      000477 54 C0            [12]  908 	anl	a,#0xc0
+      000479 FA               [12]  909 	mov	r2,a
+      00047A E5 81            [12]  910 	mov	a,sp
+      00047C 24 F7            [12]  911 	add	a,#0xf7
+      00047E F8               [12]  912 	mov	r0,a
+      00047F E6               [12]  913 	mov	a,@r0
+      000480 42 02            [12]  914 	orl	ar2,a
+      000482 8D 82            [24]  915 	mov	dpl,r5
+      000484 8E 83            [24]  916 	mov	dph,r6
+      000486 8F F0            [24]  917 	mov	b,r7
+      000488 EA               [12]  918 	mov	a,r2
+      000489 12r00r00         [24]  919 	lcall	__gptrput
+                                    920 ;	../../../core/net/mac/frame802154.c:208: tx_frame_buffer[2] = p->seq;
+      00048C A8 81            [24]  921 	mov	r0,sp
+      00048E 18               [12]  922 	dec	r0
+      00048F 18               [12]  923 	dec	r0
+      000490 74 02            [12]  924 	mov	a,#0x02
+      000492 26               [12]  925 	add	a,@r0
+      000493 FD               [12]  926 	mov	r5,a
+      000494 E4               [12]  927 	clr	a
+      000495 08               [12]  928 	inc	r0
+      000496 36               [12]  929 	addc	a,@r0
+      000497 FE               [12]  930 	mov	r6,a
+      000498 08               [12]  931 	inc	r0
+      000499 86 07            [24]  932 	mov	ar7,@r0
+      00049B E5 81            [12]  933 	mov	a,sp
+      00049D 24 F4            [12]  934 	add	a,#0xf4
+      00049F F8               [12]  935 	mov	r0,a
+      0004A0 74 08            [12]  936 	mov	a,#0x08
+      0004A2 26               [12]  937 	add	a,@r0
+      0004A3 FA               [12]  938 	mov	r2,a
+      0004A4 E4               [12]  939 	clr	a
+      0004A5 08               [12]  940 	inc	r0
+      0004A6 36               [12]  941 	addc	a,@r0
+      0004A7 FB               [12]  942 	mov	r3,a
+      0004A8 08               [12]  943 	inc	r0
+      0004A9 86 04            [24]  944 	mov	ar4,@r0
+      0004AB 8A 82            [24]  945 	mov	dpl,r2
+      0004AD 8B 83            [24]  946 	mov	dph,r3
+      0004AF 8C F0            [24]  947 	mov	b,r4
+      0004B1 12r00r00         [24]  948 	lcall	__gptrget
+      0004B4 8D 82            [24]  949 	mov	dpl,r5
+      0004B6 8E 83            [24]  950 	mov	dph,r6
+      0004B8 8F F0            [24]  951 	mov	b,r7
+      0004BA 12r00r00         [24]  952 	lcall	__gptrput
+                                    953 ;	../../../core/net/mac/frame802154.c:209: pos = 3;
+      0004BD E5 81            [12]  954 	mov	a,sp
+      0004BF 24 F8            [12]  955 	add	a,#0xf8
+      0004C1 F8               [12]  956 	mov	r0,a
+      0004C2 76 03            [12]  957 	mov	@r0,#0x03
+                                    958 ;	../../../core/net/mac/frame802154.c:212: if(flen.dest_pid_len == 2) {
+      0004C4 90r00r00         [24]  959 	mov	dptr,#_flen
+      0004C7 E0               [24]  960 	movx	a,@dptr
+      0004C8 FE               [12]  961 	mov	r6,a
+      0004C9 BE 02 6F         [24]  962 	cjne	r6,#0x02,00104$
+                                    963 ;	../../../core/net/mac/frame802154.c:213: tx_frame_buffer[pos++] = p->dest_pid & 0xff;
+      0004CC A8 81            [24]  964 	mov	r0,sp
+      0004CE 18               [12]  965 	dec	r0
+      0004CF 18               [12]  966 	dec	r0
+      0004D0 E5 81            [12]  967 	mov	a,sp
+      0004D2 24 F8            [12]  968 	add	a,#0xf8
+      0004D4 F9               [12]  969 	mov	r1,a
+      0004D5 74 03            [12]  970 	mov	a,#0x03
+      0004D7 26               [12]  971 	add	a,@r0
+      0004D8 F7               [12]  972 	mov	@r1,a
+      0004D9 E4               [12]  973 	clr	a
+      0004DA 08               [12]  974 	inc	r0
+      0004DB 36               [12]  975 	addc	a,@r0
+      0004DC 09               [12]  976 	inc	r1
+      0004DD F7               [12]  977 	mov	@r1,a
+      0004DE 08               [12]  978 	inc	r0
+      0004DF 09               [12]  979 	inc	r1
+      0004E0 E6               [12]  980 	mov	a,@r0
+      0004E1 F7               [12]  981 	mov	@r1,a
+      0004E2 E5 81            [12]  982 	mov	a,sp
+      0004E4 24 F4            [12]  983 	add	a,#0xf4
+      0004E6 F8               [12]  984 	mov	r0,a
+      0004E7 74 09            [12]  985 	mov	a,#0x09
+      0004E9 26               [12]  986 	add	a,@r0
+      0004EA FA               [12]  987 	mov	r2,a
+      0004EB E4               [12]  988 	clr	a
+      0004EC 08               [12]  989 	inc	r0
+      0004ED 36               [12]  990 	addc	a,@r0
+      0004EE FB               [12]  991 	mov	r3,a
+      0004EF 08               [12]  992 	inc	r0
+      0004F0 86 06            [24]  993 	mov	ar6,@r0
+      0004F2 8A 82            [24]  994 	mov	dpl,r2
+      0004F4 8B 83            [24]  995 	mov	dph,r3
+      0004F6 8E F0            [24]  996 	mov	b,r6
+      0004F8 12r00r00         [24]  997 	lcall	__gptrget
+      0004FB FD               [12]  998 	mov	r5,a
+      0004FC E5 81            [12]  999 	mov	a,sp
+      0004FE 24 F8            [12] 1000 	add	a,#0xf8
+      000500 F8               [12] 1001 	mov	r0,a
+      000501 86 82            [24] 1002 	mov	dpl,@r0
+      000503 08               [12] 1003 	inc	r0
+      000504 86 83            [24] 1004 	mov	dph,@r0
+      000506 08               [12] 1005 	inc	r0
+      000507 86 F0            [24] 1006 	mov	b,@r0
+      000509 ED               [12] 1007 	mov	a,r5
+      00050A 12r00r00         [24] 1008 	lcall	__gptrput
+                                   1009 ;	../../../core/net/mac/frame802154.c:214: tx_frame_buffer[pos++] = (p->dest_pid >> 8) & 0xff;
+      00050D E5 81            [12] 1010 	mov	a,sp
+      00050F 24 F8            [12] 1011 	add	a,#0xf8
+      000511 F8               [12] 1012 	mov	r0,a
+      000512 76 05            [12] 1013 	mov	@r0,#0x05
+      000514 A8 81            [24] 1014 	mov	r0,sp
+      000516 18               [12] 1015 	dec	r0
+      000517 18               [12] 1016 	dec	r0
+      000518 74 04            [12] 1017 	mov	a,#0x04
+      00051A 26               [12] 1018 	add	a,@r0
+      00051B FC               [12] 1019 	mov	r4,a
+      00051C E4               [12] 1020 	clr	a
+      00051D 08               [12] 1021 	inc	r0
+      00051E 36               [12] 1022 	addc	a,@r0
+      00051F FD               [12] 1023 	mov	r5,a
+      000520 08               [12] 1024 	inc	r0
+      000521 86 07            [24] 1025 	mov	ar7,@r0
+      000523 8A 82            [24] 1026 	mov	dpl,r2
+      000525 8B 83            [24] 1027 	mov	dph,r3
+      000527 8E F0            [24] 1028 	mov	b,r6
+      000529 12r00r00         [24] 1029 	lcall	__gptrget
+      00052C A3               [24] 1030 	inc	dptr
+      00052D 12r00r00         [24] 1031 	lcall	__gptrget
+      000530 FB               [12] 1032 	mov	r3,a
+      000531 FA               [12] 1033 	mov	r2,a
+      000532 8C 82            [24] 1034 	mov	dpl,r4
+      000534 8D 83            [24] 1035 	mov	dph,r5
+      000536 8F F0            [24] 1036 	mov	b,r7
+      000538 12r00r00         [24] 1037 	lcall	__gptrput
+      00053B                       1038 00104$:
+                                   1039 ;	../../../core/net/mac/frame802154.c:218: for(c = flen.dest_addr_len; c > 0; c--) {
+      00053B 90r00r01         [24] 1040 	mov	dptr,#(_flen + 0x0001)
+      00053E E0               [24] 1041 	movx	a,@dptr
+      00053F FE               [12] 1042 	mov	r6,a
+      000540 7F 00            [12] 1043 	mov	r7,#0x00
+      000542 E5 81            [12] 1044 	mov	a,sp
+      000544 24 F4            [12] 1045 	add	a,#0xf4
+      000546 F8               [12] 1046 	mov	r0,a
+      000547 E5 81            [12] 1047 	mov	a,sp
+      000549 24 FB            [12] 1048 	add	a,#0xfb
+      00054B F9               [12] 1049 	mov	r1,a
+      00054C 74 0B            [12] 1050 	mov	a,#0x0b
+      00054E 26               [12] 1051 	add	a,@r0
+      00054F F7               [12] 1052 	mov	@r1,a
+      000550 E4               [12] 1053 	clr	a
+      000551 08               [12] 1054 	inc	r0
+      000552 36               [12] 1055 	addc	a,@r0
+      000553 09               [12] 1056 	inc	r1
+      000554 F7               [12] 1057 	mov	@r1,a
+      000555 08               [12] 1058 	inc	r0
+      000556 09               [12] 1059 	inc	r1
+      000557 E6               [12] 1060 	mov	a,@r0
+      000558 F7               [12] 1061 	mov	@r1,a
+      000559 E5 81            [12] 1062 	mov	a,sp
+      00055B 24 F8            [12] 1063 	add	a,#0xf8
+      00055D F8               [12] 1064 	mov	r0,a
+      00055E 86 02            [24] 1065 	mov	ar2,@r0
+      000560                       1066 00110$:
+      000560 C3               [12] 1067 	clr	c
+      000561 E4               [12] 1068 	clr	a
+      000562 9E               [12] 1069 	subb	a,r6
+      000563 74 80            [12] 1070 	mov	a,#(0x00 ^ 0x80)
+      000565 8F F0            [24] 1071 	mov	b,r7
+      000567 63 F0 80         [24] 1072 	xrl	b,#0x80
+      00056A 95 F0            [12] 1073 	subb	a,b
+      00056C 50 4B            [24] 1074 	jnc	00124$
+                                   1075 ;	../../../core/net/mac/frame802154.c:219: tx_frame_buffer[pos++] = p->dest_addr[c - 1];
+      00056E A8 81            [24] 1076 	mov	r0,sp
+      000570 18               [12] 1077 	dec	r0
+      000571 18               [12] 1078 	dec	r0
+      000572 E5 81            [12] 1079 	mov	a,sp
+      000574 24 F8            [12] 1080 	add	a,#0xf8
+      000576 F9               [12] 1081 	mov	r1,a
+      000577 EA               [12] 1082 	mov	a,r2
+      000578 26               [12] 1083 	add	a,@r0
+      000579 F7               [12] 1084 	mov	@r1,a
+      00057A E4               [12] 1085 	clr	a
+      00057B 08               [12] 1086 	inc	r0
+      00057C 36               [12] 1087 	addc	a,@r0
+      00057D 09               [12] 1088 	inc	r1
+      00057E F7               [12] 1089 	mov	@r1,a
+      00057F 08               [12] 1090 	inc	r0
+      000580 09               [12] 1091 	inc	r1
+      000581 E6               [12] 1092 	mov	a,@r0
+      000582 F7               [12] 1093 	mov	@r1,a
+      000583 0A               [12] 1094 	inc	r2
+      000584 8E 05            [24] 1095 	mov	ar5,r6
+      000586 ED               [12] 1096 	mov	a,r5
+      000587 14               [12] 1097 	dec	a
+      000588 C8               [12] 1098 	xch	a,r0
+      000589 E5 81            [12] 1099 	mov	a,sp
+      00058B 24 FB            [12] 1100 	add	a,#0xfb
+      00058D C8               [12] 1101 	xch	a,r0
+      00058E 26               [12] 1102 	add	a,@r0
+      00058F FB               [12] 1103 	mov	r3,a
+      000590 08               [12] 1104 	inc	r0
+      000591 E4               [12] 1105 	clr	a
+      000592 36               [12] 1106 	addc	a,@r0
+      000593 FC               [12] 1107 	mov	r4,a
+      000594 08               [12] 1108 	inc	r0
+      000595 86 05            [24] 1109 	mov	ar5,@r0
+      000597 8B 82            [24] 1110 	mov	dpl,r3
+      000599 8C 83            [24] 1111 	mov	dph,r4
+      00059B 8D F0            [24] 1112 	mov	b,r5
+      00059D 12r00r00         [24] 1113 	lcall	__gptrget
+      0005A0 FB               [12] 1114 	mov	r3,a
+      0005A1 E5 81            [12] 1115 	mov	a,sp
+      0005A3 24 F8            [12] 1116 	add	a,#0xf8
+      0005A5 F8               [12] 1117 	mov	r0,a
+      0005A6 86 82            [24] 1118 	mov	dpl,@r0
+      0005A8 08               [12] 1119 	inc	r0
+      0005A9 86 83            [24] 1120 	mov	dph,@r0
+      0005AB 08               [12] 1121 	inc	r0
+      0005AC 86 F0            [24] 1122 	mov	b,@r0
+      0005AE EB               [12] 1123 	mov	a,r3
+      0005AF 12r00r00         [24] 1124 	lcall	__gptrput
+                                   1125 ;	../../../core/net/mac/frame802154.c:218: for(c = flen.dest_addr_len; c > 0; c--) {
+      0005B2 1E               [12] 1126 	dec	r6
+      0005B3 BE FF 01         [24] 1127 	cjne	r6,#0xff,00158$
+      0005B6 1F               [12] 1128 	dec	r7
+      0005B7                       1129 00158$:
+      0005B7 80 A7            [24] 1130 	sjmp	00110$
+      0005B9                       1131 00124$:
+      0005B9 E5 81            [12] 1132 	mov	a,sp
+      0005BB 24 FB            [12] 1133 	add	a,#0xfb
+      0005BD F8               [12] 1134 	mov	r0,a
+      0005BE A6 02            [24] 1135 	mov	@r0,ar2
+                                   1136 ;	../../../core/net/mac/frame802154.c:223: if(flen.src_pid_len == 2) {
+      0005C0 90r00r02         [24] 1137 	mov	dptr,#(_flen + 0x0002)
+      0005C3 E0               [24] 1138 	movx	a,@dptr
+      0005C4 FE               [12] 1139 	mov	r6,a
+      0005C5 BE 02 73         [24] 1140 	cjne	r6,#0x02,00107$
+                                   1141 ;	../../../core/net/mac/frame802154.c:224: tx_frame_buffer[pos++] = p->src_pid & 0xff;
+      0005C8 EA               [12] 1142 	mov	a,r2
+      0005C9 04               [12] 1143 	inc	a
+      0005CA FF               [12] 1144 	mov	r7,a
+      0005CB A8 81            [24] 1145 	mov	r0,sp
+      0005CD 18               [12] 1146 	dec	r0
+      0005CE 18               [12] 1147 	dec	r0
+      0005CF E5 81            [12] 1148 	mov	a,sp
+      0005D1 24 FB            [12] 1149 	add	a,#0xfb
+      0005D3 F9               [12] 1150 	mov	r1,a
+      0005D4 EA               [12] 1151 	mov	a,r2
+      0005D5 26               [12] 1152 	add	a,@r0
+      0005D6 F7               [12] 1153 	mov	@r1,a
+      0005D7 E4               [12] 1154 	clr	a
+      0005D8 08               [12] 1155 	inc	r0
+      0005D9 36               [12] 1156 	addc	a,@r0
+      0005DA 09               [12] 1157 	inc	r1
+      0005DB F7               [12] 1158 	mov	@r1,a
+      0005DC 08               [12] 1159 	inc	r0
+      0005DD 09               [12] 1160 	inc	r1
+      0005DE E6               [12] 1161 	mov	a,@r0
+      0005DF F7               [12] 1162 	mov	@r1,a
+      0005E0 E5 81            [12] 1163 	mov	a,sp
+      0005E2 24 F4            [12] 1164 	add	a,#0xf4
+      0005E4 F8               [12] 1165 	mov	r0,a
+      0005E5 74 13            [12] 1166 	mov	a,#0x13
+      0005E7 26               [12] 1167 	add	a,@r0
+      0005E8 FB               [12] 1168 	mov	r3,a
+      0005E9 E4               [12] 1169 	clr	a
+      0005EA 08               [12] 1170 	inc	r0
+      0005EB 36               [12] 1171 	addc	a,@r0
+      0005EC FD               [12] 1172 	mov	r5,a
+      0005ED 08               [12] 1173 	inc	r0
+      0005EE 86 06            [24] 1174 	mov	ar6,@r0
+      0005F0 8B 82            [24] 1175 	mov	dpl,r3
+      0005F2 8D 83            [24] 1176 	mov	dph,r5
+      0005F4 8E F0            [24] 1177 	mov	b,r6
+      0005F6 12r00r00         [24] 1178 	lcall	__gptrget
+      0005F9 FC               [12] 1179 	mov	r4,a
+      0005FA E5 81            [12] 1180 	mov	a,sp
+      0005FC 24 FB            [12] 1181 	add	a,#0xfb
+      0005FE F8               [12] 1182 	mov	r0,a
+      0005FF 86 82            [24] 1183 	mov	dpl,@r0
+      000601 08               [12] 1184 	inc	r0
+      000602 86 83            [24] 1185 	mov	dph,@r0
+      000604 08               [12] 1186 	inc	r0
+      000605 86 F0            [24] 1187 	mov	b,@r0
+      000607 EC               [12] 1188 	mov	a,r4
+      000608 12r00r00         [24] 1189 	lcall	__gptrput
+                                   1190 ;	../../../core/net/mac/frame802154.c:225: tx_frame_buffer[pos++] = (p->src_pid >> 8) & 0xff;
+      00060B 8F 04            [24] 1191 	mov	ar4,r7
+      00060D E5 81            [12] 1192 	mov	a,sp
+      00060F 24 FB            [12] 1193 	add	a,#0xfb
+      000611 F8               [12] 1194 	mov	r0,a
+      000612 EF               [12] 1195 	mov	a,r7
+      000613 04               [12] 1196 	inc	a
+      000614 F6               [12] 1197 	mov	@r0,a
+      000615 A8 81            [24] 1198 	mov	r0,sp
+      000617 18               [12] 1199 	dec	r0
+      000618 18               [12] 1200 	dec	r0
+      000619 EC               [12] 1201 	mov	a,r4
+      00061A 26               [12] 1202 	add	a,@r0
+      00061B FA               [12] 1203 	mov	r2,a
+      00061C E4               [12] 1204 	clr	a
+      00061D 08               [12] 1205 	inc	r0
+      00061E 36               [12] 1206 	addc	a,@r0
+      00061F FC               [12] 1207 	mov	r4,a
+      000620 08               [12] 1208 	inc	r0
+      000621 86 07            [24] 1209 	mov	ar7,@r0
+      000623 8B 82            [24] 1210 	mov	dpl,r3
+      000625 8D 83            [24] 1211 	mov	dph,r5
+      000627 8E F0            [24] 1212 	mov	b,r6
+      000629 12r00r00         [24] 1213 	lcall	__gptrget
+      00062C A3               [24] 1214 	inc	dptr
+      00062D 12r00r00         [24] 1215 	lcall	__gptrget
+      000630 FD               [12] 1216 	mov	r5,a
+      000631 FB               [12] 1217 	mov	r3,a
+      000632 8A 82            [24] 1218 	mov	dpl,r2
+      000634 8C 83            [24] 1219 	mov	dph,r4
+      000636 8F F0            [24] 1220 	mov	b,r7
+      000638 12r00r00         [24] 1221 	lcall	__gptrput
+      00063B                       1222 00107$:
+                                   1223 ;	../../../core/net/mac/frame802154.c:229: for(c = flen.src_addr_len; c > 0; c--) {
+      00063B 90r00r03         [24] 1224 	mov	dptr,#(_flen + 0x0003)
+      00063E E0               [24] 1225 	movx	a,@dptr
+      00063F FE               [12] 1226 	mov	r6,a
+      000640 7F 00            [12] 1227 	mov	r7,#0x00
+      000642 E5 81            [12] 1228 	mov	a,sp
+      000644 24 F4            [12] 1229 	add	a,#0xf4
+      000646 F8               [12] 1230 	mov	r0,a
+      000647 E5 81            [12] 1231 	mov	a,sp
+      000649 24 F8            [12] 1232 	add	a,#0xf8
+      00064B F9               [12] 1233 	mov	r1,a
+      00064C 74 15            [12] 1234 	mov	a,#0x15
+      00064E 26               [12] 1235 	add	a,@r0
+      00064F F7               [12] 1236 	mov	@r1,a
+      000650 E4               [12] 1237 	clr	a
+      000651 08               [12] 1238 	inc	r0
+      000652 36               [12] 1239 	addc	a,@r0
+      000653 09               [12] 1240 	inc	r1
+      000654 F7               [12] 1241 	mov	@r1,a
+      000655 08               [12] 1242 	inc	r0
+      000656 09               [12] 1243 	inc	r1
+      000657 E6               [12] 1244 	mov	a,@r0
+      000658 F7               [12] 1245 	mov	@r1,a
+      000659 E5 81            [12] 1246 	mov	a,sp
+      00065B 24 FB            [12] 1247 	add	a,#0xfb
+      00065D F8               [12] 1248 	mov	r0,a
+      00065E 86 02            [24] 1249 	mov	ar2,@r0
+      000660                       1250 00113$:
+      000660 C3               [12] 1251 	clr	c
+      000661 E4               [12] 1252 	clr	a
+      000662 9E               [12] 1253 	subb	a,r6
+      000663 74 80            [12] 1254 	mov	a,#(0x00 ^ 0x80)
+      000665 8F F0            [24] 1255 	mov	b,r7
+      000667 63 F0 80         [24] 1256 	xrl	b,#0x80
+      00066A 95 F0            [12] 1257 	subb	a,b
+      00066C 50 4B            [24] 1258 	jnc	00108$
+                                   1259 ;	../../../core/net/mac/frame802154.c:230: tx_frame_buffer[pos++] = p->src_addr[c - 1];
+      00066E A8 81            [24] 1260 	mov	r0,sp
+      000670 18               [12] 1261 	dec	r0
+      000671 18               [12] 1262 	dec	r0
+      000672 E5 81            [12] 1263 	mov	a,sp
+      000674 24 FB            [12] 1264 	add	a,#0xfb
+      000676 F9               [12] 1265 	mov	r1,a
+      000677 EA               [12] 1266 	mov	a,r2
+      000678 26               [12] 1267 	add	a,@r0
+      000679 F7               [12] 1268 	mov	@r1,a
+      00067A E4               [12] 1269 	clr	a
+      00067B 08               [12] 1270 	inc	r0
+      00067C 36               [12] 1271 	addc	a,@r0
+      00067D 09               [12] 1272 	inc	r1
+      00067E F7               [12] 1273 	mov	@r1,a
+      00067F 08               [12] 1274 	inc	r0
+      000680 09               [12] 1275 	inc	r1
+      000681 E6               [12] 1276 	mov	a,@r0
+      000682 F7               [12] 1277 	mov	@r1,a
+      000683 0A               [12] 1278 	inc	r2
+      000684 8E 05            [24] 1279 	mov	ar5,r6
+      000686 ED               [12] 1280 	mov	a,r5
+      000687 14               [12] 1281 	dec	a
+      000688 C8               [12] 1282 	xch	a,r0
+      000689 E5 81            [12] 1283 	mov	a,sp
+      00068B 24 F8            [12] 1284 	add	a,#0xf8
+      00068D C8               [12] 1285 	xch	a,r0
+      00068E 26               [12] 1286 	add	a,@r0
+      00068F FB               [12] 1287 	mov	r3,a
+      000690 08               [12] 1288 	inc	r0
+      000691 E4               [12] 1289 	clr	a
+      000692 36               [12] 1290 	addc	a,@r0
+      000693 FC               [12] 1291 	mov	r4,a
+      000694 08               [12] 1292 	inc	r0
+      000695 86 05            [24] 1293 	mov	ar5,@r0
+      000697 8B 82            [24] 1294 	mov	dpl,r3
+      000699 8C 83            [24] 1295 	mov	dph,r4
+      00069B 8D F0            [24] 1296 	mov	b,r5
+      00069D 12r00r00         [24] 1297 	lcall	__gptrget
+      0006A0 FB               [12] 1298 	mov	r3,a
+      0006A1 E5 81            [12] 1299 	mov	a,sp
+      0006A3 24 FB            [12] 1300 	add	a,#0xfb
+      0006A5 F8               [12] 1301 	mov	r0,a
+      0006A6 86 82            [24] 1302 	mov	dpl,@r0
+      0006A8 08               [12] 1303 	inc	r0
+      0006A9 86 83            [24] 1304 	mov	dph,@r0
+      0006AB 08               [12] 1305 	inc	r0
+      0006AC 86 F0            [24] 1306 	mov	b,@r0
+      0006AE EB               [12] 1307 	mov	a,r3
+      0006AF 12r00r00         [24] 1308 	lcall	__gptrput
+                                   1309 ;	../../../core/net/mac/frame802154.c:229: for(c = flen.src_addr_len; c > 0; c--) {
+      0006B2 1E               [12] 1310 	dec	r6
+      0006B3 BE FF 01         [24] 1311 	cjne	r6,#0xff,00162$
+      0006B6 1F               [12] 1312 	dec	r7
+      0006B7                       1313 00162$:
+      0006B7 80 A7            [24] 1314 	sjmp	00113$
+      0006B9                       1315 00108$:
+                                   1316 ;	../../../core/net/mac/frame802154.c:239: return pos;
+      0006B9 8A 82            [24] 1317 	mov	dpl,r2
+      0006BB                       1318 00115$:
+                                   1319 ;	../../../core/net/mac/frame802154.c:240: }
+      0006BB E5 81            [12] 1320 	mov	a,sp
+      0006BD 24 F3            [12] 1321 	add	a,#0xf3
+      0006BF F5 81            [12] 1322 	mov	sp,a
+      0006C1 02r00r00         [24] 1323 	ljmp	__sdcc_banked_ret
+                                   1324 ;------------------------------------------------------------
+                                   1325 ;Allocation info for local variables in function 'frame802154_parse'
+                                   1326 ;------------------------------------------------------------
+                                   1327 ;len                       Allocated to stack - sp -16
+                                   1328 ;pf                        Allocated to stack - sp -19
+                                   1329 ;data                      Allocated to stack - sp -12
+                                   1330 ;p                         Allocated to stack - sp -3
+                                   1331 ;c                         Allocated to stack - sp +0
+                                   1332 ;sloc0                     Allocated to stack - sp -9
+                                   1333 ;sloc1                     Allocated to stack - sp -6
+                                   1334 ;------------------------------------------------------------
+                                   1335 ;	../../../core/net/mac/frame802154.c:252: frame802154_parse(uint8_t *data, uint8_t len, frame802154_t *pf)
+                                   1336 ;	-----------------------------------------
+                                   1337 ;	 function frame802154_parse
+                                   1338 ;	-----------------------------------------
+      0006C4                       1339 _frame802154_parse:
+      0006C4 C0 82            [24] 1340 	push	dpl
+      0006C6 C0 83            [24] 1341 	push	dph
+      0006C8 C0 F0            [24] 1342 	push	b
+      0006CA E5 81            [12] 1343 	mov	a,sp
+      0006CC 24 0A            [12] 1344 	add	a,#0x0a
+                                   1345 ;	../../../core/net/mac/frame802154.c:257: if(len < 3) {
+      0006CE F5 81            [12] 1346 	mov	sp,a
+      0006D0 24 F0            [12] 1347 	add	a,#0xf0
+      0006D2 F8               [12] 1348 	mov	r0,a
+      0006D3 B6 03 00         [24] 1349 	cjne	@r0,#0x03,00186$
+      0006D6                       1350 00186$:
+      0006D6 50 06            [24] 1351 	jnc	00102$
+                                   1352 ;	../../../core/net/mac/frame802154.c:258: return 0;
+      0006D8 75 82 00         [24] 1353 	mov	dpl,#0x00
+      0006DB 02r0Dr54         [24] 1354 	ljmp	00128$
+      0006DE                       1355 00102$:
+                                   1356 ;	../../../core/net/mac/frame802154.c:263: memset(&fcf, 0, sizeof(fcf));
+      0006DE 74 08            [12] 1357 	mov	a,#0x08
+      0006E0 C0 E0            [24] 1358 	push	acc
+      0006E2 E4               [12] 1359 	clr	a
+      0006E3 C0 E0            [24] 1360 	push	acc
+      0006E5 C0 E0            [24] 1361 	push	acc
+      0006E7 90r00r05         [24] 1362 	mov	dptr,#_fcf
+      0006EA 75 F0 00         [24] 1363 	mov	b,#0x00
+      0006ED 78r00            [12] 1364 	mov	r0,#_memset
+      0006EF 79s00            [12] 1365 	mov	r1,#(_memset >> 8)
+      0006F1 7As00            [12] 1366 	mov	r2,#(_memset >> 16)
+      0006F3 12r00r00         [24] 1367 	lcall	__sdcc_banked_call
+      0006F6 15 81            [12] 1368 	dec	sp
+      0006F8 15 81            [12] 1369 	dec	sp
+      0006FA 15 81            [12] 1370 	dec	sp
+                                   1371 ;	../../../core/net/mac/frame802154.c:265: fcf.frame_type = p[0] & 7;
+      0006FC E5 81            [12] 1372 	mov	a,sp
+      0006FE 24 F4            [12] 1373 	add	a,#0xf4
+      000700 F8               [12] 1374 	mov	r0,a
+      000701 86 82            [24] 1375 	mov	dpl,@r0
+      000703 08               [12] 1376 	inc	r0
+      000704 86 83            [24] 1377 	mov	dph,@r0
+      000706 08               [12] 1378 	inc	r0
+      000707 86 F0            [24] 1379 	mov	b,@r0
+      000709 12r00r00         [24] 1380 	lcall	__gptrget
+      00070C FC               [12] 1381 	mov	r4,a
+      00070D 53 04 07         [24] 1382 	anl	ar4,#0x07
+      000710 90r00r05         [24] 1383 	mov	dptr,#_fcf
+      000713 EC               [12] 1384 	mov	a,r4
+      000714 F0               [24] 1385 	movx	@dptr,a
+                                   1386 ;	../../../core/net/mac/frame802154.c:266: fcf.security_enabled = (p[0] >> 3) & 1;
+      000715 E5 81            [12] 1387 	mov	a,sp
+      000717 24 F4            [12] 1388 	add	a,#0xf4
+      000719 F8               [12] 1389 	mov	r0,a
+      00071A 86 82            [24] 1390 	mov	dpl,@r0
+      00071C 08               [12] 1391 	inc	r0
+      00071D 86 83            [24] 1392 	mov	dph,@r0
+      00071F 08               [12] 1393 	inc	r0
+      000720 86 F0            [24] 1394 	mov	b,@r0
+      000722 12r00r00         [24] 1395 	lcall	__gptrget
+      000725 A2 E3            [12] 1396 	mov	c,acc[3]
+      000727 E4               [12] 1397 	clr	a
+      000728 33               [12] 1398 	rlc	a
+      000729 90r00r06         [24] 1399 	mov	dptr,#(_fcf + 0x0001)
+      00072C F0               [24] 1400 	movx	@dptr,a
+                                   1401 ;	../../../core/net/mac/frame802154.c:267: fcf.frame_pending = (p[0] >> 4) & 1;
+      00072D E5 81            [12] 1402 	mov	a,sp
+      00072F 24 F4            [12] 1403 	add	a,#0xf4
+      000731 F8               [12] 1404 	mov	r0,a
+      000732 86 82            [24] 1405 	mov	dpl,@r0
+      000734 08               [12] 1406 	inc	r0
+      000735 86 83            [24] 1407 	mov	dph,@r0
+      000737 08               [12] 1408 	inc	r0
+      000738 86 F0            [24] 1409 	mov	b,@r0
+      00073A 12r00r00         [24] 1410 	lcall	__gptrget
+      00073D C4               [12] 1411 	swap	a
+      00073E 54 01            [12] 1412 	anl	a,#0x01
+      000740 90r00r07         [24] 1413 	mov	dptr,#(_fcf + 0x0002)
+      000743 F0               [24] 1414 	movx	@dptr,a
+                                   1415 ;	../../../core/net/mac/frame802154.c:268: fcf.ack_required = (p[0] >> 5) & 1;
+      000744 E5 81            [12] 1416 	mov	a,sp
+      000746 24 F4            [12] 1417 	add	a,#0xf4
+      000748 F8               [12] 1418 	mov	r0,a
+      000749 86 82            [24] 1419 	mov	dpl,@r0
+      00074B 08               [12] 1420 	inc	r0
+      00074C 86 83            [24] 1421 	mov	dph,@r0
+      00074E 08               [12] 1422 	inc	r0
+      00074F 86 F0            [24] 1423 	mov	b,@r0
+      000751 12r00r00         [24] 1424 	lcall	__gptrget
+      000754 A2 E5            [12] 1425 	mov	c,acc[5]
+      000756 E4               [12] 1426 	clr	a
+      000757 33               [12] 1427 	rlc	a
+      000758 90r00r08         [24] 1428 	mov	dptr,#(_fcf + 0x0003)
+      00075B F0               [24] 1429 	movx	@dptr,a
+                                   1430 ;	../../../core/net/mac/frame802154.c:269: fcf.panid_compression = (p[0] >> 6) & 1;
+      00075C E5 81            [12] 1431 	mov	a,sp
+      00075E 24 F4            [12] 1432 	add	a,#0xf4
+      000760 F8               [12] 1433 	mov	r0,a
+      000761 86 82            [24] 1434 	mov	dpl,@r0
+      000763 08               [12] 1435 	inc	r0
+      000764 86 83            [24] 1436 	mov	dph,@r0
+      000766 08               [12] 1437 	inc	r0
+      000767 86 F0            [24] 1438 	mov	b,@r0
+      000769 12r00r00         [24] 1439 	lcall	__gptrget
+      00076C 23               [12] 1440 	rl	a
+      00076D 23               [12] 1441 	rl	a
+      00076E 54 01            [12] 1442 	anl	a,#0x01
+      000770 90r00r09         [24] 1443 	mov	dptr,#(_fcf + 0x0004)
+      000773 F0               [24] 1444 	movx	@dptr,a
+                                   1445 ;	../../../core/net/mac/frame802154.c:271: fcf.dest_addr_mode = (p[1] >> 2) & 3;
+      000774 E5 81            [12] 1446 	mov	a,sp
+      000776 24 F4            [12] 1447 	add	a,#0xf4
+      000778 F8               [12] 1448 	mov	r0,a
+      000779 74 01            [12] 1449 	mov	a,#0x01
+      00077B 26               [12] 1450 	add	a,@r0
+      00077C FA               [12] 1451 	mov	r2,a
+      00077D E4               [12] 1452 	clr	a
+      00077E 08               [12] 1453 	inc	r0
+      00077F 36               [12] 1454 	addc	a,@r0
+      000780 FB               [12] 1455 	mov	r3,a
+      000781 08               [12] 1456 	inc	r0
+      000782 86 04            [24] 1457 	mov	ar4,@r0
+      000784 8A 82            [24] 1458 	mov	dpl,r2
+      000786 8B 83            [24] 1459 	mov	dph,r3
+      000788 8C F0            [24] 1460 	mov	b,r4
+      00078A 12r00r00         [24] 1461 	lcall	__gptrget
+      00078D 03               [12] 1462 	rr	a
+      00078E 03               [12] 1463 	rr	a
+      00078F 54 3F            [12] 1464 	anl	a,#0x3f
+      000791 FF               [12] 1465 	mov	r7,a
+      000792 53 07 03         [24] 1466 	anl	ar7,#0x03
+      000795 90r00r0A         [24] 1467 	mov	dptr,#(_fcf + 0x0005)
+      000798 EF               [12] 1468 	mov	a,r7
+      000799 F0               [24] 1469 	movx	@dptr,a
+                                   1470 ;	../../../core/net/mac/frame802154.c:272: fcf.frame_version = (p[1] >> 4) & 3;
+      00079A 8A 82            [24] 1471 	mov	dpl,r2
+      00079C 8B 83            [24] 1472 	mov	dph,r3
+      00079E 8C F0            [24] 1473 	mov	b,r4
+      0007A0 12r00r00         [24] 1474 	lcall	__gptrget
+      0007A3 C4               [12] 1475 	swap	a
+      0007A4 54 0F            [12] 1476 	anl	a,#0x0f
+      0007A6 FF               [12] 1477 	mov	r7,a
+      0007A7 53 07 03         [24] 1478 	anl	ar7,#0x03
+      0007AA 90r00r0B         [24] 1479 	mov	dptr,#(_fcf + 0x0006)
+      0007AD EF               [12] 1480 	mov	a,r7
+      0007AE F0               [24] 1481 	movx	@dptr,a
+                                   1482 ;	../../../core/net/mac/frame802154.c:273: fcf.src_addr_mode = (p[1] >> 6) & 3;
+      0007AF 8A 82            [24] 1483 	mov	dpl,r2
+      0007B1 8B 83            [24] 1484 	mov	dph,r3
+      0007B3 8C F0            [24] 1485 	mov	b,r4
+      0007B5 12r00r00         [24] 1486 	lcall	__gptrget
+      0007B8 23               [12] 1487 	rl	a
+      0007B9 23               [12] 1488 	rl	a
+      0007BA 54 03            [12] 1489 	anl	a,#0x03
+      0007BC FA               [12] 1490 	mov	r2,a
+      0007BD 53 02 03         [24] 1491 	anl	ar2,#0x03
+      0007C0 90r00r0C         [24] 1492 	mov	dptr,#(_fcf + 0x0007)
+      0007C3 EA               [12] 1493 	mov	a,r2
+      0007C4 F0               [24] 1494 	movx	@dptr,a
+                                   1495 ;	../../../core/net/mac/frame802154.c:276: memcpy(&pf->fcf, &fcf, sizeof(frame802154_fcf_t));
+      0007C5 E5 81            [12] 1496 	mov	a,sp
+      0007C7 24 ED            [12] 1497 	add	a,#0xed
+      0007C9 F8               [12] 1498 	mov	r0,a
+      0007CA 86 05            [24] 1499 	mov	ar5,@r0
+      0007CC 08               [12] 1500 	inc	r0
+      0007CD 86 06            [24] 1501 	mov	ar6,@r0
+      0007CF 08               [12] 1502 	inc	r0
+      0007D0 86 07            [24] 1503 	mov	ar7,@r0
+      0007D2 8D 02            [24] 1504 	mov	ar2,r5
+      0007D4 8E 03            [24] 1505 	mov	ar3,r6
+      0007D6 8F 04            [24] 1506 	mov	ar4,r7
+      0007D8 C0 07            [24] 1507 	push	ar7
+      0007DA C0 06            [24] 1508 	push	ar6
+      0007DC C0 05            [24] 1509 	push	ar5
+      0007DE 74 08            [12] 1510 	mov	a,#0x08
+      0007E0 C0 E0            [24] 1511 	push	acc
+      0007E2 E4               [12] 1512 	clr	a
+      0007E3 C0 E0            [24] 1513 	push	acc
+      0007E5 74r05            [12] 1514 	mov	a,#_fcf
+      0007E7 C0 E0            [24] 1515 	push	acc
+      0007E9 74s00            [12] 1516 	mov	a,#(_fcf >> 8)
+      0007EB C0 E0            [24] 1517 	push	acc
+      0007ED E4               [12] 1518 	clr	a
+      0007EE C0 E0            [24] 1519 	push	acc
+      0007F0 8A 82            [24] 1520 	mov	dpl,r2
+      0007F2 8B 83            [24] 1521 	mov	dph,r3
+      0007F4 8C F0            [24] 1522 	mov	b,r4
+      0007F6 78r00            [12] 1523 	mov	r0,#___memcpy
+      0007F8 79s00            [12] 1524 	mov	r1,#(___memcpy >> 8)
+      0007FA 7As00            [12] 1525 	mov	r2,#(___memcpy >> 16)
+      0007FC 12r00r00         [24] 1526 	lcall	__sdcc_banked_call
+      0007FF E5 81            [12] 1527 	mov	a,sp
+      000801 24 FB            [12] 1528 	add	a,#0xfb
+      000803 F5 81            [12] 1529 	mov	sp,a
+      000805 D0 05            [24] 1530 	pop	ar5
+      000807 D0 06            [24] 1531 	pop	ar6
+      000809 D0 07            [24] 1532 	pop	ar7
+                                   1533 ;	../../../core/net/mac/frame802154.c:277: pf->seq = p[2];
+      00080B E5 81            [12] 1534 	mov	a,sp
+      00080D 24 F7            [12] 1535 	add	a,#0xf7
+      00080F F8               [12] 1536 	mov	r0,a
+      000810 74 08            [12] 1537 	mov	a,#0x08
+      000812 2D               [12] 1538 	add	a,r5
+      000813 F6               [12] 1539 	mov	@r0,a
+      000814 E4               [12] 1540 	clr	a
+      000815 3E               [12] 1541 	addc	a,r6
+      000816 08               [12] 1542 	inc	r0
+      000817 F6               [12] 1543 	mov	@r0,a
+      000818 08               [12] 1544 	inc	r0
+      000819 A6 07            [24] 1545 	mov	@r0,ar7
+      00081B E5 81            [12] 1546 	mov	a,sp
+      00081D 24 F4            [12] 1547 	add	a,#0xf4
+      00081F F8               [12] 1548 	mov	r0,a
+      000820 74 02            [12] 1549 	mov	a,#0x02
+      000822 26               [12] 1550 	add	a,@r0
+      000823 FA               [12] 1551 	mov	r2,a
+      000824 E4               [12] 1552 	clr	a
+      000825 08               [12] 1553 	inc	r0
+      000826 36               [12] 1554 	addc	a,@r0
+      000827 FB               [12] 1555 	mov	r3,a
+      000828 08               [12] 1556 	inc	r0
+      000829 86 04            [24] 1557 	mov	ar4,@r0
+      00082B 8A 82            [24] 1558 	mov	dpl,r2
+      00082D 8B 83            [24] 1559 	mov	dph,r3
+      00082F 8C F0            [24] 1560 	mov	b,r4
+      000831 12r00r00         [24] 1561 	lcall	__gptrget
+      000834 FA               [12] 1562 	mov	r2,a
+      000835 E5 81            [12] 1563 	mov	a,sp
+      000837 24 F7            [12] 1564 	add	a,#0xf7
+      000839 F8               [12] 1565 	mov	r0,a
+      00083A 86 82            [24] 1566 	mov	dpl,@r0
+      00083C 08               [12] 1567 	inc	r0
+      00083D 86 83            [24] 1568 	mov	dph,@r0
+      00083F 08               [12] 1569 	inc	r0
+      000840 86 F0            [24] 1570 	mov	b,@r0
+      000842 EA               [12] 1571 	mov	a,r2
+      000843 12r00r00         [24] 1572 	lcall	__gptrput
+                                   1573 ;	../../../core/net/mac/frame802154.c:278: p += 3;                             /* Skip first three bytes */
+      000846 E5 81            [12] 1574 	mov	a,sp
+      000848 24 F4            [12] 1575 	add	a,#0xf4
+      00084A F8               [12] 1576 	mov	r0,a
+      00084B E5 81            [12] 1577 	mov	a,sp
+      00084D 24 FD            [12] 1578 	add	a,#0xfd
+      00084F F9               [12] 1579 	mov	r1,a
+      000850 74 03            [12] 1580 	mov	a,#0x03
+      000852 26               [12] 1581 	add	a,@r0
+      000853 F7               [12] 1582 	mov	@r1,a
+      000854 E4               [12] 1583 	clr	a
+      000855 08               [12] 1584 	inc	r0
+      000856 36               [12] 1585 	addc	a,@r0
+      000857 09               [12] 1586 	inc	r1
+      000858 F7               [12] 1587 	mov	@r1,a
+      000859 08               [12] 1588 	inc	r0
+      00085A 09               [12] 1589 	inc	r1
+      00085B E6               [12] 1590 	mov	a,@r0
+      00085C F7               [12] 1591 	mov	@r1,a
+                                   1592 ;	../../../core/net/mac/frame802154.c:281: if(fcf.dest_addr_mode) {
+      00085D 90r00r0A         [24] 1593 	mov	dptr,#(_fcf + 0x0005)
+      000860 E0               [24] 1594 	movx	a,@dptr
+      000861 70 03            [24] 1595 	jnz	00188$
+      000863 02r0Ar2D         [24] 1596 	ljmp	00110$
+      000866                       1597 00188$:
+                                   1598 ;	../../../core/net/mac/frame802154.c:283: pf->dest_pid = p[0] + (p[1] << 8);
+      000866 74 09            [12] 1599 	mov	a,#0x09
+      000868 2D               [12] 1600 	add	a,r5
+      000869 FA               [12] 1601 	mov	r2,a
+      00086A E4               [12] 1602 	clr	a
+      00086B 3E               [12] 1603 	addc	a,r6
+      00086C FB               [12] 1604 	mov	r3,a
+      00086D 8F 04            [24] 1605 	mov	ar4,r7
+      00086F C0 05            [24] 1606 	push	ar5
+      000871 C0 06            [24] 1607 	push	ar6
+      000873 C0 07            [24] 1608 	push	ar7
+      000875 E5 81            [12] 1609 	mov	a,sp
+      000877 24 FA            [12] 1610 	add	a,#0xfa
+      000879 F8               [12] 1611 	mov	r0,a
+      00087A 86 82            [24] 1612 	mov	dpl,@r0
+      00087C 08               [12] 1613 	inc	r0
+      00087D 86 83            [24] 1614 	mov	dph,@r0
+      00087F 08               [12] 1615 	inc	r0
+      000880 86 F0            [24] 1616 	mov	b,@r0
+      000882 12r00r00         [24] 1617 	lcall	__gptrget
+      000885 FF               [12] 1618 	mov	r7,a
+      000886 E5 81            [12] 1619 	mov	a,sp
+      000888 24 F4            [12] 1620 	add	a,#0xf4
+      00088A F8               [12] 1621 	mov	r0,a
+      00088B A6 07            [24] 1622 	mov	@r0,ar7
+      00088D 08               [12] 1623 	inc	r0
+      00088E 76 00            [12] 1624 	mov	@r0,#0x00
+      000890 E5 81            [12] 1625 	mov	a,sp
+      000892 24 FA            [12] 1626 	add	a,#0xfa
+      000894 F8               [12] 1627 	mov	r0,a
+      000895 74 01            [12] 1628 	mov	a,#0x01
+      000897 26               [12] 1629 	add	a,@r0
+      000898 FD               [12] 1630 	mov	r5,a
+      000899 E4               [12] 1631 	clr	a
+      00089A 08               [12] 1632 	inc	r0
+      00089B 36               [12] 1633 	addc	a,@r0
+      00089C FE               [12] 1634 	mov	r6,a
+      00089D 08               [12] 1635 	inc	r0
+      00089E 86 07            [24] 1636 	mov	ar7,@r0
+      0008A0 8D 82            [24] 1637 	mov	dpl,r5
+      0008A2 8E 83            [24] 1638 	mov	dph,r6
+      0008A4 8F F0            [24] 1639 	mov	b,r7
+      0008A6 12r00r00         [24] 1640 	lcall	__gptrget
+      0008A9 FF               [12] 1641 	mov	r7,a
+      0008AA 7D 00            [12] 1642 	mov	r5,#0x00
+      0008AC E5 81            [12] 1643 	mov	a,sp
+      0008AE 24 F4            [12] 1644 	add	a,#0xf4
+      0008B0 F8               [12] 1645 	mov	r0,a
+      0008B1 ED               [12] 1646 	mov	a,r5
+      0008B2 26               [12] 1647 	add	a,@r0
+      0008B3 FD               [12] 1648 	mov	r5,a
+      0008B4 EF               [12] 1649 	mov	a,r7
+      0008B5 08               [12] 1650 	inc	r0
+      0008B6 36               [12] 1651 	addc	a,@r0
+      0008B7 FF               [12] 1652 	mov	r7,a
+      0008B8 8A 82            [24] 1653 	mov	dpl,r2
+      0008BA 8B 83            [24] 1654 	mov	dph,r3
+      0008BC 8C F0            [24] 1655 	mov	b,r4
+      0008BE ED               [12] 1656 	mov	a,r5
+      0008BF 12r00r00         [24] 1657 	lcall	__gptrput
+      0008C2 A3               [24] 1658 	inc	dptr
+      0008C3 EF               [12] 1659 	mov	a,r7
+      0008C4 12r00r00         [24] 1660 	lcall	__gptrput
+                                   1661 ;	../../../core/net/mac/frame802154.c:284: p += 2;
+      0008C7 E5 81            [12] 1662 	mov	a,sp
+      0008C9 24 FA            [12] 1663 	add	a,#0xfa
+      0008CB F8               [12] 1664 	mov	r0,a
+      0008CC 74 02            [12] 1665 	mov	a,#0x02
+      0008CE 26               [12] 1666 	add	a,@r0
+      0008CF F6               [12] 1667 	mov	@r0,a
+      0008D0 E4               [12] 1668 	clr	a
+      0008D1 08               [12] 1669 	inc	r0
+      0008D2 36               [12] 1670 	addc	a,@r0
+      0008D3 F6               [12] 1671 	mov	@r0,a
+                                   1672 ;	../../../core/net/mac/frame802154.c:292: if(fcf.dest_addr_mode == FRAME802154_SHORTADDRMODE) {
+      0008D4 90r00r0A         [24] 1673 	mov	dptr,#(_fcf + 0x0005)
+      0008D7 E0               [24] 1674 	movx	a,@dptr
+      0008D8 FC               [12] 1675 	mov	r4,a
+      0008D9 BC 02 02         [24] 1676 	cjne	r4,#0x02,00189$
+      0008DC 80 09            [24] 1677 	sjmp	00190$
+      0008DE                       1678 00189$:
+      0008DE D0 07            [24] 1679 	pop	ar7
+      0008E0 D0 06            [24] 1680 	pop	ar6
+      0008E2 D0 05            [24] 1681 	pop	ar5
+      0008E4 02r09rA0         [24] 1682 	ljmp	00107$
+      0008E7                       1683 00190$:
+      0008E7 D0 07            [24] 1684 	pop	ar7
+      0008E9 D0 06            [24] 1685 	pop	ar6
+      0008EB D0 05            [24] 1686 	pop	ar5
+                                   1687 ;	../../../core/net/mac/frame802154.c:293: rimeaddr_copy((rimeaddr_t *)&(pf->dest_addr), &rimeaddr_null);
+      0008ED E5 81            [12] 1688 	mov	a,sp
+      0008EF 24 FA            [12] 1689 	add	a,#0xfa
+      0008F1 F8               [12] 1690 	mov	r0,a
+      0008F2 74 0B            [12] 1691 	mov	a,#0x0b
+      0008F4 2D               [12] 1692 	add	a,r5
+      0008F5 F6               [12] 1693 	mov	@r0,a
+      0008F6 E4               [12] 1694 	clr	a
+      0008F7 3E               [12] 1695 	addc	a,r6
+      0008F8 08               [12] 1696 	inc	r0
+      0008F9 F6               [12] 1697 	mov	@r0,a
+      0008FA 08               [12] 1698 	inc	r0
+      0008FB A6 07            [24] 1699 	mov	@r0,ar7
+      0008FD E5 81            [12] 1700 	mov	a,sp
+      0008FF 24 FA            [12] 1701 	add	a,#0xfa
+      000901 F8               [12] 1702 	mov	r0,a
+      000902 86 02            [24] 1703 	mov	ar2,@r0
+      000904 08               [12] 1704 	inc	r0
+      000905 86 03            [24] 1705 	mov	ar3,@r0
+      000907 08               [12] 1706 	inc	r0
+      000908 86 04            [24] 1707 	mov	ar4,@r0
+      00090A C0 07            [24] 1708 	push	ar7
+      00090C C0 06            [24] 1709 	push	ar6
+      00090E C0 05            [24] 1710 	push	ar5
+      000910 74r00            [12] 1711 	mov	a,#_rimeaddr_null
+      000912 C0 E0            [24] 1712 	push	acc
+      000914 74s00            [12] 1713 	mov	a,#(_rimeaddr_null >> 8)
+      000916 C0 E0            [24] 1714 	push	acc
+      000918 74 80            [12] 1715 	mov	a,#0x80
+      00091A C0 E0            [24] 1716 	push	acc
+      00091C 8A 82            [24] 1717 	mov	dpl,r2
+      00091E 8B 83            [24] 1718 	mov	dph,r3
+      000920 8C F0            [24] 1719 	mov	b,r4
+      000922 78r00            [12] 1720 	mov	r0,#_rimeaddr_copy
+      000924 79s00            [12] 1721 	mov	r1,#(_rimeaddr_copy >> 8)
+      000926 7As00            [12] 1722 	mov	r2,#(_rimeaddr_copy >> 16)
+      000928 12r00r00         [24] 1723 	lcall	__sdcc_banked_call
+      00092B 15 81            [12] 1724 	dec	sp
+      00092D 15 81            [12] 1725 	dec	sp
+      00092F 15 81            [12] 1726 	dec	sp
+      000931 D0 05            [24] 1727 	pop	ar5
+      000933 D0 06            [24] 1728 	pop	ar6
+      000935 D0 07            [24] 1729 	pop	ar7
+                                   1730 ;	../../../core/net/mac/frame802154.c:294: pf->dest_addr[0] = p[1];
+      000937 E5 81            [12] 1731 	mov	a,sp
+      000939 24 FD            [12] 1732 	add	a,#0xfd
+      00093B F8               [12] 1733 	mov	r0,a
+      00093C 74 01            [12] 1734 	mov	a,#0x01
+      00093E 26               [12] 1735 	add	a,@r0
+      00093F FA               [12] 1736 	mov	r2,a
+      000940 E4               [12] 1737 	clr	a
+      000941 08               [12] 1738 	inc	r0
+      000942 36               [12] 1739 	addc	a,@r0
+      000943 FB               [12] 1740 	mov	r3,a
+      000944 08               [12] 1741 	inc	r0
+      000945 86 04            [24] 1742 	mov	ar4,@r0
+      000947 8A 82            [24] 1743 	mov	dpl,r2
+      000949 8B 83            [24] 1744 	mov	dph,r3
+      00094B 8C F0            [24] 1745 	mov	b,r4
+      00094D 12r00r00         [24] 1746 	lcall	__gptrget
+      000950 FA               [12] 1747 	mov	r2,a
+      000951 E5 81            [12] 1748 	mov	a,sp
+      000953 24 FA            [12] 1749 	add	a,#0xfa
+      000955 F8               [12] 1750 	mov	r0,a
+      000956 86 82            [24] 1751 	mov	dpl,@r0
+      000958 08               [12] 1752 	inc	r0
+      000959 86 83            [24] 1753 	mov	dph,@r0
+      00095B 08               [12] 1754 	inc	r0
+      00095C 86 F0            [24] 1755 	mov	b,@r0
+      00095E EA               [12] 1756 	mov	a,r2
+      00095F 12r00r00         [24] 1757 	lcall	__gptrput
+                                   1758 ;	../../../core/net/mac/frame802154.c:295: pf->dest_addr[1] = p[0];
+      000962 74 0C            [12] 1759 	mov	a,#0x0c
+      000964 2D               [12] 1760 	add	a,r5
+      000965 FA               [12] 1761 	mov	r2,a
+      000966 E4               [12] 1762 	clr	a
+      000967 3E               [12] 1763 	addc	a,r6
+      000968 FB               [12] 1764 	mov	r3,a
+      000969 8F 04            [24] 1765 	mov	ar4,r7
+      00096B C0 05            [24] 1766 	push	ar5
+      00096D C0 06            [24] 1767 	push	ar6
+      00096F C0 07            [24] 1768 	push	ar7
+      000971 E5 81            [12] 1769 	mov	a,sp
+      000973 24 FA            [12] 1770 	add	a,#0xfa
+      000975 F8               [12] 1771 	mov	r0,a
+      000976 86 82            [24] 1772 	mov	dpl,@r0
+      000978 08               [12] 1773 	inc	r0
+      000979 86 83            [24] 1774 	mov	dph,@r0
+      00097B 08               [12] 1775 	inc	r0
+      00097C 86 F0            [24] 1776 	mov	b,@r0
+      00097E 12r00r00         [24] 1777 	lcall	__gptrget
+      000981 8A 82            [24] 1778 	mov	dpl,r2
+      000983 8B 83            [24] 1779 	mov	dph,r3
+      000985 8C F0            [24] 1780 	mov	b,r4
+      000987 12r00r00         [24] 1781 	lcall	__gptrput
+                                   1782 ;	../../../core/net/mac/frame802154.c:296: p += 2;
+      00098A E5 81            [12] 1783 	mov	a,sp
+      00098C 24 FA            [12] 1784 	add	a,#0xfa
+      00098E F8               [12] 1785 	mov	r0,a
+      00098F 74 02            [12] 1786 	mov	a,#0x02
+      000991 26               [12] 1787 	add	a,@r0
+      000992 F6               [12] 1788 	mov	@r0,a
+      000993 E4               [12] 1789 	clr	a
+      000994 08               [12] 1790 	inc	r0
+      000995 36               [12] 1791 	addc	a,@r0
+      000996 F6               [12] 1792 	mov	@r0,a
+      000997 D0 07            [24] 1793 	pop	ar7
+      000999 D0 06            [24] 1794 	pop	ar6
+      00099B D0 05            [24] 1795 	pop	ar5
+      00099D 02r0Ar7A         [24] 1796 	ljmp	00111$
+      0009A0                       1797 00107$:
+                                   1798 ;	../../../core/net/mac/frame802154.c:297: } else if(fcf.dest_addr_mode == FRAME802154_LONGADDRMODE) {
+      0009A0 BC 03 02         [24] 1799 	cjne	r4,#0x03,00191$
+      0009A3 80 03            [24] 1800 	sjmp	00192$
+      0009A5                       1801 00191$:
+      0009A5 02r0Ar7A         [24] 1802 	ljmp	00111$
+      0009A8                       1803 00192$:
+                                   1804 ;	../../../core/net/mac/frame802154.c:298: for(c = 0; c < 8; c++) {
+      0009A8 E5 81            [12] 1805 	mov	a,sp
+      0009AA 24 FA            [12] 1806 	add	a,#0xfa
+      0009AC F8               [12] 1807 	mov	r0,a
+      0009AD 74 0B            [12] 1808 	mov	a,#0x0b
+      0009AF 2D               [12] 1809 	add	a,r5
+      0009B0 F6               [12] 1810 	mov	@r0,a
+      0009B1 E4               [12] 1811 	clr	a
+      0009B2 3E               [12] 1812 	addc	a,r6
+      0009B3 08               [12] 1813 	inc	r0
+      0009B4 F6               [12] 1814 	mov	@r0,a
+      0009B5 08               [12] 1815 	inc	r0
+      0009B6 A6 07            [24] 1816 	mov	@r0,ar7
+      0009B8 A8 81            [24] 1817 	mov	r0,sp
+      0009BA 76 00            [12] 1818 	mov	@r0,#0x00
+      0009BC                       1819 00124$:
+                                   1820 ;	../../../core/net/mac/frame802154.c:299: pf->dest_addr[c] = p[7 - c];
+      0009BC C0 05            [24] 1821 	push	ar5
+      0009BE C0 06            [24] 1822 	push	ar6
+      0009C0 C0 07            [24] 1823 	push	ar7
+      0009C2 E5 81            [12] 1824 	mov	a,sp
+      0009C4 24 F7            [12] 1825 	add	a,#0xf7
+      0009C6 F8               [12] 1826 	mov	r0,a
+      0009C7 E5 81            [12] 1827 	mov	a,sp
+      0009C9 24 FD            [12] 1828 	add	a,#0xfd
+      0009CB F9               [12] 1829 	mov	r1,a
+      0009CC E7               [12] 1830 	mov	a,@r1
+      0009CD 26               [12] 1831 	add	a,@r0
+      0009CE FA               [12] 1832 	mov	r2,a
+      0009CF E4               [12] 1833 	clr	a
+      0009D0 08               [12] 1834 	inc	r0
+      0009D1 36               [12] 1835 	addc	a,@r0
+      0009D2 FB               [12] 1836 	mov	r3,a
+      0009D3 08               [12] 1837 	inc	r0
+      0009D4 86 07            [24] 1838 	mov	ar7,@r0
+      0009D6 E5 81            [12] 1839 	mov	a,sp
+      0009D8 24 FD            [12] 1840 	add	a,#0xfd
+      0009DA F8               [12] 1841 	mov	r0,a
+      0009DB 86 05            [24] 1842 	mov	ar5,@r0
+      0009DD 7E 00            [12] 1843 	mov	r6,#0x00
+      0009DF 74 07            [12] 1844 	mov	a,#0x07
+      0009E1 C3               [12] 1845 	clr	c
+      0009E2 9D               [12] 1846 	subb	a,r5
+      0009E3 FD               [12] 1847 	mov	r5,a
+      0009E4 E4               [12] 1848 	clr	a
+      0009E5 9E               [12] 1849 	subb	a,r6
+      0009E6 FE               [12] 1850 	mov	r6,a
+      0009E7 E5 81            [12] 1851 	mov	a,sp
+      0009E9 24 FA            [12] 1852 	add	a,#0xfa
+      0009EB F8               [12] 1853 	mov	r0,a
+      0009EC ED               [12] 1854 	mov	a,r5
+      0009ED 26               [12] 1855 	add	a,@r0
+      0009EE FD               [12] 1856 	mov	r5,a
+      0009EF EE               [12] 1857 	mov	a,r6
+      0009F0 08               [12] 1858 	inc	r0
+      0009F1 36               [12] 1859 	addc	a,@r0
+      0009F2 FC               [12] 1860 	mov	r4,a
+      0009F3 08               [12] 1861 	inc	r0
+      0009F4 86 06            [24] 1862 	mov	ar6,@r0
+      0009F6 8D 82            [24] 1863 	mov	dpl,r5
+      0009F8 8C 83            [24] 1864 	mov	dph,r4
+      0009FA 8E F0            [24] 1865 	mov	b,r6
+      0009FC 12r00r00         [24] 1866 	lcall	__gptrget
+      0009FF 8A 82            [24] 1867 	mov	dpl,r2
+      000A01 8B 83            [24] 1868 	mov	dph,r3
+      000A03 8F F0            [24] 1869 	mov	b,r7
+      000A05 12r00r00         [24] 1870 	lcall	__gptrput
+                                   1871 ;	../../../core/net/mac/frame802154.c:298: for(c = 0; c < 8; c++) {
+      000A08 E5 81            [12] 1872 	mov	a,sp
+      000A0A 24 FD            [12] 1873 	add	a,#0xfd
+      000A0C F8               [12] 1874 	mov	r0,a
+      000A0D 06               [12] 1875 	inc	@r0
+      000A0E E5 81            [12] 1876 	mov	a,sp
+      000A10 24 FD            [12] 1877 	add	a,#0xfd
+      000A12 F8               [12] 1878 	mov	r0,a
+      000A13 B6 08 00         [24] 1879 	cjne	@r0,#0x08,00193$
+      000A16                       1880 00193$:
+      000A16 D0 07            [24] 1881 	pop	ar7
+      000A18 D0 06            [24] 1882 	pop	ar6
+      000A1A D0 05            [24] 1883 	pop	ar5
+      000A1C 40 9E            [24] 1884 	jc	00124$
+                                   1885 ;	../../../core/net/mac/frame802154.c:301: p += 8;
+      000A1E E5 81            [12] 1886 	mov	a,sp
+      000A20 24 FD            [12] 1887 	add	a,#0xfd
+      000A22 F8               [12] 1888 	mov	r0,a
+      000A23 74 08            [12] 1889 	mov	a,#0x08
+      000A25 26               [12] 1890 	add	a,@r0
+      000A26 F6               [12] 1891 	mov	@r0,a
+      000A27 E4               [12] 1892 	clr	a
+      000A28 08               [12] 1893 	inc	r0
+      000A29 36               [12] 1894 	addc	a,@r0
+      000A2A F6               [12] 1895 	mov	@r0,a
+      000A2B 80 4D            [24] 1896 	sjmp	00111$
+      000A2D                       1897 00110$:
+                                   1898 ;	../../../core/net/mac/frame802154.c:304: rimeaddr_copy((rimeaddr_t *)&(pf->dest_addr), &rimeaddr_null);
+      000A2D 74 0B            [12] 1899 	mov	a,#0x0b
+      000A2F 2D               [12] 1900 	add	a,r5
+      000A30 FA               [12] 1901 	mov	r2,a
+      000A31 E4               [12] 1902 	clr	a
+      000A32 3E               [12] 1903 	addc	a,r6
+      000A33 FB               [12] 1904 	mov	r3,a
+      000A34 8F 04            [24] 1905 	mov	ar4,r7
+      000A36 C0 07            [24] 1906 	push	ar7
+      000A38 C0 06            [24] 1907 	push	ar6
+      000A3A C0 05            [24] 1908 	push	ar5
+      000A3C 74r00            [12] 1909 	mov	a,#_rimeaddr_null
+      000A3E C0 E0            [24] 1910 	push	acc
+      000A40 74s00            [12] 1911 	mov	a,#(_rimeaddr_null >> 8)
+      000A42 C0 E0            [24] 1912 	push	acc
+      000A44 74 80            [12] 1913 	mov	a,#0x80
+      000A46 C0 E0            [24] 1914 	push	acc
+      000A48 8A 82            [24] 1915 	mov	dpl,r2
+      000A4A 8B 83            [24] 1916 	mov	dph,r3
+      000A4C 8C F0            [24] 1917 	mov	b,r4
+      000A4E 78r00            [12] 1918 	mov	r0,#_rimeaddr_copy
+      000A50 79s00            [12] 1919 	mov	r1,#(_rimeaddr_copy >> 8)
+      000A52 7As00            [12] 1920 	mov	r2,#(_rimeaddr_copy >> 16)
+      000A54 12r00r00         [24] 1921 	lcall	__sdcc_banked_call
+      000A57 15 81            [12] 1922 	dec	sp
+      000A59 15 81            [12] 1923 	dec	sp
+      000A5B 15 81            [12] 1924 	dec	sp
+      000A5D D0 05            [24] 1925 	pop	ar5
+      000A5F D0 06            [24] 1926 	pop	ar6
+      000A61 D0 07            [24] 1927 	pop	ar7
+                                   1928 ;	../../../core/net/mac/frame802154.c:305: pf->dest_pid = 0;
+      000A63 74 09            [12] 1929 	mov	a,#0x09
+      000A65 2D               [12] 1930 	add	a,r5
+      000A66 FA               [12] 1931 	mov	r2,a
+      000A67 E4               [12] 1932 	clr	a
+      000A68 3E               [12] 1933 	addc	a,r6
+      000A69 FB               [12] 1934 	mov	r3,a
+      000A6A 8F 04            [24] 1935 	mov	ar4,r7
+      000A6C 8A 82            [24] 1936 	mov	dpl,r2
+      000A6E 8B 83            [24] 1937 	mov	dph,r3
+      000A70 8C F0            [24] 1938 	mov	b,r4
+      000A72 E4               [12] 1939 	clr	a
+      000A73 12r00r00         [24] 1940 	lcall	__gptrput
+      000A76 A3               [24] 1941 	inc	dptr
+      000A77 12r00r00         [24] 1942 	lcall	__gptrput
+      000A7A                       1943 00111$:
+                                   1944 ;	../../../core/net/mac/frame802154.c:309: if(fcf.src_addr_mode) {
+      000A7A 90r00r0C         [24] 1945 	mov	dptr,#(_fcf + 0x0007)
+      000A7D E0               [24] 1946 	movx	a,@dptr
+      000A7E 70 03            [24] 1947 	jnz	00195$
+      000A80 02r0Cr92         [24] 1948 	ljmp	00122$
+      000A83                       1949 00195$:
+                                   1950 ;	../../../core/net/mac/frame802154.c:311: if(!fcf.panid_compression) {
+      000A83 90r00r09         [24] 1951 	mov	dptr,#(_fcf + 0x0004)
+      000A86 E0               [24] 1952 	movx	a,@dptr
+      000A87 60 03            [24] 1953 	jz	00196$
+      000A89 02r0Br02         [24] 1954 	ljmp	00113$
+      000A8C                       1955 00196$:
+                                   1956 ;	../../../core/net/mac/frame802154.c:312: pf->src_pid = p[0] + (p[1] << 8);
+      000A8C 74 13            [12] 1957 	mov	a,#0x13
+      000A8E 2D               [12] 1958 	add	a,r5
+      000A8F FA               [12] 1959 	mov	r2,a
+      000A90 E4               [12] 1960 	clr	a
+      000A91 3E               [12] 1961 	addc	a,r6
+      000A92 FB               [12] 1962 	mov	r3,a
+      000A93 8F 04            [24] 1963 	mov	ar4,r7
+      000A95 C0 05            [24] 1964 	push	ar5
+      000A97 C0 06            [24] 1965 	push	ar6
+      000A99 C0 07            [24] 1966 	push	ar7
+      000A9B E5 81            [12] 1967 	mov	a,sp
+      000A9D 24 FA            [12] 1968 	add	a,#0xfa
+      000A9F F8               [12] 1969 	mov	r0,a
+      000AA0 86 82            [24] 1970 	mov	dpl,@r0
+      000AA2 08               [12] 1971 	inc	r0
+      000AA3 86 83            [24] 1972 	mov	dph,@r0
+      000AA5 08               [12] 1973 	inc	r0
+      000AA6 86 F0            [24] 1974 	mov	b,@r0
+      000AA8 12r00r00         [24] 1975 	lcall	__gptrget
+      000AAB FF               [12] 1976 	mov	r7,a
+      000AAC E5 81            [12] 1977 	mov	a,sp
+      000AAE 24 F7            [12] 1978 	add	a,#0xf7
+      000AB0 F8               [12] 1979 	mov	r0,a
+      000AB1 A6 07            [24] 1980 	mov	@r0,ar7
+      000AB3 08               [12] 1981 	inc	r0
+      000AB4 76 00            [12] 1982 	mov	@r0,#0x00
+      000AB6 E5 81            [12] 1983 	mov	a,sp
+      000AB8 24 FA            [12] 1984 	add	a,#0xfa
+      000ABA F8               [12] 1985 	mov	r0,a
+      000ABB 74 01            [12] 1986 	mov	a,#0x01
+      000ABD 26               [12] 1987 	add	a,@r0
+      000ABE FD               [12] 1988 	mov	r5,a
+      000ABF E4               [12] 1989 	clr	a
+      000AC0 08               [12] 1990 	inc	r0
+      000AC1 36               [12] 1991 	addc	a,@r0
+      000AC2 FE               [12] 1992 	mov	r6,a
+      000AC3 08               [12] 1993 	inc	r0
+      000AC4 86 07            [24] 1994 	mov	ar7,@r0
+      000AC6 8D 82            [24] 1995 	mov	dpl,r5
+      000AC8 8E 83            [24] 1996 	mov	dph,r6
+      000ACA 8F F0            [24] 1997 	mov	b,r7
+      000ACC 12r00r00         [24] 1998 	lcall	__gptrget
+      000ACF FF               [12] 1999 	mov	r7,a
+      000AD0 7D 00            [12] 2000 	mov	r5,#0x00
+      000AD2 E5 81            [12] 2001 	mov	a,sp
+      000AD4 24 F7            [12] 2002 	add	a,#0xf7
+      000AD6 F8               [12] 2003 	mov	r0,a
+      000AD7 ED               [12] 2004 	mov	a,r5
+      000AD8 26               [12] 2005 	add	a,@r0
+      000AD9 FD               [12] 2006 	mov	r5,a
+      000ADA EF               [12] 2007 	mov	a,r7
+      000ADB 08               [12] 2008 	inc	r0
+      000ADC 36               [12] 2009 	addc	a,@r0
+      000ADD FF               [12] 2010 	mov	r7,a
+      000ADE 8A 82            [24] 2011 	mov	dpl,r2
+      000AE0 8B 83            [24] 2012 	mov	dph,r3
+      000AE2 8C F0            [24] 2013 	mov	b,r4
+      000AE4 ED               [12] 2014 	mov	a,r5
+      000AE5 12r00r00         [24] 2015 	lcall	__gptrput
+      000AE8 A3               [24] 2016 	inc	dptr
+      000AE9 EF               [12] 2017 	mov	a,r7
+      000AEA 12r00r00         [24] 2018 	lcall	__gptrput
+                                   2019 ;	../../../core/net/mac/frame802154.c:313: p += 2;
+      000AED E5 81            [12] 2020 	mov	a,sp
+      000AEF 24 FA            [12] 2021 	add	a,#0xfa
+      000AF1 F8               [12] 2022 	mov	r0,a
+      000AF2 74 02            [12] 2023 	mov	a,#0x02
+      000AF4 26               [12] 2024 	add	a,@r0
+      000AF5 F6               [12] 2025 	mov	@r0,a
+      000AF6 E4               [12] 2026 	clr	a
+      000AF7 08               [12] 2027 	inc	r0
+      000AF8 36               [12] 2028 	addc	a,@r0
+      000AF9 F6               [12] 2029 	mov	@r0,a
+      000AFA D0 07            [24] 2030 	pop	ar7
+      000AFC D0 06            [24] 2031 	pop	ar6
+      000AFE D0 05            [24] 2032 	pop	ar5
+      000B00 80 3E            [24] 2033 	sjmp	00114$
+      000B02                       2034 00113$:
+                                   2035 ;	../../../core/net/mac/frame802154.c:315: pf->src_pid = pf->dest_pid;
+      000B02 E5 81            [12] 2036 	mov	a,sp
+      000B04 24 FA            [12] 2037 	add	a,#0xfa
+      000B06 F8               [12] 2038 	mov	r0,a
+      000B07 74 13            [12] 2039 	mov	a,#0x13
+      000B09 2D               [12] 2040 	add	a,r5
+      000B0A F6               [12] 2041 	mov	@r0,a
+      000B0B E4               [12] 2042 	clr	a
+      000B0C 3E               [12] 2043 	addc	a,r6
+      000B0D 08               [12] 2044 	inc	r0
+      000B0E F6               [12] 2045 	mov	@r0,a
+      000B0F 08               [12] 2046 	inc	r0
+      000B10 A6 07            [24] 2047 	mov	@r0,ar7
+      000B12 74 09            [12] 2048 	mov	a,#0x09
+      000B14 2D               [12] 2049 	add	a,r5
+      000B15 FA               [12] 2050 	mov	r2,a
+      000B16 E4               [12] 2051 	clr	a
+      000B17 3E               [12] 2052 	addc	a,r6
+      000B18 FB               [12] 2053 	mov	r3,a
+      000B19 8F 04            [24] 2054 	mov	ar4,r7
+      000B1B 8A 82            [24] 2055 	mov	dpl,r2
+      000B1D 8B 83            [24] 2056 	mov	dph,r3
+      000B1F 8C F0            [24] 2057 	mov	b,r4
+      000B21 12r00r00         [24] 2058 	lcall	__gptrget
+      000B24 FA               [12] 2059 	mov	r2,a
+      000B25 A3               [24] 2060 	inc	dptr
+      000B26 12r00r00         [24] 2061 	lcall	__gptrget
+      000B29 FB               [12] 2062 	mov	r3,a
+      000B2A E5 81            [12] 2063 	mov	a,sp
+      000B2C 24 FA            [12] 2064 	add	a,#0xfa
+      000B2E F8               [12] 2065 	mov	r0,a
+      000B2F 86 82            [24] 2066 	mov	dpl,@r0
+      000B31 08               [12] 2067 	inc	r0
+      000B32 86 83            [24] 2068 	mov	dph,@r0
+      000B34 08               [12] 2069 	inc	r0
+      000B35 86 F0            [24] 2070 	mov	b,@r0
+      000B37 EA               [12] 2071 	mov	a,r2
+      000B38 12r00r00         [24] 2072 	lcall	__gptrput
+      000B3B A3               [24] 2073 	inc	dptr
+      000B3C EB               [12] 2074 	mov	a,r3
+      000B3D 12r00r00         [24] 2075 	lcall	__gptrput
+      000B40                       2076 00114$:
+                                   2077 ;	../../../core/net/mac/frame802154.c:324: if(fcf.src_addr_mode == FRAME802154_SHORTADDRMODE) {
+      000B40 90r00r0C         [24] 2078 	mov	dptr,#(_fcf + 0x0007)
+      000B43 E0               [24] 2079 	movx	a,@dptr
+      000B44 FC               [12] 2080 	mov	r4,a
+      000B45 BC 02 02         [24] 2081 	cjne	r4,#0x02,00197$
+      000B48 80 03            [24] 2082 	sjmp	00198$
+      000B4A                       2083 00197$:
+      000B4A 02r0Cr00         [24] 2084 	ljmp	00119$
+      000B4D                       2085 00198$:
+                                   2086 ;	../../../core/net/mac/frame802154.c:325: rimeaddr_copy((rimeaddr_t *)&(pf->src_addr), &rimeaddr_null);
+      000B4D E5 81            [12] 2087 	mov	a,sp
+      000B4F 24 FA            [12] 2088 	add	a,#0xfa
+      000B51 F8               [12] 2089 	mov	r0,a
+      000B52 74 15            [12] 2090 	mov	a,#0x15
+      000B54 2D               [12] 2091 	add	a,r5
+      000B55 F6               [12] 2092 	mov	@r0,a
+      000B56 E4               [12] 2093 	clr	a
+      000B57 3E               [12] 2094 	addc	a,r6
+      000B58 08               [12] 2095 	inc	r0
+      000B59 F6               [12] 2096 	mov	@r0,a
+      000B5A 08               [12] 2097 	inc	r0
+      000B5B A6 07            [24] 2098 	mov	@r0,ar7
+      000B5D E5 81            [12] 2099 	mov	a,sp
+      000B5F 24 FA            [12] 2100 	add	a,#0xfa
+      000B61 F8               [12] 2101 	mov	r0,a
+      000B62 86 02            [24] 2102 	mov	ar2,@r0
+      000B64 08               [12] 2103 	inc	r0
+      000B65 86 03            [24] 2104 	mov	ar3,@r0
+      000B67 08               [12] 2105 	inc	r0
+      000B68 86 04            [24] 2106 	mov	ar4,@r0
+      000B6A C0 07            [24] 2107 	push	ar7
+      000B6C C0 06            [24] 2108 	push	ar6
+      000B6E C0 05            [24] 2109 	push	ar5
+      000B70 74r00            [12] 2110 	mov	a,#_rimeaddr_null
+      000B72 C0 E0            [24] 2111 	push	acc
+      000B74 74s00            [12] 2112 	mov	a,#(_rimeaddr_null >> 8)
+      000B76 C0 E0            [24] 2113 	push	acc
+      000B78 74 80            [12] 2114 	mov	a,#0x80
+      000B7A C0 E0            [24] 2115 	push	acc
+      000B7C 8A 82            [24] 2116 	mov	dpl,r2
+      000B7E 8B 83            [24] 2117 	mov	dph,r3
+      000B80 8C F0            [24] 2118 	mov	b,r4
+      000B82 78r00            [12] 2119 	mov	r0,#_rimeaddr_copy
+      000B84 79s00            [12] 2120 	mov	r1,#(_rimeaddr_copy >> 8)
+      000B86 7As00            [12] 2121 	mov	r2,#(_rimeaddr_copy >> 16)
+      000B88 12r00r00         [24] 2122 	lcall	__sdcc_banked_call
+      000B8B 15 81            [12] 2123 	dec	sp
+      000B8D 15 81            [12] 2124 	dec	sp
+      000B8F 15 81            [12] 2125 	dec	sp
+      000B91 D0 05            [24] 2126 	pop	ar5
+      000B93 D0 06            [24] 2127 	pop	ar6
+      000B95 D0 07            [24] 2128 	pop	ar7
+                                   2129 ;	../../../core/net/mac/frame802154.c:326: pf->src_addr[0] = p[1];
+      000B97 E5 81            [12] 2130 	mov	a,sp
+      000B99 24 FD            [12] 2131 	add	a,#0xfd
+      000B9B F8               [12] 2132 	mov	r0,a
+      000B9C 74 01            [12] 2133 	mov	a,#0x01
+      000B9E 26               [12] 2134 	add	a,@r0
+      000B9F FA               [12] 2135 	mov	r2,a
+      000BA0 E4               [12] 2136 	clr	a
+      000BA1 08               [12] 2137 	inc	r0
+      000BA2 36               [12] 2138 	addc	a,@r0
+      000BA3 FB               [12] 2139 	mov	r3,a
+      000BA4 08               [12] 2140 	inc	r0
+      000BA5 86 04            [24] 2141 	mov	ar4,@r0
+      000BA7 8A 82            [24] 2142 	mov	dpl,r2
+      000BA9 8B 83            [24] 2143 	mov	dph,r3
+      000BAB 8C F0            [24] 2144 	mov	b,r4
+      000BAD 12r00r00         [24] 2145 	lcall	__gptrget
+      000BB0 FA               [12] 2146 	mov	r2,a
+      000BB1 E5 81            [12] 2147 	mov	a,sp
+      000BB3 24 FA            [12] 2148 	add	a,#0xfa
+      000BB5 F8               [12] 2149 	mov	r0,a
+      000BB6 86 82            [24] 2150 	mov	dpl,@r0
+      000BB8 08               [12] 2151 	inc	r0
+      000BB9 86 83            [24] 2152 	mov	dph,@r0
+      000BBB 08               [12] 2153 	inc	r0
+      000BBC 86 F0            [24] 2154 	mov	b,@r0
+      000BBE EA               [12] 2155 	mov	a,r2
+      000BBF 12r00r00         [24] 2156 	lcall	__gptrput
+                                   2157 ;	../../../core/net/mac/frame802154.c:327: pf->src_addr[1] = p[0];
+      000BC2 74 16            [12] 2158 	mov	a,#0x16
+      000BC4 2D               [12] 2159 	add	a,r5
+      000BC5 FA               [12] 2160 	mov	r2,a
+      000BC6 E4               [12] 2161 	clr	a
+      000BC7 3E               [12] 2162 	addc	a,r6
+      000BC8 FB               [12] 2163 	mov	r3,a
+      000BC9 8F 04            [24] 2164 	mov	ar4,r7
+      000BCB C0 05            [24] 2165 	push	ar5
+      000BCD C0 06            [24] 2166 	push	ar6
+      000BCF C0 07            [24] 2167 	push	ar7
+      000BD1 E5 81            [12] 2168 	mov	a,sp
+      000BD3 24 FA            [12] 2169 	add	a,#0xfa
+      000BD5 F8               [12] 2170 	mov	r0,a
+      000BD6 86 82            [24] 2171 	mov	dpl,@r0
+      000BD8 08               [12] 2172 	inc	r0
+      000BD9 86 83            [24] 2173 	mov	dph,@r0
+      000BDB 08               [12] 2174 	inc	r0
+      000BDC 86 F0            [24] 2175 	mov	b,@r0
+      000BDE 12r00r00         [24] 2176 	lcall	__gptrget
+      000BE1 8A 82            [24] 2177 	mov	dpl,r2
+      000BE3 8B 83            [24] 2178 	mov	dph,r3
+      000BE5 8C F0            [24] 2179 	mov	b,r4
+      000BE7 12r00r00         [24] 2180 	lcall	__gptrput
+                                   2181 ;	../../../core/net/mac/frame802154.c:328: p += 2;
+      000BEA E5 81            [12] 2182 	mov	a,sp
+      000BEC 24 FA            [12] 2183 	add	a,#0xfa
+      000BEE F8               [12] 2184 	mov	r0,a
+      000BEF 74 02            [12] 2185 	mov	a,#0x02
+      000BF1 26               [12] 2186 	add	a,@r0
+      000BF2 F6               [12] 2187 	mov	@r0,a
+      000BF3 E4               [12] 2188 	clr	a
+      000BF4 08               [12] 2189 	inc	r0
+      000BF5 36               [12] 2190 	addc	a,@r0
+      000BF6 F6               [12] 2191 	mov	@r0,a
+      000BF7 D0 07            [24] 2192 	pop	ar7
+      000BF9 D0 06            [24] 2193 	pop	ar6
+      000BFB D0 05            [24] 2194 	pop	ar5
+      000BFD 02r0CrDF         [24] 2195 	ljmp	00123$
+      000C00                       2196 00119$:
+                                   2197 ;	../../../core/net/mac/frame802154.c:329: } else if(fcf.src_addr_mode == FRAME802154_LONGADDRMODE) {
+      000C00 90r00r0C         [24] 2198 	mov	dptr,#(_fcf + 0x0007)
+      000C03 E0               [24] 2199 	movx	a,@dptr
+      000C04 FC               [12] 2200 	mov	r4,a
+      000C05 BC 03 02         [24] 2201 	cjne	r4,#0x03,00199$
+      000C08 80 03            [24] 2202 	sjmp	00200$
+      000C0A                       2203 00199$:
+      000C0A 02r0CrDF         [24] 2204 	ljmp	00123$
+      000C0D                       2205 00200$:
+                                   2206 ;	../../../core/net/mac/frame802154.c:330: for(c = 0; c < 8; c++) {
+      000C0D E5 81            [12] 2207 	mov	a,sp
+      000C0F 24 FA            [12] 2208 	add	a,#0xfa
+      000C11 F8               [12] 2209 	mov	r0,a
+      000C12 74 15            [12] 2210 	mov	a,#0x15
+      000C14 2D               [12] 2211 	add	a,r5
+      000C15 F6               [12] 2212 	mov	@r0,a
+      000C16 E4               [12] 2213 	clr	a
+      000C17 3E               [12] 2214 	addc	a,r6
+      000C18 08               [12] 2215 	inc	r0
+      000C19 F6               [12] 2216 	mov	@r0,a
+      000C1A 08               [12] 2217 	inc	r0
+      000C1B A6 07            [24] 2218 	mov	@r0,ar7
+      000C1D A8 81            [24] 2219 	mov	r0,sp
+      000C1F 76 00            [12] 2220 	mov	@r0,#0x00
+      000C21                       2221 00126$:
+                                   2222 ;	../../../core/net/mac/frame802154.c:331: pf->src_addr[c] = p[7 - c];
+      000C21 C0 05            [24] 2223 	push	ar5
+      000C23 C0 06            [24] 2224 	push	ar6
+      000C25 C0 07            [24] 2225 	push	ar7
+      000C27 E5 81            [12] 2226 	mov	a,sp
+      000C29 24 F7            [12] 2227 	add	a,#0xf7
+      000C2B F8               [12] 2228 	mov	r0,a
+      000C2C E5 81            [12] 2229 	mov	a,sp
+      000C2E 24 FD            [12] 2230 	add	a,#0xfd
+      000C30 F9               [12] 2231 	mov	r1,a
+      000C31 E7               [12] 2232 	mov	a,@r1
+      000C32 26               [12] 2233 	add	a,@r0
+      000C33 FA               [12] 2234 	mov	r2,a
+      000C34 E4               [12] 2235 	clr	a
+      000C35 08               [12] 2236 	inc	r0
+      000C36 36               [12] 2237 	addc	a,@r0
+      000C37 FB               [12] 2238 	mov	r3,a
+      000C38 08               [12] 2239 	inc	r0
+      000C39 86 07            [24] 2240 	mov	ar7,@r0
+      000C3B E5 81            [12] 2241 	mov	a,sp
+      000C3D 24 FD            [12] 2242 	add	a,#0xfd
+      000C3F F8               [12] 2243 	mov	r0,a
+      000C40 86 05            [24] 2244 	mov	ar5,@r0
+      000C42 7E 00            [12] 2245 	mov	r6,#0x00
+      000C44 74 07            [12] 2246 	mov	a,#0x07
+      000C46 C3               [12] 2247 	clr	c
+      000C47 9D               [12] 2248 	subb	a,r5
+      000C48 FD               [12] 2249 	mov	r5,a
+      000C49 E4               [12] 2250 	clr	a
+      000C4A 9E               [12] 2251 	subb	a,r6
+      000C4B FE               [12] 2252 	mov	r6,a
+      000C4C E5 81            [12] 2253 	mov	a,sp
+      000C4E 24 FA            [12] 2254 	add	a,#0xfa
+      000C50 F8               [12] 2255 	mov	r0,a
+      000C51 ED               [12] 2256 	mov	a,r5
+      000C52 26               [12] 2257 	add	a,@r0
+      000C53 FD               [12] 2258 	mov	r5,a
+      000C54 EE               [12] 2259 	mov	a,r6
+      000C55 08               [12] 2260 	inc	r0
+      000C56 36               [12] 2261 	addc	a,@r0
+      000C57 FC               [12] 2262 	mov	r4,a
+      000C58 08               [12] 2263 	inc	r0
+      000C59 86 06            [24] 2264 	mov	ar6,@r0
+      000C5B 8D 82            [24] 2265 	mov	dpl,r5
+      000C5D 8C 83            [24] 2266 	mov	dph,r4
+      000C5F 8E F0            [24] 2267 	mov	b,r6
+      000C61 12r00r00         [24] 2268 	lcall	__gptrget
+      000C64 8A 82            [24] 2269 	mov	dpl,r2
+      000C66 8B 83            [24] 2270 	mov	dph,r3
+      000C68 8F F0            [24] 2271 	mov	b,r7
+      000C6A 12r00r00         [24] 2272 	lcall	__gptrput
+                                   2273 ;	../../../core/net/mac/frame802154.c:330: for(c = 0; c < 8; c++) {
+      000C6D E5 81            [12] 2274 	mov	a,sp
+      000C6F 24 FD            [12] 2275 	add	a,#0xfd
+      000C71 F8               [12] 2276 	mov	r0,a
+      000C72 06               [12] 2277 	inc	@r0
+      000C73 E5 81            [12] 2278 	mov	a,sp
+      000C75 24 FD            [12] 2279 	add	a,#0xfd
+      000C77 F8               [12] 2280 	mov	r0,a
+      000C78 B6 08 00         [24] 2281 	cjne	@r0,#0x08,00201$
+      000C7B                       2282 00201$:
+      000C7B D0 07            [24] 2283 	pop	ar7
+      000C7D D0 06            [24] 2284 	pop	ar6
+      000C7F D0 05            [24] 2285 	pop	ar5
+      000C81 40 9E            [24] 2286 	jc	00126$
+                                   2287 ;	../../../core/net/mac/frame802154.c:333: p += 8;
+      000C83 E5 81            [12] 2288 	mov	a,sp
+      000C85 24 FD            [12] 2289 	add	a,#0xfd
+      000C87 F8               [12] 2290 	mov	r0,a
+      000C88 74 08            [12] 2291 	mov	a,#0x08
+      000C8A 26               [12] 2292 	add	a,@r0
+      000C8B F6               [12] 2293 	mov	@r0,a
+      000C8C E4               [12] 2294 	clr	a
+      000C8D 08               [12] 2295 	inc	r0
+      000C8E 36               [12] 2296 	addc	a,@r0
+      000C8F F6               [12] 2297 	mov	@r0,a
+      000C90 80 4D            [24] 2298 	sjmp	00123$
+      000C92                       2299 00122$:
+                                   2300 ;	../../../core/net/mac/frame802154.c:336: rimeaddr_copy((rimeaddr_t *)&(pf->src_addr), &rimeaddr_null);
+      000C92 74 15            [12] 2301 	mov	a,#0x15
+      000C94 2D               [12] 2302 	add	a,r5
+      000C95 FA               [12] 2303 	mov	r2,a
+      000C96 E4               [12] 2304 	clr	a
+      000C97 3E               [12] 2305 	addc	a,r6
+      000C98 FB               [12] 2306 	mov	r3,a
+      000C99 8F 04            [24] 2307 	mov	ar4,r7
+      000C9B C0 07            [24] 2308 	push	ar7
+      000C9D C0 06            [24] 2309 	push	ar6
+      000C9F C0 05            [24] 2310 	push	ar5
+      000CA1 74r00            [12] 2311 	mov	a,#_rimeaddr_null
+      000CA3 C0 E0            [24] 2312 	push	acc
+      000CA5 74s00            [12] 2313 	mov	a,#(_rimeaddr_null >> 8)
+      000CA7 C0 E0            [24] 2314 	push	acc
+      000CA9 74 80            [12] 2315 	mov	a,#0x80
+      000CAB C0 E0            [24] 2316 	push	acc
+      000CAD 8A 82            [24] 2317 	mov	dpl,r2
+      000CAF 8B 83            [24] 2318 	mov	dph,r3
+      000CB1 8C F0            [24] 2319 	mov	b,r4
+      000CB3 78r00            [12] 2320 	mov	r0,#_rimeaddr_copy
+      000CB5 79s00            [12] 2321 	mov	r1,#(_rimeaddr_copy >> 8)
+      000CB7 7As00            [12] 2322 	mov	r2,#(_rimeaddr_copy >> 16)
+      000CB9 12r00r00         [24] 2323 	lcall	__sdcc_banked_call
+      000CBC 15 81            [12] 2324 	dec	sp
+      000CBE 15 81            [12] 2325 	dec	sp
+      000CC0 15 81            [12] 2326 	dec	sp
+      000CC2 D0 05            [24] 2327 	pop	ar5
+      000CC4 D0 06            [24] 2328 	pop	ar6
+      000CC6 D0 07            [24] 2329 	pop	ar7
+                                   2330 ;	../../../core/net/mac/frame802154.c:337: pf->src_pid = 0;
+      000CC8 74 13            [12] 2331 	mov	a,#0x13
+      000CCA 2D               [12] 2332 	add	a,r5
+      000CCB FA               [12] 2333 	mov	r2,a
+      000CCC E4               [12] 2334 	clr	a
+      000CCD 3E               [12] 2335 	addc	a,r6
+      000CCE FB               [12] 2336 	mov	r3,a
+      000CCF 8F 04            [24] 2337 	mov	ar4,r7
+      000CD1 8A 82            [24] 2338 	mov	dpl,r2
+      000CD3 8B 83            [24] 2339 	mov	dph,r3
+      000CD5 8C F0            [24] 2340 	mov	b,r4
+      000CD7 E4               [12] 2341 	clr	a
+      000CD8 12r00r00         [24] 2342 	lcall	__gptrput
+      000CDB A3               [24] 2343 	inc	dptr
+      000CDC 12r00r00         [24] 2344 	lcall	__gptrput
+      000CDF                       2345 00123$:
+                                   2346 ;	../../../core/net/mac/frame802154.c:346: c = p - data;
+      000CDF E5 81            [12] 2347 	mov	a,sp
+      000CE1 24 FD            [12] 2348 	add	a,#0xfd
+      000CE3 F8               [12] 2349 	mov	r0,a
+      000CE4 86 02            [24] 2350 	mov	ar2,@r0
+      000CE6 E5 81            [12] 2351 	mov	a,sp
+      000CE8 24 F4            [12] 2352 	add	a,#0xf4
+      000CEA F8               [12] 2353 	mov	r0,a
+      000CEB 86 04            [24] 2354 	mov	ar4,@r0
+      000CED EA               [12] 2355 	mov	a,r2
+      000CEE C3               [12] 2356 	clr	c
+      000CEF 9C               [12] 2357 	subb	a,r4
+      000CF0 FA               [12] 2358 	mov	r2,a
+      000CF1 FB               [12] 2359 	mov	r3,a
+                                   2360 ;	../../../core/net/mac/frame802154.c:348: pf->payload_len = len - c;
+      000CF2 E5 81            [12] 2361 	mov	a,sp
+      000CF4 24 FA            [12] 2362 	add	a,#0xfa
+      000CF6 F8               [12] 2363 	mov	r0,a
+      000CF7 74 30            [12] 2364 	mov	a,#0x30
+      000CF9 2D               [12] 2365 	add	a,r5
+      000CFA F6               [12] 2366 	mov	@r0,a
+      000CFB E4               [12] 2367 	clr	a
+      000CFC 3E               [12] 2368 	addc	a,r6
+      000CFD 08               [12] 2369 	inc	r0
+      000CFE F6               [12] 2370 	mov	@r0,a
+      000CFF 08               [12] 2371 	inc	r0
+      000D00 A6 07            [24] 2372 	mov	@r0,ar7
+      000D02 E5 81            [12] 2373 	mov	a,sp
+      000D04 24 F0            [12] 2374 	add	a,#0xf0
+      000D06 F8               [12] 2375 	mov	r0,a
+      000D07 E6               [12] 2376 	mov	a,@r0
+      000D08 C3               [12] 2377 	clr	c
+      000D09 9B               [12] 2378 	subb	a,r3
+      000D0A FC               [12] 2379 	mov	r4,a
+      000D0B E5 81            [12] 2380 	mov	a,sp
+      000D0D 24 FA            [12] 2381 	add	a,#0xfa
+      000D0F F8               [12] 2382 	mov	r0,a
+      000D10 86 82            [24] 2383 	mov	dpl,@r0
+      000D12 08               [12] 2384 	inc	r0
+      000D13 86 83            [24] 2385 	mov	dph,@r0
+      000D15 08               [12] 2386 	inc	r0
+      000D16 86 F0            [24] 2387 	mov	b,@r0
+      000D18 EC               [12] 2388 	mov	a,r4
+      000D19 12r00r00         [24] 2389 	lcall	__gptrput
+                                   2390 ;	../../../core/net/mac/frame802154.c:350: pf->payload = p;
+      000D1C 74 2D            [12] 2391 	mov	a,#0x2d
+      000D1E 2D               [12] 2392 	add	a,r5
+      000D1F FD               [12] 2393 	mov	r5,a
+      000D20 E4               [12] 2394 	clr	a
+      000D21 3E               [12] 2395 	addc	a,r6
+      000D22 FE               [12] 2396 	mov	r6,a
+      000D23 8D 82            [24] 2397 	mov	dpl,r5
+      000D25 8E 83            [24] 2398 	mov	dph,r6
+      000D27 8F F0            [24] 2399 	mov	b,r7
+      000D29 E5 81            [12] 2400 	mov	a,sp
+      000D2B 24 FD            [12] 2401 	add	a,#0xfd
+      000D2D F8               [12] 2402 	mov	r0,a
+      000D2E E6               [12] 2403 	mov	a,@r0
+      000D2F 12r00r00         [24] 2404 	lcall	__gptrput
+      000D32 A3               [24] 2405 	inc	dptr
+      000D33 08               [12] 2406 	inc	r0
+      000D34 E6               [12] 2407 	mov	a,@r0
+      000D35 12r00r00         [24] 2408 	lcall	__gptrput
+      000D38 A3               [24] 2409 	inc	dptr
+      000D39 08               [12] 2410 	inc	r0
+      000D3A E6               [12] 2411 	mov	a,@r0
+      000D3B 12r00r00         [24] 2412 	lcall	__gptrput
+                                   2413 ;	../../../core/net/mac/frame802154.c:353: return c > len ? 0 : c;
+      000D3E E5 81            [12] 2414 	mov	a,sp
+      000D40 24 F0            [12] 2415 	add	a,#0xf0
+      000D42 F8               [12] 2416 	mov	r0,a
+      000D43 C3               [12] 2417 	clr	c
+      000D44 E6               [12] 2418 	mov	a,@r0
+      000D45 9B               [12] 2419 	subb	a,r3
+      000D46 50 06            [24] 2420 	jnc	00130$
+      000D48 7E 00            [12] 2421 	mov	r6,#0x00
+      000D4A 7F 00            [12] 2422 	mov	r7,#0x00
+      000D4C 80 04            [24] 2423 	sjmp	00131$
+      000D4E                       2424 00130$:
+      000D4E 8B 06            [24] 2425 	mov	ar6,r3
+      000D50 7F 00            [12] 2426 	mov	r7,#0x00
+      000D52                       2427 00131$:
+      000D52 8E 82            [24] 2428 	mov	dpl,r6
+      000D54                       2429 00128$:
+                                   2430 ;	../../../core/net/mac/frame802154.c:354: }
+      000D54 E5 81            [12] 2431 	mov	a,sp
+      000D56 24 F3            [12] 2432 	add	a,#0xf3
+      000D58 F5 81            [12] 2433 	mov	sp,a
+      000D5A 02r00r00         [24] 2434 	ljmp	__sdcc_banked_ret
+                                   2435 	.area CSEG    (CODE)
+                                   2436 	.area CONST   (CODE)
+                                   2437 	.area XINIT   (CODE)
+                                   2438 	.area CABS    (ABS,CODE)

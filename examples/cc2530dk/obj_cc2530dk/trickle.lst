@@ -1,0 +1,1376 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module trickle
+                                      6 	.optsdcc -mmcs51 --model-large
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _random_rand
+                                     12 	.globl _queuebuf_free
+                                     13 	.globl _queuebuf_to_packetbuf
+                                     14 	.globl _queuebuf_new_from_packetbuf
+                                     15 	.globl _broadcast_send
+                                     16 	.globl _broadcast_close
+                                     17 	.globl _broadcast_open
+                                     18 	.globl _channel_set_attributes
+                                     19 	.globl _packetbuf_attr
+                                     20 	.globl _packetbuf_set_attr
+                                     21 	.globl _ctimer_stop
+                                     22 	.globl _ctimer_set
+                                     23 	.globl _trickle_open
+                                     24 	.globl _trickle_close
+                                     25 	.globl _trickle_send
+                                     26 ;--------------------------------------------------------
+                                     27 ; special function registers
+                                     28 ;--------------------------------------------------------
+                                     29 	.area RSEG    (ABS,DATA)
+      000000                         30 	.org 0x0000
+                                     31 ;--------------------------------------------------------
+                                     32 ; special function bits
+                                     33 ;--------------------------------------------------------
+                                     34 	.area RSEG    (ABS,DATA)
+      000000                         35 	.org 0x0000
+                                     36 ;--------------------------------------------------------
+                                     37 ; overlayable register banks
+                                     38 ;--------------------------------------------------------
+                                     39 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                         40 	.ds 8
+                                     41 ;--------------------------------------------------------
+                                     42 ; internal ram data
+                                     43 ;--------------------------------------------------------
+                                     44 	.area DSEG    (DATA)
+                                     45 ;--------------------------------------------------------
+                                     46 ; overlayable items in internal ram 
+                                     47 ;--------------------------------------------------------
+                                     48 ;--------------------------------------------------------
+                                     49 ; indirectly addressable internal ram data
+                                     50 ;--------------------------------------------------------
+                                     51 	.area ISEG    (DATA)
+                                     52 ;--------------------------------------------------------
+                                     53 ; absolute internal ram data
+                                     54 ;--------------------------------------------------------
+                                     55 	.area IABS    (ABS,DATA)
+                                     56 	.area IABS    (ABS,DATA)
+                                     57 ;--------------------------------------------------------
+                                     58 ; bit data
+                                     59 ;--------------------------------------------------------
+                                     60 	.area BSEG    (BIT)
+                                     61 ;--------------------------------------------------------
+                                     62 ; paged external ram data
+                                     63 ;--------------------------------------------------------
+                                     64 	.area PSEG    (PAG,XDATA)
+                                     65 ;--------------------------------------------------------
+                                     66 ; external ram data
+                                     67 ;--------------------------------------------------------
+                                     68 	.area XSEG    (XDATA)
+                                     69 ;--------------------------------------------------------
+                                     70 ; absolute external ram data
+                                     71 ;--------------------------------------------------------
+                                     72 	.area XABS    (ABS,XDATA)
+                                     73 ;--------------------------------------------------------
+                                     74 ; external initialized ram data
+                                     75 ;--------------------------------------------------------
+                                     76 	.area XISEG   (XDATA)
+                                     77 	.area HOME    (CODE)
+                                     78 	.area GSINIT0 (CODE)
+                                     79 	.area GSINIT1 (CODE)
+                                     80 	.area GSINIT2 (CODE)
+                                     81 	.area GSINIT3 (CODE)
+                                     82 	.area GSINIT4 (CODE)
+                                     83 	.area GSINIT5 (CODE)
+                                     84 	.area GSINIT  (CODE)
+                                     85 	.area GSFINAL (CODE)
+                                     86 	.area CSEG    (CODE)
+                                     87 ;--------------------------------------------------------
+                                     88 ; global & static initialisations
+                                     89 ;--------------------------------------------------------
+                                     90 	.area HOME    (CODE)
+                                     91 	.area GSINIT  (CODE)
+                                     92 	.area GSFINAL (CODE)
+                                     93 	.area GSINIT  (CODE)
+                                     94 ;--------------------------------------------------------
+                                     95 ; Home
+                                     96 ;--------------------------------------------------------
+                                     97 	.area HOME    (CODE)
+                                     98 	.area HOME    (CODE)
+                                     99 ;--------------------------------------------------------
+                                    100 ; code
+                                    101 ;--------------------------------------------------------
+                                    102 	.area CSEG    (CODE)
+                                    103 ;------------------------------------------------------------
+                                    104 ;Allocation info for local variables in function 'send'
+                                    105 ;------------------------------------------------------------
+                                    106 ;ptr                       Allocated to registers r5 r6 r7 
+                                    107 ;c                         Allocated to registers r5 r6 r7 
+                                    108 ;------------------------------------------------------------
+                                    109 ;	../../core/net/rime/trickle.c:76: send(void *ptr)
+                                    110 ;	-----------------------------------------
+                                    111 ;	 function send
+                                    112 ;	-----------------------------------------
+      000000                        113 _send:
+                           000007   114 	ar7 = 0x07
+                           000006   115 	ar6 = 0x06
+                           000005   116 	ar5 = 0x05
+                           000004   117 	ar4 = 0x04
+                           000003   118 	ar3 = 0x03
+                           000002   119 	ar2 = 0x02
+                           000001   120 	ar1 = 0x01
+                           000000   121 	ar0 = 0x00
+      000000 AD 82            [24]  122 	mov	r5,dpl
+      000002 AE 83            [24]  123 	mov	r6,dph
+      000004 AF F0            [24]  124 	mov	r7,b
+                                    125 ;	../../core/net/rime/trickle.c:78: struct trickle_conn *c = ptr;
+                                    126 ;	../../core/net/rime/trickle.c:80: if(c->q != NULL) {
+      000006 74 53            [12]  127 	mov	a,#0x53
+      000008 2D               [12]  128 	add	a,r5
+      000009 FA               [12]  129 	mov	r2,a
+      00000A E4               [12]  130 	clr	a
+      00000B 3E               [12]  131 	addc	a,r6
+      00000C FB               [12]  132 	mov	r3,a
+      00000D 8F 04            [24]  133 	mov	ar4,r7
+      00000F 8A 82            [24]  134 	mov	dpl,r2
+      000011 8B 83            [24]  135 	mov	dph,r3
+      000013 8C F0            [24]  136 	mov	b,r4
+      000015 12r00r00         [24]  137 	lcall	__gptrget
+      000018 FA               [12]  138 	mov	r2,a
+      000019 A3               [24]  139 	inc	dptr
+      00001A 12r00r00         [24]  140 	lcall	__gptrget
+      00001D FB               [12]  141 	mov	r3,a
+      00001E A3               [24]  142 	inc	dptr
+      00001F 12r00r00         [24]  143 	lcall	__gptrget
+      000022 FC               [12]  144 	mov	r4,a
+      000023 EA               [12]  145 	mov	a,r2
+      000024 4B               [12]  146 	orl	a,r3
+      000025 60 1E            [24]  147 	jz	00103$
+                                    148 ;	../../core/net/rime/trickle.c:81: queuebuf_to_packetbuf(c->q);
+      000027 8A 82            [24]  149 	mov	dpl,r2
+      000029 8B 83            [24]  150 	mov	dph,r3
+      00002B 8C F0            [24]  151 	mov	b,r4
+      00002D C0 07            [24]  152 	push	ar7
+      00002F C0 06            [24]  153 	push	ar6
+      000031 C0 05            [24]  154 	push	ar5
+      000033 12r00r00         [24]  155 	lcall	_queuebuf_to_packetbuf
+      000036 D0 05            [24]  156 	pop	ar5
+      000038 D0 06            [24]  157 	pop	ar6
+      00003A D0 07            [24]  158 	pop	ar7
+                                    159 ;	../../core/net/rime/trickle.c:82: broadcast_send(&c->c);
+      00003C 8D 82            [24]  160 	mov	dpl,r5
+      00003E 8E 83            [24]  161 	mov	dph,r6
+      000040 8F F0            [24]  162 	mov	b,r7
+                                    163 ;	../../core/net/rime/trickle.c:87: }
+      000042 02r00r00         [24]  164 	ljmp	_broadcast_send
+      000045                        165 00103$:
+      000045 22               [24]  166 	ret
+                                    167 ;------------------------------------------------------------
+                                    168 ;Allocation info for local variables in function 'timer_callback'
+                                    169 ;------------------------------------------------------------
+                                    170 ;ptr                       Allocated to registers r5 r6 r7 
+                                    171 ;c                         Allocated to registers r5 r6 r7 
+                                    172 ;------------------------------------------------------------
+                                    173 ;	../../core/net/rime/trickle.c:90: timer_callback(void *ptr)
+                                    174 ;	-----------------------------------------
+                                    175 ;	 function timer_callback
+                                    176 ;	-----------------------------------------
+      000046                        177 _timer_callback:
+                                    178 ;	../../core/net/rime/trickle.c:92: struct trickle_conn *c = ptr;
+                                    179 ;	../../core/net/rime/trickle.c:93: run_trickle(c);
+                                    180 ;	../../core/net/rime/trickle.c:94: }
+      000046 02r00rA6         [24]  181 	ljmp	_run_trickle
+                                    182 ;------------------------------------------------------------
+                                    183 ;Allocation info for local variables in function 'reset_interval'
+                                    184 ;------------------------------------------------------------
+                                    185 ;c                         Allocated to registers r5 r6 r7 
+                                    186 ;------------------------------------------------------------
+                                    187 ;	../../core/net/rime/trickle.c:97: reset_interval(struct trickle_conn *c)
+                                    188 ;	-----------------------------------------
+                                    189 ;	 function reset_interval
+                                    190 ;	-----------------------------------------
+      000049                        191 _reset_interval:
+      000049 AD 82            [24]  192 	mov	r5,dpl
+      00004B AE 83            [24]  193 	mov	r6,dph
+      00004D AF F0            [24]  194 	mov	r7,b
+                                    195 ;	../../core/net/rime/trickle.c:99: PT_INIT(&c->pt);
+      00004F 74 51            [12]  196 	mov	a,#0x51
+      000051 2D               [12]  197 	add	a,r5
+      000052 FA               [12]  198 	mov	r2,a
+      000053 E4               [12]  199 	clr	a
+      000054 3E               [12]  200 	addc	a,r6
+      000055 FB               [12]  201 	mov	r3,a
+      000056 8F 04            [24]  202 	mov	ar4,r7
+      000058 8A 82            [24]  203 	mov	dpl,r2
+      00005A 8B 83            [24]  204 	mov	dph,r3
+      00005C 8C F0            [24]  205 	mov	b,r4
+      00005E E4               [12]  206 	clr	a
+      00005F 12r00r00         [24]  207 	lcall	__gptrput
+      000062 A3               [24]  208 	inc	dptr
+      000063 12r00r00         [24]  209 	lcall	__gptrput
+                                    210 ;	../../core/net/rime/trickle.c:100: run_trickle(c);
+      000066 8D 82            [24]  211 	mov	dpl,r5
+      000068 8E 83            [24]  212 	mov	dph,r6
+      00006A 8F F0            [24]  213 	mov	b,r7
+                                    214 ;	../../core/net/rime/trickle.c:101: }
+      00006C 02r00rA6         [24]  215 	ljmp	_run_trickle
+                                    216 ;------------------------------------------------------------
+                                    217 ;Allocation info for local variables in function 'set_timer'
+                                    218 ;------------------------------------------------------------
+                                    219 ;t                         Allocated to stack - sp -4
+                                    220 ;i                         Allocated to stack - sp -6
+                                    221 ;c                         Allocated to registers r5 r6 r7 
+                                    222 ;------------------------------------------------------------
+                                    223 ;	../../core/net/rime/trickle.c:104: set_timer(struct trickle_conn *c, struct ctimer *t, clock_time_t i)
+                                    224 ;	-----------------------------------------
+                                    225 ;	 function set_timer
+                                    226 ;	-----------------------------------------
+      00006F                        227 _set_timer:
+      00006F AD 82            [24]  228 	mov	r5,dpl
+      000071 AE 83            [24]  229 	mov	r6,dph
+      000073 AF F0            [24]  230 	mov	r7,b
+                                    231 ;	../../core/net/rime/trickle.c:106: ctimer_set(t, i, timer_callback, c);
+      000075 C0 05            [24]  232 	push	ar5
+      000077 C0 06            [24]  233 	push	ar6
+      000079 C0 07            [24]  234 	push	ar7
+      00007B 74r46            [12]  235 	mov	a,#_timer_callback
+      00007D C0 E0            [24]  236 	push	acc
+      00007F 74s00            [12]  237 	mov	a,#(_timer_callback >> 8)
+      000081 C0 E0            [24]  238 	push	acc
+      000083 E5 81            [12]  239 	mov	a,sp
+      000085 24 F5            [12]  240 	add	a,#0xf5
+      000087 F8               [12]  241 	mov	r0,a
+      000088 E6               [12]  242 	mov	a,@r0
+      000089 C0 E0            [24]  243 	push	acc
+      00008B 08               [12]  244 	inc	r0
+      00008C E6               [12]  245 	mov	a,@r0
+      00008D C0 E0            [24]  246 	push	acc
+      00008F E5 81            [12]  247 	mov	a,sp
+      000091 24 F5            [12]  248 	add	a,#0xf5
+      000093 F8               [12]  249 	mov	r0,a
+      000094 86 82            [24]  250 	mov	dpl,@r0
+      000096 08               [12]  251 	inc	r0
+      000097 86 83            [24]  252 	mov	dph,@r0
+      000099 08               [12]  253 	inc	r0
+      00009A 86 F0            [24]  254 	mov	b,@r0
+      00009C 12r00r00         [24]  255 	lcall	_ctimer_set
+      00009F E5 81            [12]  256 	mov	a,sp
+      0000A1 24 F9            [12]  257 	add	a,#0xf9
+      0000A3 F5 81            [12]  258 	mov	sp,a
+                                    259 ;	../../core/net/rime/trickle.c:107: }
+      0000A5 22               [24]  260 	ret
+                                    261 ;------------------------------------------------------------
+                                    262 ;Allocation info for local variables in function 'run_trickle'
+                                    263 ;------------------------------------------------------------
+                                    264 ;c                         Allocated to stack - sp -3
+                                    265 ;interval                  Allocated to registers r4 r3 
+                                    266 ;PT_YIELD_FLAG             Allocated to stack - sp +0
+                                    267 ;sloc0                     Allocated to stack - sp +3
+                                    268 ;sloc1                     Allocated to stack - sp +5
+                                    269 ;------------------------------------------------------------
+                                    270 ;	../../core/net/rime/trickle.c:110: run_trickle(struct trickle_conn *c)
+                                    271 ;	-----------------------------------------
+                                    272 ;	 function run_trickle
+                                    273 ;	-----------------------------------------
+      0000A6                        274 _run_trickle:
+      0000A6 C0 82            [24]  275 	push	dpl
+      0000A8 C0 83            [24]  276 	push	dph
+      0000AA C0 F0            [24]  277 	push	b
+      0000AC 05 81            [12]  278 	inc	sp
+                                    279 ;	../../core/net/rime/trickle.c:113: PT_BEGIN(&c->pt);
+      0000AE A8 81            [24]  280 	mov	r0,sp
+      0000B0 76 01            [12]  281 	mov	@r0,#0x01
+      0000B2 E5 81            [12]  282 	mov	a,sp
+      0000B4 24 FD            [12]  283 	add	a,#0xfd
+      0000B6 F8               [12]  284 	mov	r0,a
+      0000B7 74 51            [12]  285 	mov	a,#0x51
+      0000B9 26               [12]  286 	add	a,@r0
+      0000BA FA               [12]  287 	mov	r2,a
+      0000BB E4               [12]  288 	clr	a
+      0000BC 08               [12]  289 	inc	r0
+      0000BD 36               [12]  290 	addc	a,@r0
+      0000BE FB               [12]  291 	mov	r3,a
+      0000BF 08               [12]  292 	inc	r0
+      0000C0 86 04            [24]  293 	mov	ar4,@r0
+      0000C2 8A 82            [24]  294 	mov	dpl,r2
+      0000C4 8B 83            [24]  295 	mov	dph,r3
+      0000C6 8C F0            [24]  296 	mov	b,r4
+      0000C8 12r00r00         [24]  297 	lcall	__gptrget
+      0000CB FE               [12]  298 	mov	r6,a
+      0000CC A3               [24]  299 	inc	dptr
+      0000CD 12r00r00         [24]  300 	lcall	__gptrget
+      0000D0 FF               [12]  301 	mov	r7,a
+      0000D1 BE 00 05         [24]  302 	cjne	r6,#0x00,00156$
+      0000D4 BF 00 02         [24]  303 	cjne	r7,#0x00,00156$
+      0000D7 80 15            [24]  304 	sjmp	00119$
+      0000D9                        305 00156$:
+      0000D9 BE 79 06         [24]  306 	cjne	r6,#0x79,00157$
+      0000DC BF 00 03         [24]  307 	cjne	r7,#0x00,00157$
+      0000DF 02r02r21         [24]  308 	ljmp	00102$
+      0000E2                        309 00157$:
+      0000E2 BE 7D 06         [24]  310 	cjne	r6,#0x7d,00158$
+      0000E5 BF 00 03         [24]  311 	cjne	r7,#0x00,00158$
+      0000E8 02r02r85         [24]  312 	ljmp	00110$
+      0000EB                        313 00158$:
+      0000EB 02r02rBF         [24]  314 	ljmp	00121$
+                                    315 ;	../../core/net/rime/trickle.c:115: while(1) {
+      0000EE                        316 00119$:
+                                    317 ;	../../core/net/rime/trickle.c:116: interval = c->interval << c->interval_scaling;
+      0000EE E5 81            [12]  318 	mov	a,sp
+      0000F0 24 FD            [12]  319 	add	a,#0xfd
+      0000F2 F8               [12]  320 	mov	r0,a
+      0000F3 74 56            [12]  321 	mov	a,#0x56
+      0000F5 26               [12]  322 	add	a,@r0
+      0000F6 FD               [12]  323 	mov	r5,a
+      0000F7 E4               [12]  324 	clr	a
+      0000F8 08               [12]  325 	inc	r0
+      0000F9 36               [12]  326 	addc	a,@r0
+      0000FA FE               [12]  327 	mov	r6,a
+      0000FB 08               [12]  328 	inc	r0
+      0000FC 86 07            [24]  329 	mov	ar7,@r0
+      0000FE 8D 82            [24]  330 	mov	dpl,r5
+      000100 8E 83            [24]  331 	mov	dph,r6
+      000102 8F F0            [24]  332 	mov	b,r7
+      000104 12r00r00         [24]  333 	lcall	__gptrget
+      000107 FC               [12]  334 	mov	r4,a
+      000108 A3               [24]  335 	inc	dptr
+      000109 12r00r00         [24]  336 	lcall	__gptrget
+      00010C FB               [12]  337 	mov	r3,a
+      00010D E5 81            [12]  338 	mov	a,sp
+      00010F 24 FD            [12]  339 	add	a,#0xfd
+      000111 F8               [12]  340 	mov	r0,a
+      000112 74 59            [12]  341 	mov	a,#0x59
+      000114 26               [12]  342 	add	a,@r0
+      000115 FD               [12]  343 	mov	r5,a
+      000116 E4               [12]  344 	clr	a
+      000117 08               [12]  345 	inc	r0
+      000118 36               [12]  346 	addc	a,@r0
+      000119 FE               [12]  347 	mov	r6,a
+      00011A 08               [12]  348 	inc	r0
+      00011B 86 07            [24]  349 	mov	ar7,@r0
+      00011D 8D 82            [24]  350 	mov	dpl,r5
+      00011F 8E 83            [24]  351 	mov	dph,r6
+      000121 8F F0            [24]  352 	mov	b,r7
+      000123 12r00r00         [24]  353 	lcall	__gptrget
+      000126 FD               [12]  354 	mov	r5,a
+      000127 8D F0            [24]  355 	mov	b,r5
+      000129 05 F0            [12]  356 	inc	b
+      00012B AD 04            [24]  357 	mov	r5,ar4
+      00012D AF 03            [24]  358 	mov	r7,ar3
+      00012F 80 06            [24]  359 	sjmp	00160$
+      000131                        360 00159$:
+      000131 ED               [12]  361 	mov	a,r5
+      000132 2D               [12]  362 	add	a,r5
+      000133 FD               [12]  363 	mov	r5,a
+      000134 EF               [12]  364 	mov	a,r7
+      000135 33               [12]  365 	rlc	a
+      000136 FF               [12]  366 	mov	r7,a
+      000137                        367 00160$:
+      000137 D5 F0 F7         [24]  368 	djnz	b,00159$
+      00013A 8D 04            [24]  369 	mov	ar4,r5
+      00013C 8F 03            [24]  370 	mov	ar3,r7
+                                    371 ;	../../core/net/rime/trickle.c:117: set_timer(c, &c->interval_timer, interval);
+      00013E E5 81            [12]  372 	mov	a,sp
+      000140 24 FD            [12]  373 	add	a,#0xfd
+      000142 F8               [12]  374 	mov	r0,a
+      000143 74 27            [12]  375 	mov	a,#0x27
+      000145 26               [12]  376 	add	a,@r0
+      000146 FD               [12]  377 	mov	r5,a
+      000147 E4               [12]  378 	clr	a
+      000148 08               [12]  379 	inc	r0
+      000149 36               [12]  380 	addc	a,@r0
+      00014A FE               [12]  381 	mov	r6,a
+      00014B 08               [12]  382 	inc	r0
+      00014C 86 07            [24]  383 	mov	ar7,@r0
+      00014E C0 04            [24]  384 	push	ar4
+      000150 C0 03            [24]  385 	push	ar3
+      000152 C0 04            [24]  386 	push	ar4
+      000154 C0 03            [24]  387 	push	ar3
+      000156 C0 05            [24]  388 	push	ar5
+      000158 C0 06            [24]  389 	push	ar6
+      00015A C0 07            [24]  390 	push	ar7
+      00015C E5 81            [12]  391 	mov	a,sp
+      00015E 24 F6            [12]  392 	add	a,#0xf6
+      000160 F8               [12]  393 	mov	r0,a
+      000161 86 82            [24]  394 	mov	dpl,@r0
+      000163 08               [12]  395 	inc	r0
+      000164 86 83            [24]  396 	mov	dph,@r0
+      000166 08               [12]  397 	inc	r0
+      000167 86 F0            [24]  398 	mov	b,@r0
+      000169 12r00r6F         [24]  399 	lcall	_set_timer
+      00016C E5 81            [12]  400 	mov	a,sp
+      00016E 24 FB            [12]  401 	add	a,#0xfb
+      000170 F5 81            [12]  402 	mov	sp,a
+      000172 D0 03            [24]  403 	pop	ar3
+      000174 D0 04            [24]  404 	pop	ar4
+                                    405 ;	../../core/net/rime/trickle.c:118: set_timer(c, &c->t, interval / 2 + (random_rand() % (interval / 2)));
+      000176 8C 05            [24]  406 	mov	ar5,r4
+      000178 8B 07            [24]  407 	mov	ar7,r3
+      00017A EF               [12]  408 	mov	a,r7
+      00017B C3               [12]  409 	clr	c
+      00017C 13               [12]  410 	rrc	a
+      00017D CD               [12]  411 	xch	a,r5
+      00017E 13               [12]  412 	rrc	a
+      00017F CD               [12]  413 	xch	a,r5
+      000180 FC               [12]  414 	mov	r4,a
+      000181 C0 05            [24]  415 	push	ar5
+      000183 C0 04            [24]  416 	push	ar4
+      000185 12r00r00         [24]  417 	lcall	_random_rand
+      000188 AE 82            [24]  418 	mov	r6,dpl
+      00018A AF 83            [24]  419 	mov	r7,dph
+      00018C D0 04            [24]  420 	pop	ar4
+      00018E D0 05            [24]  421 	pop	ar5
+      000190 C0 05            [24]  422 	push	ar5
+      000192 C0 04            [24]  423 	push	ar4
+      000194 C0 05            [24]  424 	push	ar5
+      000196 C0 04            [24]  425 	push	ar4
+      000198 8E 82            [24]  426 	mov	dpl,r6
+      00019A 8F 83            [24]  427 	mov	dph,r7
+      00019C 12r00r00         [24]  428 	lcall	__moduint
+      00019F AE 82            [24]  429 	mov	r6,dpl
+      0001A1 AF 83            [24]  430 	mov	r7,dph
+      0001A3 15 81            [12]  431 	dec	sp
+      0001A5 15 81            [12]  432 	dec	sp
+      0001A7 D0 04            [24]  433 	pop	ar4
+      0001A9 D0 05            [24]  434 	pop	ar5
+      0001AB EE               [12]  435 	mov	a,r6
+      0001AC 2D               [12]  436 	add	a,r5
+      0001AD FE               [12]  437 	mov	r6,a
+      0001AE EF               [12]  438 	mov	a,r7
+      0001AF 3C               [12]  439 	addc	a,r4
+      0001B0 FF               [12]  440 	mov	r7,a
+      0001B1 8E 04            [24]  441 	mov	ar4,r6
+      0001B3 8F 03            [24]  442 	mov	ar3,r7
+      0001B5 E5 81            [12]  443 	mov	a,sp
+      0001B7 24 FD            [12]  444 	add	a,#0xfd
+      0001B9 F8               [12]  445 	mov	r0,a
+      0001BA 74 12            [12]  446 	mov	a,#0x12
+      0001BC 26               [12]  447 	add	a,@r0
+      0001BD FD               [12]  448 	mov	r5,a
+      0001BE E4               [12]  449 	clr	a
+      0001BF 08               [12]  450 	inc	r0
+      0001C0 36               [12]  451 	addc	a,@r0
+      0001C1 FE               [12]  452 	mov	r6,a
+      0001C2 08               [12]  453 	inc	r0
+      0001C3 86 07            [24]  454 	mov	ar7,@r0
+      0001C5 C0 04            [24]  455 	push	ar4
+      0001C7 C0 03            [24]  456 	push	ar3
+      0001C9 C0 05            [24]  457 	push	ar5
+      0001CB C0 06            [24]  458 	push	ar6
+      0001CD C0 07            [24]  459 	push	ar7
+      0001CF E5 81            [12]  460 	mov	a,sp
+      0001D1 24 F8            [12]  461 	add	a,#0xf8
+      0001D3 F8               [12]  462 	mov	r0,a
+      0001D4 86 82            [24]  463 	mov	dpl,@r0
+      0001D6 08               [12]  464 	inc	r0
+      0001D7 86 83            [24]  465 	mov	dph,@r0
+      0001D9 08               [12]  466 	inc	r0
+      0001DA 86 F0            [24]  467 	mov	b,@r0
+      0001DC 12r00r6F         [24]  468 	lcall	_set_timer
+      0001DF E5 81            [12]  469 	mov	a,sp
+      0001E1 24 FB            [12]  470 	add	a,#0xfb
+                                    471 ;	../../core/net/rime/trickle.c:120: c->duplicates = 0;
+      0001E3 F5 81            [12]  472 	mov	sp,a
+      0001E5 24 FD            [12]  473 	add	a,#0xfd
+      0001E7 F8               [12]  474 	mov	r0,a
+      0001E8 74 5A            [12]  475 	mov	a,#0x5a
+      0001EA 26               [12]  476 	add	a,@r0
+      0001EB FD               [12]  477 	mov	r5,a
+      0001EC E4               [12]  478 	clr	a
+      0001ED 08               [12]  479 	inc	r0
+      0001EE 36               [12]  480 	addc	a,@r0
+      0001EF FE               [12]  481 	mov	r6,a
+      0001F0 08               [12]  482 	inc	r0
+      0001F1 86 07            [24]  483 	mov	ar7,@r0
+      0001F3 8D 82            [24]  484 	mov	dpl,r5
+      0001F5 8E 83            [24]  485 	mov	dph,r6
+      0001F7 8F F0            [24]  486 	mov	b,r7
+      0001F9 E4               [12]  487 	clr	a
+      0001FA 12r00r00         [24]  488 	lcall	__gptrput
+                                    489 ;	../../core/net/rime/trickle.c:121: PT_YIELD(&c->pt); /* Wait until listen timeout */
+      0001FD A8 81            [24]  490 	mov	r0,sp
+      0001FF 76 00            [12]  491 	mov	@r0,#0x00
+      000201 E5 81            [12]  492 	mov	a,sp
+      000203 24 FD            [12]  493 	add	a,#0xfd
+      000205 F8               [12]  494 	mov	r0,a
+      000206 74 51            [12]  495 	mov	a,#0x51
+      000208 26               [12]  496 	add	a,@r0
+      000209 FD               [12]  497 	mov	r5,a
+      00020A E4               [12]  498 	clr	a
+      00020B 08               [12]  499 	inc	r0
+      00020C 36               [12]  500 	addc	a,@r0
+      00020D FE               [12]  501 	mov	r6,a
+      00020E 08               [12]  502 	inc	r0
+      00020F 86 07            [24]  503 	mov	ar7,@r0
+      000211 8D 82            [24]  504 	mov	dpl,r5
+      000213 8E 83            [24]  505 	mov	dph,r6
+      000215 8F F0            [24]  506 	mov	b,r7
+      000217 74 79            [12]  507 	mov	a,#0x79
+      000219 12r00r00         [24]  508 	lcall	__gptrput
+      00021C A3               [24]  509 	inc	dptr
+      00021D E4               [12]  510 	clr	a
+      00021E 12r00r00         [24]  511 	lcall	__gptrput
+      000221                        512 00102$:
+      000221 A8 81            [24]  513 	mov	r0,sp
+      000223 E6               [12]  514 	mov	a,@r0
+      000224 70 06            [24]  515 	jnz	00106$
+      000226 90 00 01         [24]  516 	mov	dptr,#0x0001
+      000229 02r02rD0         [24]  517 	ljmp	00122$
+      00022C                        518 00106$:
+                                    519 ;	../../core/net/rime/trickle.c:122: if(c->duplicates < DUPLICATE_THRESHOLD) {
+      00022C E5 81            [12]  520 	mov	a,sp
+      00022E 24 FD            [12]  521 	add	a,#0xfd
+      000230 F8               [12]  522 	mov	r0,a
+      000231 74 5A            [12]  523 	mov	a,#0x5a
+      000233 26               [12]  524 	add	a,@r0
+      000234 FD               [12]  525 	mov	r5,a
+      000235 E4               [12]  526 	clr	a
+      000236 08               [12]  527 	inc	r0
+      000237 36               [12]  528 	addc	a,@r0
+      000238 FE               [12]  529 	mov	r6,a
+      000239 08               [12]  530 	inc	r0
+      00023A 86 07            [24]  531 	mov	ar7,@r0
+      00023C 8D 82            [24]  532 	mov	dpl,r5
+      00023E 8E 83            [24]  533 	mov	dph,r6
+      000240 8F F0            [24]  534 	mov	b,r7
+      000242 12r00r00         [24]  535 	lcall	__gptrget
+      000245 FD               [12]  536 	mov	r5,a
+      000246 BD 01 00         [24]  537 	cjne	r5,#0x01,00162$
+      000249                        538 00162$:
+      000249 50 16            [24]  539 	jnc	00113$
+                                    540 ;	../../core/net/rime/trickle.c:123: send(c);
+      00024B E5 81            [12]  541 	mov	a,sp
+      00024D 24 FD            [12]  542 	add	a,#0xfd
+      00024F F8               [12]  543 	mov	r0,a
+      000250 86 05            [24]  544 	mov	ar5,@r0
+      000252 08               [12]  545 	inc	r0
+      000253 86 06            [24]  546 	mov	ar6,@r0
+      000255 08               [12]  547 	inc	r0
+      000256 86 07            [24]  548 	mov	ar7,@r0
+      000258 8D 82            [24]  549 	mov	dpl,r5
+      00025A 8E 83            [24]  550 	mov	dph,r6
+      00025C 8F F0            [24]  551 	mov	b,r7
+      00025E 12r00r00         [24]  552 	lcall	_send
+                                    553 ;	../../core/net/rime/trickle.c:125: PT_YIELD(&c->pt); /* Wait until interval timer expired. */
+      000261                        554 00113$:
+      000261 A8 81            [24]  555 	mov	r0,sp
+      000263 76 00            [12]  556 	mov	@r0,#0x00
+      000265 E5 81            [12]  557 	mov	a,sp
+      000267 24 FD            [12]  558 	add	a,#0xfd
+      000269 F8               [12]  559 	mov	r0,a
+      00026A 74 51            [12]  560 	mov	a,#0x51
+      00026C 26               [12]  561 	add	a,@r0
+      00026D FD               [12]  562 	mov	r5,a
+      00026E E4               [12]  563 	clr	a
+      00026F 08               [12]  564 	inc	r0
+      000270 36               [12]  565 	addc	a,@r0
+      000271 FE               [12]  566 	mov	r6,a
+      000272 08               [12]  567 	inc	r0
+      000273 86 07            [24]  568 	mov	ar7,@r0
+      000275 8D 82            [24]  569 	mov	dpl,r5
+      000277 8E 83            [24]  570 	mov	dph,r6
+      000279 8F F0            [24]  571 	mov	b,r7
+      00027B 74 7D            [12]  572 	mov	a,#0x7d
+      00027D 12r00r00         [24]  573 	lcall	__gptrput
+      000280 A3               [24]  574 	inc	dptr
+      000281 E4               [12]  575 	clr	a
+      000282 12r00r00         [24]  576 	lcall	__gptrput
+      000285                        577 00110$:
+      000285 A8 81            [24]  578 	mov	r0,sp
+      000287 E6               [12]  579 	mov	a,@r0
+      000288 70 05            [24]  580 	jnz	00114$
+      00028A 90 00 01         [24]  581 	mov	dptr,#0x0001
+      00028D 80 41            [24]  582 	sjmp	00122$
+      00028F                        583 00114$:
+                                    584 ;	../../core/net/rime/trickle.c:126: if(c->interval_scaling < INTERVAL_MAX) {
+      00028F E5 81            [12]  585 	mov	a,sp
+      000291 24 FD            [12]  586 	add	a,#0xfd
+      000293 F8               [12]  587 	mov	r0,a
+      000294 74 59            [12]  588 	mov	a,#0x59
+      000296 26               [12]  589 	add	a,@r0
+      000297 FE               [12]  590 	mov	r6,a
+      000298 E4               [12]  591 	clr	a
+      000299 08               [12]  592 	inc	r0
+      00029A 36               [12]  593 	addc	a,@r0
+      00029B FD               [12]  594 	mov	r5,a
+      00029C 08               [12]  595 	inc	r0
+      00029D 86 04            [24]  596 	mov	ar4,@r0
+      00029F 8E 82            [24]  597 	mov	dpl,r6
+      0002A1 8D 83            [24]  598 	mov	dph,r5
+      0002A3 8C F0            [24]  599 	mov	b,r4
+      0002A5 12r00r00         [24]  600 	lcall	__gptrget
+      0002A8 FF               [12]  601 	mov	r7,a
+      0002A9 BF 04 00         [24]  602 	cjne	r7,#0x04,00165$
+      0002AC                        603 00165$:
+      0002AC 40 03            [24]  604 	jc	00166$
+      0002AE 02r00rEE         [24]  605 	ljmp	00119$
+      0002B1                        606 00166$:
+                                    607 ;	../../core/net/rime/trickle.c:127: c->interval_scaling++;
+      0002B1 0F               [12]  608 	inc	r7
+      0002B2 8E 82            [24]  609 	mov	dpl,r6
+      0002B4 8D 83            [24]  610 	mov	dph,r5
+      0002B6 8C F0            [24]  611 	mov	b,r4
+      0002B8 EF               [12]  612 	mov	a,r7
+      0002B9 12r00r00         [24]  613 	lcall	__gptrput
+      0002BC 02r00rEE         [24]  614 	ljmp	00119$
+                                    615 ;	../../core/net/rime/trickle.c:131: PT_END(&c->pt);
+      0002BF                        616 00121$:
+      0002BF 8A 82            [24]  617 	mov	dpl,r2
+      0002C1 8B 83            [24]  618 	mov	dph,r3
+      0002C3 8C F0            [24]  619 	mov	b,r4
+      0002C5 E4               [12]  620 	clr	a
+      0002C6 12r00r00         [24]  621 	lcall	__gptrput
+      0002C9 A3               [24]  622 	inc	dptr
+      0002CA 12r00r00         [24]  623 	lcall	__gptrput
+      0002CD 90 00 03         [24]  624 	mov	dptr,#0x0003
+      0002D0                        625 00122$:
+                                    626 ;	../../core/net/rime/trickle.c:132: }
+      0002D0 E5 81            [12]  627 	mov	a,sp
+      0002D2 24 FC            [12]  628 	add	a,#0xfc
+      0002D4 F5 81            [12]  629 	mov	sp,a
+      0002D6 22               [24]  630 	ret
+                                    631 ;------------------------------------------------------------
+                                    632 ;Allocation info for local variables in function 'recv'
+                                    633 ;------------------------------------------------------------
+                                    634 ;from                      Allocated to stack - sp -12
+                                    635 ;bc                        Allocated to registers r5 r6 r7 
+                                    636 ;c                         Allocated to stack - sp -4
+                                    637 ;seqno                     Allocated to stack - sp -1
+                                    638 ;sloc0                     Allocated to stack - sp +1
+                                    639 ;sloc1                     Allocated to stack - sp -7
+                                    640 ;------------------------------------------------------------
+                                    641 ;	../../core/net/rime/trickle.c:135: recv(struct broadcast_conn *bc, const rimeaddr_t *from)
+                                    642 ;	-----------------------------------------
+                                    643 ;	 function recv
+                                    644 ;	-----------------------------------------
+      0002D7                        645 _recv:
+      0002D7 E5 81            [12]  646 	mov	a,sp
+      0002D9 24 08            [12]  647 	add	a,#0x08
+      0002DB F5 81            [12]  648 	mov	sp,a
+      0002DD AD 82            [24]  649 	mov	r5,dpl
+      0002DF AE 83            [24]  650 	mov	r6,dph
+      0002E1 AF F0            [24]  651 	mov	r7,b
+                                    652 ;	../../core/net/rime/trickle.c:137: struct trickle_conn *c = (struct trickle_conn *)bc;
+      0002E3 E5 81            [12]  653 	mov	a,sp
+      0002E5 24 FC            [12]  654 	add	a,#0xfc
+      0002E7 F8               [12]  655 	mov	r0,a
+      0002E8 A6 05            [24]  656 	mov	@r0,ar5
+      0002EA 08               [12]  657 	inc	r0
+      0002EB A6 06            [24]  658 	mov	@r0,ar6
+      0002ED 08               [12]  659 	inc	r0
+      0002EE A6 07            [24]  660 	mov	@r0,ar7
+                                    661 ;	../../core/net/rime/trickle.c:138: uint16_t seqno = packetbuf_attr(PACKETBUF_ATTR_EPACKET_ID);
+      0002F0 75 82 15         [24]  662 	mov	dpl,#0x15
+      0002F3 12r00r00         [24]  663 	lcall	_packetbuf_attr
+      0002F6 AB 82            [24]  664 	mov	r3,dpl
+      0002F8 AC 83            [24]  665 	mov	r4,dph
+      0002FA A8 81            [24]  666 	mov	r0,sp
+      0002FC 18               [12]  667 	dec	r0
+      0002FD A6 03            [24]  668 	mov	@r0,ar3
+      0002FF 08               [12]  669 	inc	r0
+      000300 A6 04            [24]  670 	mov	@r0,ar4
+                                    671 ;	../../core/net/rime/trickle.c:148: if(seqno == c->seqno) {
+      000302 E5 81            [12]  672 	mov	a,sp
+      000304 24 FC            [12]  673 	add	a,#0xfc
+      000306 F8               [12]  674 	mov	r0,a
+      000307 74 58            [12]  675 	mov	a,#0x58
+      000309 26               [12]  676 	add	a,@r0
+      00030A FA               [12]  677 	mov	r2,a
+      00030B E4               [12]  678 	clr	a
+      00030C 08               [12]  679 	inc	r0
+      00030D 36               [12]  680 	addc	a,@r0
+      00030E FB               [12]  681 	mov	r3,a
+      00030F 08               [12]  682 	inc	r0
+      000310 86 04            [24]  683 	mov	ar4,@r0
+      000312 8A 82            [24]  684 	mov	dpl,r2
+      000314 8B 83            [24]  685 	mov	dph,r3
+      000316 8C F0            [24]  686 	mov	b,r4
+      000318 12r00r00         [24]  687 	lcall	__gptrget
+      00031B FD               [12]  688 	mov	r5,a
+      00031C FE               [12]  689 	mov	r6,a
+      00031D 7F 00            [12]  690 	mov	r7,#0x00
+      00031F A8 81            [24]  691 	mov	r0,sp
+      000321 18               [12]  692 	dec	r0
+      000322 E6               [12]  693 	mov	a,@r0
+      000323 B5 06 07         [24]  694 	cjne	a,ar6,00123$
+      000326 08               [12]  695 	inc	r0
+      000327 E6               [12]  696 	mov	a,@r0
+      000328 B5 07 02         [24]  697 	cjne	a,ar7,00123$
+      00032B 80 02            [24]  698 	sjmp	00124$
+      00032D                        699 00123$:
+      00032D 80 28            [24]  700 	sjmp	00107$
+      00032F                        701 00124$:
+                                    702 ;	../../core/net/rime/trickle.c:150: ++c->duplicates;
+      00032F E5 81            [12]  703 	mov	a,sp
+      000331 24 FC            [12]  704 	add	a,#0xfc
+      000333 F8               [12]  705 	mov	r0,a
+      000334 74 5A            [12]  706 	mov	a,#0x5a
+      000336 26               [12]  707 	add	a,@r0
+      000337 FE               [12]  708 	mov	r6,a
+      000338 E4               [12]  709 	clr	a
+      000339 08               [12]  710 	inc	r0
+      00033A 36               [12]  711 	addc	a,@r0
+      00033B FD               [12]  712 	mov	r5,a
+      00033C 08               [12]  713 	inc	r0
+      00033D 86 04            [24]  714 	mov	ar4,@r0
+      00033F 8E 82            [24]  715 	mov	dpl,r6
+      000341 8D 83            [24]  716 	mov	dph,r5
+      000343 8C F0            [24]  717 	mov	b,r4
+      000345 12r00r00         [24]  718 	lcall	__gptrget
+      000348 FF               [12]  719 	mov	r7,a
+      000349 0F               [12]  720 	inc	r7
+      00034A 8E 82            [24]  721 	mov	dpl,r6
+      00034C 8D 83            [24]  722 	mov	dph,r5
+      00034E 8C F0            [24]  723 	mov	b,r4
+      000350 EF               [12]  724 	mov	a,r7
+      000351 12r00r00         [24]  725 	lcall	__gptrput
+      000354 02r05r29         [24]  726 	ljmp	00109$
+      000357                        727 00107$:
+                                    728 ;	../../core/net/rime/trickle.c:151: } else if(SEQNO_LT(seqno, c->seqno)) {
+      000357 A8 81            [24]  729 	mov	r0,sp
+      000359 18               [12]  730 	dec	r0
+      00035A E6               [12]  731 	mov	a,@r0
+      00035B FF               [12]  732 	mov	r7,a
+      00035C C3               [12]  733 	clr	c
+      00035D 9D               [12]  734 	subb	a,r5
+      00035E 30 E7 33         [24]  735 	jnb	acc.7,00104$
+                                    736 ;	../../core/net/rime/trickle.c:152: c->interval_scaling = 0;
+      000361 E5 81            [12]  737 	mov	a,sp
+      000363 24 FC            [12]  738 	add	a,#0xfc
+      000365 F8               [12]  739 	mov	r0,a
+      000366 74 59            [12]  740 	mov	a,#0x59
+      000368 26               [12]  741 	add	a,@r0
+      000369 FF               [12]  742 	mov	r7,a
+      00036A E4               [12]  743 	clr	a
+      00036B 08               [12]  744 	inc	r0
+      00036C 36               [12]  745 	addc	a,@r0
+      00036D FE               [12]  746 	mov	r6,a
+      00036E 08               [12]  747 	inc	r0
+      00036F 86 05            [24]  748 	mov	ar5,@r0
+      000371 8F 82            [24]  749 	mov	dpl,r7
+      000373 8E 83            [24]  750 	mov	dph,r6
+      000375 8D F0            [24]  751 	mov	b,r5
+      000377 E4               [12]  752 	clr	a
+      000378 12r00r00         [24]  753 	lcall	__gptrput
+                                    754 ;	../../core/net/rime/trickle.c:153: send(c);
+      00037B E5 81            [12]  755 	mov	a,sp
+      00037D 24 FC            [12]  756 	add	a,#0xfc
+      00037F F8               [12]  757 	mov	r0,a
+      000380 86 05            [24]  758 	mov	ar5,@r0
+      000382 08               [12]  759 	inc	r0
+      000383 86 06            [24]  760 	mov	ar6,@r0
+      000385 08               [12]  761 	inc	r0
+      000386 86 07            [24]  762 	mov	ar7,@r0
+      000388 8D 82            [24]  763 	mov	dpl,r5
+      00038A 8E 83            [24]  764 	mov	dph,r6
+      00038C 8F F0            [24]  765 	mov	b,r7
+      00038E 12r00r00         [24]  766 	lcall	_send
+      000391 02r05r29         [24]  767 	ljmp	00109$
+      000394                        768 00104$:
+                                    769 ;	../../core/net/rime/trickle.c:158: c->seqno = seqno;
+      000394 8A 82            [24]  770 	mov	dpl,r2
+      000396 8B 83            [24]  771 	mov	dph,r3
+      000398 8C F0            [24]  772 	mov	b,r4
+      00039A EF               [12]  773 	mov	a,r7
+      00039B 12r00r00         [24]  774 	lcall	__gptrput
+                                    775 ;	../../core/net/rime/trickle.c:160: if(c->q != NULL) {
+      00039E E5 81            [12]  776 	mov	a,sp
+      0003A0 24 FC            [12]  777 	add	a,#0xfc
+      0003A2 F8               [12]  778 	mov	r0,a
+      0003A3 74 53            [12]  779 	mov	a,#0x53
+      0003A5 26               [12]  780 	add	a,@r0
+      0003A6 FD               [12]  781 	mov	r5,a
+      0003A7 E4               [12]  782 	clr	a
+      0003A8 08               [12]  783 	inc	r0
+      0003A9 36               [12]  784 	addc	a,@r0
+      0003AA FE               [12]  785 	mov	r6,a
+      0003AB 08               [12]  786 	inc	r0
+      0003AC 86 07            [24]  787 	mov	ar7,@r0
+      0003AE 8D 82            [24]  788 	mov	dpl,r5
+      0003B0 8E 83            [24]  789 	mov	dph,r6
+      0003B2 8F F0            [24]  790 	mov	b,r7
+      0003B4 12r00r00         [24]  791 	lcall	__gptrget
+      0003B7 FA               [12]  792 	mov	r2,a
+      0003B8 A3               [24]  793 	inc	dptr
+      0003B9 12r00r00         [24]  794 	lcall	__gptrget
+      0003BC FB               [12]  795 	mov	r3,a
+      0003BD A3               [24]  796 	inc	dptr
+      0003BE 12r00r00         [24]  797 	lcall	__gptrget
+      0003C1 FC               [12]  798 	mov	r4,a
+      0003C2 EA               [12]  799 	mov	a,r2
+      0003C3 4B               [12]  800 	orl	a,r3
+      0003C4 60 15            [24]  801 	jz	00102$
+                                    802 ;	../../core/net/rime/trickle.c:161: queuebuf_free(c->q);
+      0003C6 8A 82            [24]  803 	mov	dpl,r2
+      0003C8 8B 83            [24]  804 	mov	dph,r3
+      0003CA 8C F0            [24]  805 	mov	b,r4
+      0003CC C0 07            [24]  806 	push	ar7
+      0003CE C0 06            [24]  807 	push	ar6
+      0003D0 C0 05            [24]  808 	push	ar5
+      0003D2 12r00r00         [24]  809 	lcall	_queuebuf_free
+      0003D5 D0 05            [24]  810 	pop	ar5
+      0003D7 D0 06            [24]  811 	pop	ar6
+      0003D9 D0 07            [24]  812 	pop	ar7
+      0003DB                        813 00102$:
+                                    814 ;	../../core/net/rime/trickle.c:163: c->q = queuebuf_new_from_packetbuf();
+      0003DB C0 07            [24]  815 	push	ar7
+      0003DD C0 06            [24]  816 	push	ar6
+      0003DF C0 05            [24]  817 	push	ar5
+      0003E1 12r00r00         [24]  818 	lcall	_queuebuf_new_from_packetbuf
+      0003E4 AA 82            [24]  819 	mov	r2,dpl
+      0003E6 AB 83            [24]  820 	mov	r3,dph
+      0003E8 AC F0            [24]  821 	mov	r4,b
+      0003EA D0 05            [24]  822 	pop	ar5
+      0003EC D0 06            [24]  823 	pop	ar6
+      0003EE D0 07            [24]  824 	pop	ar7
+      0003F0 8D 82            [24]  825 	mov	dpl,r5
+      0003F2 8E 83            [24]  826 	mov	dph,r6
+      0003F4 8F F0            [24]  827 	mov	b,r7
+      0003F6 EA               [12]  828 	mov	a,r2
+      0003F7 12r00r00         [24]  829 	lcall	__gptrput
+      0003FA A3               [24]  830 	inc	dptr
+      0003FB EB               [12]  831 	mov	a,r3
+      0003FC 12r00r00         [24]  832 	lcall	__gptrput
+      0003FF A3               [24]  833 	inc	dptr
+      000400 EC               [12]  834 	mov	a,r4
+      000401 12r00r00         [24]  835 	lcall	__gptrput
+                                    836 ;	../../core/net/rime/trickle.c:164: c->interval_scaling = 0;
+      000404 E5 81            [12]  837 	mov	a,sp
+      000406 24 FC            [12]  838 	add	a,#0xfc
+      000408 F8               [12]  839 	mov	r0,a
+      000409 74 59            [12]  840 	mov	a,#0x59
+      00040B 26               [12]  841 	add	a,@r0
+      00040C FD               [12]  842 	mov	r5,a
+      00040D E4               [12]  843 	clr	a
+      00040E 08               [12]  844 	inc	r0
+      00040F 36               [12]  845 	addc	a,@r0
+      000410 FE               [12]  846 	mov	r6,a
+      000411 08               [12]  847 	inc	r0
+      000412 86 07            [24]  848 	mov	ar7,@r0
+      000414 8D 82            [24]  849 	mov	dpl,r5
+      000416 8E 83            [24]  850 	mov	dph,r6
+      000418 8F F0            [24]  851 	mov	b,r7
+      00041A E4               [12]  852 	clr	a
+      00041B 12r00r00         [24]  853 	lcall	__gptrput
+                                    854 ;	../../core/net/rime/trickle.c:165: reset_interval(c);
+      00041E E5 81            [12]  855 	mov	a,sp
+      000420 24 FC            [12]  856 	add	a,#0xfc
+      000422 F8               [12]  857 	mov	r0,a
+      000423 86 82            [24]  858 	mov	dpl,@r0
+      000425 08               [12]  859 	inc	r0
+      000426 86 83            [24]  860 	mov	dph,@r0
+      000428 08               [12]  861 	inc	r0
+      000429 86 F0            [24]  862 	mov	b,@r0
+      00042B 12r00r49         [24]  863 	lcall	_reset_interval
+                                    864 ;	../../core/net/rime/trickle.c:167: send, c);
+      00042E E5 81            [12]  865 	mov	a,sp
+      000430 24 FC            [12]  866 	add	a,#0xfc
+      000432 F8               [12]  867 	mov	r0,a
+      000433 86 05            [24]  868 	mov	ar5,@r0
+      000435 08               [12]  869 	inc	r0
+      000436 86 06            [24]  870 	mov	ar6,@r0
+      000438 08               [12]  871 	inc	r0
+      000439 86 07            [24]  872 	mov	ar7,@r0
+                                    873 ;	../../core/net/rime/trickle.c:166: ctimer_set(&c->first_transmission_timer, random_rand() % c->interval,
+      00043B C0 07            [24]  874 	push	ar7
+      00043D C0 06            [24]  875 	push	ar6
+      00043F C0 05            [24]  876 	push	ar5
+      000441 12r00r00         [24]  877 	lcall	_random_rand
+      000444 C8               [12]  878 	xch	a,r0
+      000445 E5 81            [12]  879 	mov	a,sp
+      000447 24 F6            [12]  880 	add	a,#0xf6
+      000449 C8               [12]  881 	xch	a,r0
+      00044A A6 82            [24]  882 	mov	@r0,dpl
+      00044C 08               [12]  883 	inc	r0
+      00044D A6 83            [24]  884 	mov	@r0,dph
+      00044F D0 05            [24]  885 	pop	ar5
+      000451 D0 06            [24]  886 	pop	ar6
+      000453 D0 07            [24]  887 	pop	ar7
+      000455 E5 81            [12]  888 	mov	a,sp
+      000457 24 FC            [12]  889 	add	a,#0xfc
+      000459 F8               [12]  890 	mov	r0,a
+      00045A 74 56            [12]  891 	mov	a,#0x56
+      00045C 26               [12]  892 	add	a,@r0
+      00045D FA               [12]  893 	mov	r2,a
+      00045E E4               [12]  894 	clr	a
+      00045F 08               [12]  895 	inc	r0
+      000460 36               [12]  896 	addc	a,@r0
+      000461 FB               [12]  897 	mov	r3,a
+      000462 08               [12]  898 	inc	r0
+      000463 86 04            [24]  899 	mov	ar4,@r0
+      000465 8A 82            [24]  900 	mov	dpl,r2
+      000467 8B 83            [24]  901 	mov	dph,r3
+      000469 8C F0            [24]  902 	mov	b,r4
+      00046B 12r00r00         [24]  903 	lcall	__gptrget
+      00046E FA               [12]  904 	mov	r2,a
+      00046F A3               [24]  905 	inc	dptr
+      000470 12r00r00         [24]  906 	lcall	__gptrget
+      000473 FB               [12]  907 	mov	r3,a
+      000474 C0 07            [24]  908 	push	ar7
+      000476 C0 06            [24]  909 	push	ar6
+      000478 C0 05            [24]  910 	push	ar5
+      00047A C0 02            [24]  911 	push	ar2
+      00047C C0 03            [24]  912 	push	ar3
+      00047E E5 81            [12]  913 	mov	a,sp
+      000480 24 F4            [12]  914 	add	a,#0xf4
+      000482 F8               [12]  915 	mov	r0,a
+      000483 86 82            [24]  916 	mov	dpl,@r0
+      000485 08               [12]  917 	inc	r0
+      000486 86 83            [24]  918 	mov	dph,@r0
+      000488 12r00r00         [24]  919 	lcall	__moduint
+      00048B C8               [12]  920 	xch	a,r0
+      00048C E5 81            [12]  921 	mov	a,sp
+      00048E 24 F4            [12]  922 	add	a,#0xf4
+      000490 C8               [12]  923 	xch	a,r0
+      000491 A6 82            [24]  924 	mov	@r0,dpl
+      000493 08               [12]  925 	inc	r0
+      000494 A6 83            [24]  926 	mov	@r0,dph
+      000496 15 81            [12]  927 	dec	sp
+      000498 15 81            [12]  928 	dec	sp
+      00049A D0 05            [24]  929 	pop	ar5
+      00049C D0 06            [24]  930 	pop	ar6
+      00049E D0 07            [24]  931 	pop	ar7
+      0004A0 E5 81            [12]  932 	mov	a,sp
+      0004A2 24 FC            [12]  933 	add	a,#0xfc
+      0004A4 F8               [12]  934 	mov	r0,a
+      0004A5 74 3C            [12]  935 	mov	a,#0x3c
+      0004A7 26               [12]  936 	add	a,@r0
+      0004A8 FA               [12]  937 	mov	r2,a
+      0004A9 E4               [12]  938 	clr	a
+      0004AA 08               [12]  939 	inc	r0
+      0004AB 36               [12]  940 	addc	a,@r0
+      0004AC FB               [12]  941 	mov	r3,a
+      0004AD 08               [12]  942 	inc	r0
+      0004AE 86 04            [24]  943 	mov	ar4,@r0
+      0004B0 C0 05            [24]  944 	push	ar5
+      0004B2 C0 06            [24]  945 	push	ar6
+      0004B4 C0 07            [24]  946 	push	ar7
+      0004B6 74r00            [12]  947 	mov	a,#_send
+      0004B8 C0 E0            [24]  948 	push	acc
+      0004BA 74s00            [12]  949 	mov	a,#(_send >> 8)
+      0004BC C0 E0            [24]  950 	push	acc
+      0004BE E5 81            [12]  951 	mov	a,sp
+      0004C0 24 F4            [12]  952 	add	a,#0xf4
+      0004C2 F8               [12]  953 	mov	r0,a
+      0004C3 E6               [12]  954 	mov	a,@r0
+      0004C4 C0 E0            [24]  955 	push	acc
+      0004C6 08               [12]  956 	inc	r0
+      0004C7 E6               [12]  957 	mov	a,@r0
+      0004C8 C0 E0            [24]  958 	push	acc
+      0004CA 8A 82            [24]  959 	mov	dpl,r2
+      0004CC 8B 83            [24]  960 	mov	dph,r3
+      0004CE 8C F0            [24]  961 	mov	b,r4
+      0004D0 12r00r00         [24]  962 	lcall	_ctimer_set
+      0004D3 E5 81            [12]  963 	mov	a,sp
+      0004D5 24 F9            [12]  964 	add	a,#0xf9
+                                    965 ;	../../core/net/rime/trickle.c:168: c->cb->recv(c);
+      0004D7 F5 81            [12]  966 	mov	sp,a
+      0004D9 24 FC            [12]  967 	add	a,#0xfc
+      0004DB F8               [12]  968 	mov	r0,a
+      0004DC 74 0F            [12]  969 	mov	a,#0x0f
+      0004DE 26               [12]  970 	add	a,@r0
+      0004DF FD               [12]  971 	mov	r5,a
+      0004E0 E4               [12]  972 	clr	a
+      0004E1 08               [12]  973 	inc	r0
+      0004E2 36               [12]  974 	addc	a,@r0
+      0004E3 FE               [12]  975 	mov	r6,a
+      0004E4 08               [12]  976 	inc	r0
+      0004E5 86 07            [24]  977 	mov	ar7,@r0
+      0004E7 8D 82            [24]  978 	mov	dpl,r5
+      0004E9 8E 83            [24]  979 	mov	dph,r6
+      0004EB 8F F0            [24]  980 	mov	b,r7
+      0004ED 12r00r00         [24]  981 	lcall	__gptrget
+      0004F0 FD               [12]  982 	mov	r5,a
+      0004F1 A3               [24]  983 	inc	dptr
+      0004F2 12r00r00         [24]  984 	lcall	__gptrget
+      0004F5 FE               [12]  985 	mov	r6,a
+      0004F6 A3               [24]  986 	inc	dptr
+      0004F7 12r00r00         [24]  987 	lcall	__gptrget
+      0004FA FF               [12]  988 	mov	r7,a
+      0004FB 8D 82            [24]  989 	mov	dpl,r5
+      0004FD 8E 83            [24]  990 	mov	dph,r6
+      0004FF 8F F0            [24]  991 	mov	b,r7
+      000501 12r00r00         [24]  992 	lcall	__gptrget
+      000504 FD               [12]  993 	mov	r5,a
+      000505 A3               [24]  994 	inc	dptr
+      000506 12r00r00         [24]  995 	lcall	__gptrget
+      000509 FE               [12]  996 	mov	r6,a
+      00050A C0 06            [24]  997 	push	ar6
+      00050C C0 05            [24]  998 	push	ar5
+      00050E 12r05r13         [24]  999 	lcall	00127$
+      000511 80 12            [24] 1000 	sjmp	00128$
+      000513                       1001 00127$:
+      000513 C0 05            [24] 1002 	push	ar5
+      000515 C0 06            [24] 1003 	push	ar6
+      000517 E5 81            [12] 1004 	mov	a,sp
+      000519 24 F6            [12] 1005 	add	a,#0xf6
+      00051B F8               [12] 1006 	mov	r0,a
+      00051C 86 82            [24] 1007 	mov	dpl,@r0
+      00051E 08               [12] 1008 	inc	r0
+      00051F 86 83            [24] 1009 	mov	dph,@r0
+      000521 08               [12] 1010 	inc	r0
+      000522 86 F0            [24] 1011 	mov	b,@r0
+      000524 22               [24] 1012 	ret
+      000525                       1013 00128$:
+      000525 D0 05            [24] 1014 	pop	ar5
+      000527 D0 06            [24] 1015 	pop	ar6
+      000529                       1016 00109$:
+                                   1017 ;	../../core/net/rime/trickle.c:170: }
+      000529 E5 81            [12] 1018 	mov	a,sp
+      00052B 24 F8            [12] 1019 	add	a,#0xf8
+      00052D F5 81            [12] 1020 	mov	sp,a
+      00052F 22               [24] 1021 	ret
+                                   1022 ;------------------------------------------------------------
+                                   1023 ;Allocation info for local variables in function 'trickle_open'
+                                   1024 ;------------------------------------------------------------
+                                   1025 ;interval                  Allocated to stack - sp -3
+                                   1026 ;channel                   Allocated to stack - sp -5
+                                   1027 ;cb                        Allocated to stack - sp -8
+                                   1028 ;c                         Allocated to registers r5 r6 r7 
+                                   1029 ;------------------------------------------------------------
+                                   1030 ;	../../core/net/rime/trickle.c:175: trickle_open(struct trickle_conn *c, clock_time_t interval,
+                                   1031 ;	-----------------------------------------
+                                   1032 ;	 function trickle_open
+                                   1033 ;	-----------------------------------------
+      000530                       1034 _trickle_open:
+      000530 AD 82            [24] 1035 	mov	r5,dpl
+      000532 AE 83            [24] 1036 	mov	r6,dph
+      000534 AF F0            [24] 1037 	mov	r7,b
+                                   1038 ;	../../core/net/rime/trickle.c:178: broadcast_open(&c->c, channel, &bc);
+      000536 C0 07            [24] 1039 	push	ar7
+      000538 C0 06            [24] 1040 	push	ar6
+      00053A C0 05            [24] 1041 	push	ar5
+      00053C 74r06            [12] 1042 	mov	a,#_bc
+      00053E C0 E0            [24] 1043 	push	acc
+      000540 74s00            [12] 1044 	mov	a,#(_bc >> 8)
+      000542 C0 E0            [24] 1045 	push	acc
+      000544 74 80            [12] 1046 	mov	a,#0x80
+      000546 C0 E0            [24] 1047 	push	acc
+      000548 E5 81            [12] 1048 	mov	a,sp
+      00054A 24 F5            [12] 1049 	add	a,#0xf5
+      00054C F8               [12] 1050 	mov	r0,a
+      00054D E6               [12] 1051 	mov	a,@r0
+      00054E C0 E0            [24] 1052 	push	acc
+      000550 08               [12] 1053 	inc	r0
+      000551 E6               [12] 1054 	mov	a,@r0
+      000552 C0 E0            [24] 1055 	push	acc
+      000554 8D 82            [24] 1056 	mov	dpl,r5
+      000556 8E 83            [24] 1057 	mov	dph,r6
+      000558 8F F0            [24] 1058 	mov	b,r7
+      00055A 12r00r00         [24] 1059 	lcall	_broadcast_open
+      00055D E5 81            [12] 1060 	mov	a,sp
+      00055F 24 FB            [12] 1061 	add	a,#0xfb
+      000561 F5 81            [12] 1062 	mov	sp,a
+      000563 D0 05            [24] 1063 	pop	ar5
+      000565 D0 06            [24] 1064 	pop	ar6
+      000567 D0 07            [24] 1065 	pop	ar7
+                                   1066 ;	../../core/net/rime/trickle.c:179: c->cb = cb;
+      000569 74 0F            [12] 1067 	mov	a,#0x0f
+      00056B 2D               [12] 1068 	add	a,r5
+      00056C FA               [12] 1069 	mov	r2,a
+      00056D E4               [12] 1070 	clr	a
+      00056E 3E               [12] 1071 	addc	a,r6
+      00056F FB               [12] 1072 	mov	r3,a
+      000570 8F 04            [24] 1073 	mov	ar4,r7
+      000572 8A 82            [24] 1074 	mov	dpl,r2
+      000574 8B 83            [24] 1075 	mov	dph,r3
+      000576 8C F0            [24] 1076 	mov	b,r4
+      000578 E5 81            [12] 1077 	mov	a,sp
+      00057A 24 F8            [12] 1078 	add	a,#0xf8
+      00057C F8               [12] 1079 	mov	r0,a
+      00057D E6               [12] 1080 	mov	a,@r0
+      00057E 12r00r00         [24] 1081 	lcall	__gptrput
+      000581 A3               [24] 1082 	inc	dptr
+      000582 08               [12] 1083 	inc	r0
+      000583 E6               [12] 1084 	mov	a,@r0
+      000584 12r00r00         [24] 1085 	lcall	__gptrput
+      000587 A3               [24] 1086 	inc	dptr
+      000588 08               [12] 1087 	inc	r0
+      000589 E6               [12] 1088 	mov	a,@r0
+      00058A 12r00r00         [24] 1089 	lcall	__gptrput
+                                   1090 ;	../../core/net/rime/trickle.c:180: c->q = NULL;
+      00058D 74 53            [12] 1091 	mov	a,#0x53
+      00058F 2D               [12] 1092 	add	a,r5
+      000590 FA               [12] 1093 	mov	r2,a
+      000591 E4               [12] 1094 	clr	a
+      000592 3E               [12] 1095 	addc	a,r6
+      000593 FB               [12] 1096 	mov	r3,a
+      000594 8F 04            [24] 1097 	mov	ar4,r7
+      000596 8A 82            [24] 1098 	mov	dpl,r2
+      000598 8B 83            [24] 1099 	mov	dph,r3
+      00059A 8C F0            [24] 1100 	mov	b,r4
+      00059C E4               [12] 1101 	clr	a
+      00059D 12r00r00         [24] 1102 	lcall	__gptrput
+      0005A0 A3               [24] 1103 	inc	dptr
+      0005A1 12r00r00         [24] 1104 	lcall	__gptrput
+      0005A4 A3               [24] 1105 	inc	dptr
+      0005A5 12r00r00         [24] 1106 	lcall	__gptrput
+                                   1107 ;	../../core/net/rime/trickle.c:181: c->interval = interval;
+      0005A8 74 56            [12] 1108 	mov	a,#0x56
+      0005AA 2D               [12] 1109 	add	a,r5
+      0005AB FA               [12] 1110 	mov	r2,a
+      0005AC E4               [12] 1111 	clr	a
+      0005AD 3E               [12] 1112 	addc	a,r6
+      0005AE FB               [12] 1113 	mov	r3,a
+      0005AF 8F 04            [24] 1114 	mov	ar4,r7
+      0005B1 8A 82            [24] 1115 	mov	dpl,r2
+      0005B3 8B 83            [24] 1116 	mov	dph,r3
+      0005B5 8C F0            [24] 1117 	mov	b,r4
+      0005B7 E5 81            [12] 1118 	mov	a,sp
+      0005B9 24 FD            [12] 1119 	add	a,#0xfd
+      0005BB F8               [12] 1120 	mov	r0,a
+      0005BC E6               [12] 1121 	mov	a,@r0
+      0005BD 12r00r00         [24] 1122 	lcall	__gptrput
+      0005C0 A3               [24] 1123 	inc	dptr
+      0005C1 08               [12] 1124 	inc	r0
+      0005C2 E6               [12] 1125 	mov	a,@r0
+      0005C3 12r00r00         [24] 1126 	lcall	__gptrput
+                                   1127 ;	../../core/net/rime/trickle.c:182: c->interval_scaling = 0;
+      0005C6 74 59            [12] 1128 	mov	a,#0x59
+      0005C8 2D               [12] 1129 	add	a,r5
+      0005C9 FD               [12] 1130 	mov	r5,a
+      0005CA E4               [12] 1131 	clr	a
+      0005CB 3E               [12] 1132 	addc	a,r6
+      0005CC FE               [12] 1133 	mov	r6,a
+      0005CD 8D 82            [24] 1134 	mov	dpl,r5
+      0005CF 8E 83            [24] 1135 	mov	dph,r6
+      0005D1 8F F0            [24] 1136 	mov	b,r7
+      0005D3 E4               [12] 1137 	clr	a
+      0005D4 12r00r00         [24] 1138 	lcall	__gptrput
+                                   1139 ;	../../core/net/rime/trickle.c:183: channel_set_attributes(channel, attributes);
+      0005D7 74r00            [12] 1140 	mov	a,#_attributes
+      0005D9 C0 E0            [24] 1141 	push	acc
+      0005DB 74s00            [12] 1142 	mov	a,#(_attributes >> 8)
+      0005DD C0 E0            [24] 1143 	push	acc
+      0005DF 74 80            [12] 1144 	mov	a,#0x80
+      0005E1 C0 E0            [24] 1145 	push	acc
+      0005E3 E5 81            [12] 1146 	mov	a,sp
+      0005E5 24 F8            [12] 1147 	add	a,#0xf8
+      0005E7 F8               [12] 1148 	mov	r0,a
+      0005E8 86 82            [24] 1149 	mov	dpl,@r0
+      0005EA 08               [12] 1150 	inc	r0
+      0005EB 86 83            [24] 1151 	mov	dph,@r0
+      0005ED 12r00r00         [24] 1152 	lcall	_channel_set_attributes
+      0005F0 15 81            [12] 1153 	dec	sp
+      0005F2 15 81            [12] 1154 	dec	sp
+      0005F4 15 81            [12] 1155 	dec	sp
+                                   1156 ;	../../core/net/rime/trickle.c:184: }
+      0005F6 22               [24] 1157 	ret
+                                   1158 ;------------------------------------------------------------
+                                   1159 ;Allocation info for local variables in function 'trickle_close'
+                                   1160 ;------------------------------------------------------------
+                                   1161 ;c                         Allocated to registers r5 r6 r7 
+                                   1162 ;------------------------------------------------------------
+                                   1163 ;	../../core/net/rime/trickle.c:187: trickle_close(struct trickle_conn *c)
+                                   1164 ;	-----------------------------------------
+                                   1165 ;	 function trickle_close
+                                   1166 ;	-----------------------------------------
+      0005F7                       1167 _trickle_close:
+                                   1168 ;	../../core/net/rime/trickle.c:189: broadcast_close(&c->c);
+      0005F7 AD 82            [24] 1169 	mov	r5,dpl
+      0005F9 AE 83            [24] 1170 	mov	r6,dph
+      0005FB AF F0            [24] 1171 	mov	r7,b
+      0005FD C0 07            [24] 1172 	push	ar7
+      0005FF C0 06            [24] 1173 	push	ar6
+      000601 C0 05            [24] 1174 	push	ar5
+      000603 12r00r00         [24] 1175 	lcall	_broadcast_close
+      000606 D0 05            [24] 1176 	pop	ar5
+      000608 D0 06            [24] 1177 	pop	ar6
+      00060A D0 07            [24] 1178 	pop	ar7
+                                   1179 ;	../../core/net/rime/trickle.c:190: ctimer_stop(&c->t);
+      00060C 74 12            [12] 1180 	mov	a,#0x12
+      00060E 2D               [12] 1181 	add	a,r5
+      00060F FA               [12] 1182 	mov	r2,a
+      000610 E4               [12] 1183 	clr	a
+      000611 3E               [12] 1184 	addc	a,r6
+      000612 FB               [12] 1185 	mov	r3,a
+      000613 8F 04            [24] 1186 	mov	ar4,r7
+      000615 8A 82            [24] 1187 	mov	dpl,r2
+      000617 8B 83            [24] 1188 	mov	dph,r3
+      000619 8C F0            [24] 1189 	mov	b,r4
+      00061B C0 07            [24] 1190 	push	ar7
+      00061D C0 06            [24] 1191 	push	ar6
+      00061F C0 05            [24] 1192 	push	ar5
+      000621 12r00r00         [24] 1193 	lcall	_ctimer_stop
+      000624 D0 05            [24] 1194 	pop	ar5
+      000626 D0 06            [24] 1195 	pop	ar6
+      000628 D0 07            [24] 1196 	pop	ar7
+                                   1197 ;	../../core/net/rime/trickle.c:191: ctimer_stop(&c->interval_timer);
+      00062A 74 27            [12] 1198 	mov	a,#0x27
+      00062C 2D               [12] 1199 	add	a,r5
+      00062D FD               [12] 1200 	mov	r5,a
+      00062E E4               [12] 1201 	clr	a
+      00062F 3E               [12] 1202 	addc	a,r6
+      000630 FE               [12] 1203 	mov	r6,a
+      000631 8D 82            [24] 1204 	mov	dpl,r5
+      000633 8E 83            [24] 1205 	mov	dph,r6
+      000635 8F F0            [24] 1206 	mov	b,r7
+                                   1207 ;	../../core/net/rime/trickle.c:192: }
+      000637 02r00r00         [24] 1208 	ljmp	_ctimer_stop
+                                   1209 ;------------------------------------------------------------
+                                   1210 ;Allocation info for local variables in function 'trickle_send'
+                                   1211 ;------------------------------------------------------------
+                                   1212 ;c                         Allocated to stack - sp -5
+                                   1213 ;sloc0                     Allocated to stack - sp -2
+                                   1214 ;------------------------------------------------------------
+                                   1215 ;	../../core/net/rime/trickle.c:195: trickle_send(struct trickle_conn *c)
+                                   1216 ;	-----------------------------------------
+                                   1217 ;	 function trickle_send
+                                   1218 ;	-----------------------------------------
+      00063A                       1219 _trickle_send:
+      00063A C0 82            [24] 1220 	push	dpl
+      00063C C0 83            [24] 1221 	push	dph
+      00063E C0 F0            [24] 1222 	push	b
+      000640 05 81            [12] 1223 	inc	sp
+      000642 05 81            [12] 1224 	inc	sp
+      000644 05 81            [12] 1225 	inc	sp
+                                   1226 ;	../../core/net/rime/trickle.c:197: if(c->q != NULL) {
+      000646 E5 81            [12] 1227 	mov	a,sp
+      000648 24 FB            [12] 1228 	add	a,#0xfb
+      00064A F8               [12] 1229 	mov	r0,a
+      00064B 74 53            [12] 1230 	mov	a,#0x53
+      00064D 26               [12] 1231 	add	a,@r0
+      00064E FA               [12] 1232 	mov	r2,a
+      00064F E4               [12] 1233 	clr	a
+      000650 08               [12] 1234 	inc	r0
+      000651 36               [12] 1235 	addc	a,@r0
+      000652 FB               [12] 1236 	mov	r3,a
+      000653 08               [12] 1237 	inc	r0
+      000654 86 04            [24] 1238 	mov	ar4,@r0
+      000656 8A 82            [24] 1239 	mov	dpl,r2
+      000658 8B 83            [24] 1240 	mov	dph,r3
+      00065A 8C F0            [24] 1241 	mov	b,r4
+      00065C 12r00r00         [24] 1242 	lcall	__gptrget
+      00065F FF               [12] 1243 	mov	r7,a
+      000660 A3               [24] 1244 	inc	dptr
+      000661 12r00r00         [24] 1245 	lcall	__gptrget
+      000664 FE               [12] 1246 	mov	r6,a
+      000665 A3               [24] 1247 	inc	dptr
+      000666 12r00r00         [24] 1248 	lcall	__gptrget
+      000669 FD               [12] 1249 	mov	r5,a
+      00066A EF               [12] 1250 	mov	a,r7
+      00066B 4E               [12] 1251 	orl	a,r6
+      00066C 60 15            [24] 1252 	jz	00102$
+                                   1253 ;	../../core/net/rime/trickle.c:198: queuebuf_free(c->q);
+      00066E 8F 82            [24] 1254 	mov	dpl,r7
+      000670 8E 83            [24] 1255 	mov	dph,r6
+      000672 8D F0            [24] 1256 	mov	b,r5
+      000674 C0 04            [24] 1257 	push	ar4
+      000676 C0 03            [24] 1258 	push	ar3
+      000678 C0 02            [24] 1259 	push	ar2
+      00067A 12r00r00         [24] 1260 	lcall	_queuebuf_free
+      00067D D0 02            [24] 1261 	pop	ar2
+      00067F D0 03            [24] 1262 	pop	ar3
+      000681 D0 04            [24] 1263 	pop	ar4
+      000683                       1264 00102$:
+                                   1265 ;	../../core/net/rime/trickle.c:200: c->seqno++;
+      000683 E5 81            [12] 1266 	mov	a,sp
+      000685 24 FB            [12] 1267 	add	a,#0xfb
+      000687 F8               [12] 1268 	mov	r0,a
+      000688 A9 81            [24] 1269 	mov	r1,sp
+      00068A 19               [12] 1270 	dec	r1
+      00068B 19               [12] 1271 	dec	r1
+      00068C 74 58            [12] 1272 	mov	a,#0x58
+      00068E 26               [12] 1273 	add	a,@r0
+      00068F F7               [12] 1274 	mov	@r1,a
+      000690 E4               [12] 1275 	clr	a
+      000691 08               [12] 1276 	inc	r0
+      000692 36               [12] 1277 	addc	a,@r0
+      000693 09               [12] 1278 	inc	r1
+      000694 F7               [12] 1279 	mov	@r1,a
+      000695 08               [12] 1280 	inc	r0
+      000696 09               [12] 1281 	inc	r1
+      000697 E6               [12] 1282 	mov	a,@r0
+      000698 F7               [12] 1283 	mov	@r1,a
+      000699 A8 81            [24] 1284 	mov	r0,sp
+      00069B 18               [12] 1285 	dec	r0
+      00069C 18               [12] 1286 	dec	r0
+      00069D 86 82            [24] 1287 	mov	dpl,@r0
+      00069F 08               [12] 1288 	inc	r0
+      0006A0 86 83            [24] 1289 	mov	dph,@r0
+      0006A2 08               [12] 1290 	inc	r0
+      0006A3 86 F0            [24] 1291 	mov	b,@r0
+      0006A5 12r00r00         [24] 1292 	lcall	__gptrget
+      0006A8 FF               [12] 1293 	mov	r7,a
+      0006A9 0F               [12] 1294 	inc	r7
+      0006AA A8 81            [24] 1295 	mov	r0,sp
+      0006AC 18               [12] 1296 	dec	r0
+      0006AD 18               [12] 1297 	dec	r0
+      0006AE 86 82            [24] 1298 	mov	dpl,@r0
+      0006B0 08               [12] 1299 	inc	r0
+      0006B1 86 83            [24] 1300 	mov	dph,@r0
+      0006B3 08               [12] 1301 	inc	r0
+      0006B4 86 F0            [24] 1302 	mov	b,@r0
+      0006B6 EF               [12] 1303 	mov	a,r7
+      0006B7 12r00r00         [24] 1304 	lcall	__gptrput
+                                   1305 ;	../../core/net/rime/trickle.c:201: packetbuf_set_attr(PACKETBUF_ATTR_EPACKET_ID, c->seqno);
+      0006BA 7E 00            [12] 1306 	mov	r6,#0x00
+      0006BC C0 04            [24] 1307 	push	ar4
+      0006BE C0 03            [24] 1308 	push	ar3
+      0006C0 C0 02            [24] 1309 	push	ar2
+      0006C2 C0 07            [24] 1310 	push	ar7
+      0006C4 C0 06            [24] 1311 	push	ar6
+      0006C6 75 82 15         [24] 1312 	mov	dpl,#0x15
+      0006C9 12r00r00         [24] 1313 	lcall	_packetbuf_set_attr
+      0006CC 15 81            [12] 1314 	dec	sp
+      0006CE 15 81            [12] 1315 	dec	sp
+                                   1316 ;	../../core/net/rime/trickle.c:202: c->q = queuebuf_new_from_packetbuf();
+      0006D0 12r00r00         [24] 1317 	lcall	_queuebuf_new_from_packetbuf
+      0006D3 AD 82            [24] 1318 	mov	r5,dpl
+      0006D5 AE 83            [24] 1319 	mov	r6,dph
+      0006D7 AF F0            [24] 1320 	mov	r7,b
+      0006D9 D0 02            [24] 1321 	pop	ar2
+      0006DB D0 03            [24] 1322 	pop	ar3
+      0006DD D0 04            [24] 1323 	pop	ar4
+      0006DF 8A 82            [24] 1324 	mov	dpl,r2
+      0006E1 8B 83            [24] 1325 	mov	dph,r3
+      0006E3 8C F0            [24] 1326 	mov	b,r4
+      0006E5 ED               [12] 1327 	mov	a,r5
+      0006E6 12r00r00         [24] 1328 	lcall	__gptrput
+      0006E9 A3               [24] 1329 	inc	dptr
+      0006EA EE               [12] 1330 	mov	a,r6
+      0006EB 12r00r00         [24] 1331 	lcall	__gptrput
+      0006EE A3               [24] 1332 	inc	dptr
+      0006EF EF               [12] 1333 	mov	a,r7
+      0006F0 12r00r00         [24] 1334 	lcall	__gptrput
+                                   1335 ;	../../core/net/rime/trickle.c:206: reset_interval(c);
+      0006F3 E5 81            [12] 1336 	mov	a,sp
+      0006F5 24 FB            [12] 1337 	add	a,#0xfb
+      0006F7 F8               [12] 1338 	mov	r0,a
+      0006F8 86 82            [24] 1339 	mov	dpl,@r0
+      0006FA 08               [12] 1340 	inc	r0
+      0006FB 86 83            [24] 1341 	mov	dph,@r0
+      0006FD 08               [12] 1342 	inc	r0
+      0006FE 86 F0            [24] 1343 	mov	b,@r0
+      000700 12r00r49         [24] 1344 	lcall	_reset_interval
+                                   1345 ;	../../core/net/rime/trickle.c:207: send(c);
+      000703 E5 81            [12] 1346 	mov	a,sp
+      000705 24 FB            [12] 1347 	add	a,#0xfb
+      000707 F8               [12] 1348 	mov	r0,a
+      000708 86 05            [24] 1349 	mov	ar5,@r0
+      00070A 08               [12] 1350 	inc	r0
+      00070B 86 06            [24] 1351 	mov	ar6,@r0
+      00070D 08               [12] 1352 	inc	r0
+      00070E 86 07            [24] 1353 	mov	ar7,@r0
+      000710 8D 82            [24] 1354 	mov	dpl,r5
+      000712 8E 83            [24] 1355 	mov	dph,r6
+      000714 8F F0            [24] 1356 	mov	b,r7
+      000716 12r00r00         [24] 1357 	lcall	_send
+                                   1358 ;	../../core/net/rime/trickle.c:208: }
+      000719 E5 81            [12] 1359 	mov	a,sp
+      00071B 24 FA            [12] 1360 	add	a,#0xfa
+      00071D F5 81            [12] 1361 	mov	sp,a
+      00071F 22               [24] 1362 	ret
+                                   1363 	.area CSEG    (CODE)
+                                   1364 	.area CONST   (CODE)
+      000000                       1365 _attributes:
+      000000 15                    1366 	.db #0x15	; 21
+      000001 08                    1367 	.db #0x08	; 8
+      000002 18                    1368 	.db #0x18	; 24
+      000003 10                    1369 	.db #0x10	; 16
+      000004 00                    1370 	.db #0x00	; 0
+      000005 00                    1371 	.db #0x00	; 0
+      000006                       1372 _bc:
+      000006rD7s02                 1373 	.byte _recv, (_recv >> 8)
+      000008 00 00                 1374 	.byte #0x00,#0x00
+                                   1375 	.area XINIT   (CODE)
+                                   1376 	.area CABS    (ABS,CODE)

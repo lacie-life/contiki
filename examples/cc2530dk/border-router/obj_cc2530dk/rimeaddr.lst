@@ -1,0 +1,295 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module rimeaddr
+                                      6 	.optsdcc -mmcs51 --model-huge
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _rimeaddr_null
+                                     12 	.globl _rimeaddr_node_addr
+                                     13 	.globl _rimeaddr_copy
+                                     14 	.globl _rimeaddr_cmp
+                                     15 	.globl _rimeaddr_set_node_addr
+                                     16 ;--------------------------------------------------------
+                                     17 ; special function registers
+                                     18 ;--------------------------------------------------------
+                                     19 	.area RSEG    (ABS,DATA)
+      000000                         20 	.org 0x0000
+                                     21 ;--------------------------------------------------------
+                                     22 ; special function bits
+                                     23 ;--------------------------------------------------------
+                                     24 	.area RSEG    (ABS,DATA)
+      000000                         25 	.org 0x0000
+                                     26 ;--------------------------------------------------------
+                                     27 ; overlayable register banks
+                                     28 ;--------------------------------------------------------
+                                     29 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                         30 	.ds 8
+                                     31 ;--------------------------------------------------------
+                                     32 ; internal ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area DSEG    (DATA)
+                                     35 ;--------------------------------------------------------
+                                     36 ; overlayable items in internal ram 
+                                     37 ;--------------------------------------------------------
+                                     38 ;--------------------------------------------------------
+                                     39 ; indirectly addressable internal ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area ISEG    (DATA)
+                                     42 ;--------------------------------------------------------
+                                     43 ; absolute internal ram data
+                                     44 ;--------------------------------------------------------
+                                     45 	.area IABS    (ABS,DATA)
+                                     46 	.area IABS    (ABS,DATA)
+                                     47 ;--------------------------------------------------------
+                                     48 ; bit data
+                                     49 ;--------------------------------------------------------
+                                     50 	.area BSEG    (BIT)
+                                     51 ;--------------------------------------------------------
+                                     52 ; paged external ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area PSEG    (PAG,XDATA)
+                                     55 ;--------------------------------------------------------
+                                     56 ; external ram data
+                                     57 ;--------------------------------------------------------
+                                     58 	.area XSEG    (XDATA)
+      000000                         59 _rimeaddr_node_addr::
+      000000                         60 	.ds 8
+                                     61 ;--------------------------------------------------------
+                                     62 ; absolute external ram data
+                                     63 ;--------------------------------------------------------
+                                     64 	.area XABS    (ABS,XDATA)
+                                     65 ;--------------------------------------------------------
+                                     66 ; external initialized ram data
+                                     67 ;--------------------------------------------------------
+                                     68 	.area XISEG   (XDATA)
+                                     69 	.area HOME    (CODE)
+                                     70 	.area GSINIT0 (CODE)
+                                     71 	.area GSINIT1 (CODE)
+                                     72 	.area GSINIT2 (CODE)
+                                     73 	.area GSINIT3 (CODE)
+                                     74 	.area GSINIT4 (CODE)
+                                     75 	.area GSINIT5 (CODE)
+                                     76 	.area GSINIT  (CODE)
+                                     77 	.area GSFINAL (CODE)
+                                     78 	.area CSEG    (CODE)
+                                     79 ;--------------------------------------------------------
+                                     80 ; global & static initialisations
+                                     81 ;--------------------------------------------------------
+                                     82 	.area HOME    (CODE)
+                                     83 	.area GSINIT  (CODE)
+                                     84 	.area GSFINAL (CODE)
+                                     85 	.area GSINIT  (CODE)
+                                     86 ;--------------------------------------------------------
+                                     87 ; Home
+                                     88 ;--------------------------------------------------------
+                                     89 	.area HOME    (CODE)
+                                     90 	.area HOME    (CODE)
+                                     91 ;--------------------------------------------------------
+                                     92 ; code
+                                     93 ;--------------------------------------------------------
+                                     94 	.area BANK1   (CODE)
+                                     95 ;------------------------------------------------------------
+                                     96 ;Allocation info for local variables in function 'rimeaddr_copy'
+                                     97 ;------------------------------------------------------------
+                                     98 ;src                       Allocated to stack - sp -9
+                                     99 ;dest                      Allocated to stack - sp -3
+                                    100 ;i                         Allocated to stack - sp +0
+                                    101 ;------------------------------------------------------------
+                                    102 ;	../../../core/net/rime/rimeaddr.c:59: rimeaddr_copy(rimeaddr_t *dest, const rimeaddr_t *src)
+                                    103 ;	-----------------------------------------
+                                    104 ;	 function rimeaddr_copy
+                                    105 ;	-----------------------------------------
+      000000                        106 _rimeaddr_copy:
+                           000007   107 	ar7 = 0x07
+                           000006   108 	ar6 = 0x06
+                           000005   109 	ar5 = 0x05
+                           000004   110 	ar4 = 0x04
+                           000003   111 	ar3 = 0x03
+                           000002   112 	ar2 = 0x02
+                           000001   113 	ar1 = 0x01
+                           000000   114 	ar0 = 0x00
+      000000 C0 82            [24]  115 	push	dpl
+      000002 C0 83            [24]  116 	push	dph
+      000004 C0 F0            [24]  117 	push	b
+      000006 05 81            [12]  118 	inc	sp
+                                    119 ;	../../../core/net/rime/rimeaddr.c:62: for(i = 0; i < RIMEADDR_SIZE; i++) {
+      000008 A8 81            [24]  120 	mov	r0,sp
+      00000A 76 00            [12]  121 	mov	@r0,#0x00
+      00000C                        122 00102$:
+                                    123 ;	../../../core/net/rime/rimeaddr.c:63: dest->u8[i] = src->u8[i];
+      00000C E5 81            [12]  124 	mov	a,sp
+      00000E 24 FD            [12]  125 	add	a,#0xfd
+      000010 F8               [12]  126 	mov	r0,a
+      000011 A9 81            [24]  127 	mov	r1,sp
+      000013 E7               [12]  128 	mov	a,@r1
+      000014 26               [12]  129 	add	a,@r0
+      000015 FA               [12]  130 	mov	r2,a
+      000016 E4               [12]  131 	clr	a
+      000017 08               [12]  132 	inc	r0
+      000018 36               [12]  133 	addc	a,@r0
+      000019 FB               [12]  134 	mov	r3,a
+      00001A 08               [12]  135 	inc	r0
+      00001B 86 07            [24]  136 	mov	ar7,@r0
+      00001D E5 81            [12]  137 	mov	a,sp
+      00001F 24 F7            [12]  138 	add	a,#0xf7
+      000021 F8               [12]  139 	mov	r0,a
+      000022 86 04            [24]  140 	mov	ar4,@r0
+      000024 08               [12]  141 	inc	r0
+      000025 86 05            [24]  142 	mov	ar5,@r0
+      000027 08               [12]  143 	inc	r0
+      000028 86 06            [24]  144 	mov	ar6,@r0
+      00002A A8 81            [24]  145 	mov	r0,sp
+      00002C E6               [12]  146 	mov	a,@r0
+      00002D 2C               [12]  147 	add	a,r4
+      00002E FC               [12]  148 	mov	r4,a
+      00002F E4               [12]  149 	clr	a
+      000030 3D               [12]  150 	addc	a,r5
+      000031 FD               [12]  151 	mov	r5,a
+      000032 8C 82            [24]  152 	mov	dpl,r4
+      000034 8D 83            [24]  153 	mov	dph,r5
+      000036 8E F0            [24]  154 	mov	b,r6
+      000038 12r00r00         [24]  155 	lcall	__gptrget
+      00003B FC               [12]  156 	mov	r4,a
+      00003C 8A 82            [24]  157 	mov	dpl,r2
+      00003E 8B 83            [24]  158 	mov	dph,r3
+      000040 8F F0            [24]  159 	mov	b,r7
+      000042 12r00r00         [24]  160 	lcall	__gptrput
+                                    161 ;	../../../core/net/rime/rimeaddr.c:62: for(i = 0; i < RIMEADDR_SIZE; i++) {
+      000045 A8 81            [24]  162 	mov	r0,sp
+      000047 06               [12]  163 	inc	@r0
+      000048 A8 81            [24]  164 	mov	r0,sp
+      00004A B6 08 00         [24]  165 	cjne	@r0,#0x08,00111$
+      00004D                        166 00111$:
+      00004D 40 BD            [24]  167 	jc	00102$
+                                    168 ;	../../../core/net/rime/rimeaddr.c:65: }
+      00004F E5 81            [12]  169 	mov	a,sp
+      000051 24 FC            [12]  170 	add	a,#0xfc
+      000053 F5 81            [12]  171 	mov	sp,a
+      000055 02r00r00         [24]  172 	ljmp	__sdcc_banked_ret
+                                    173 ;------------------------------------------------------------
+                                    174 ;Allocation info for local variables in function 'rimeaddr_cmp'
+                                    175 ;------------------------------------------------------------
+                                    176 ;addr2                     Allocated to stack - sp -9
+                                    177 ;addr1                     Allocated to stack - sp -3
+                                    178 ;i                         Allocated to stack - sp +0
+                                    179 ;------------------------------------------------------------
+                                    180 ;	../../../core/net/rime/rimeaddr.c:68: rimeaddr_cmp(const rimeaddr_t *addr1, const rimeaddr_t *addr2)
+                                    181 ;	-----------------------------------------
+                                    182 ;	 function rimeaddr_cmp
+                                    183 ;	-----------------------------------------
+      000058                        184 _rimeaddr_cmp:
+      000058 C0 82            [24]  185 	push	dpl
+      00005A C0 83            [24]  186 	push	dph
+      00005C C0 F0            [24]  187 	push	b
+      00005E 05 81            [12]  188 	inc	sp
+                                    189 ;	../../../core/net/rime/rimeaddr.c:71: for(i = 0; i < RIMEADDR_SIZE; i++) {
+      000060 A8 81            [24]  190 	mov	r0,sp
+      000062 76 00            [12]  191 	mov	@r0,#0x00
+      000064                        192 00104$:
+                                    193 ;	../../../core/net/rime/rimeaddr.c:72: if(addr1->u8[i] != addr2->u8[i]) {
+      000064 E5 81            [12]  194 	mov	a,sp
+      000066 24 FD            [12]  195 	add	a,#0xfd
+      000068 F8               [12]  196 	mov	r0,a
+      000069 A9 81            [24]  197 	mov	r1,sp
+      00006B E7               [12]  198 	mov	a,@r1
+      00006C 26               [12]  199 	add	a,@r0
+      00006D FA               [12]  200 	mov	r2,a
+      00006E E4               [12]  201 	clr	a
+      00006F 08               [12]  202 	inc	r0
+      000070 36               [12]  203 	addc	a,@r0
+      000071 FB               [12]  204 	mov	r3,a
+      000072 08               [12]  205 	inc	r0
+      000073 86 07            [24]  206 	mov	ar7,@r0
+      000075 E5 81            [12]  207 	mov	a,sp
+      000077 24 F7            [12]  208 	add	a,#0xf7
+      000079 F8               [12]  209 	mov	r0,a
+      00007A 86 04            [24]  210 	mov	ar4,@r0
+      00007C 08               [12]  211 	inc	r0
+      00007D 86 05            [24]  212 	mov	ar5,@r0
+      00007F 08               [12]  213 	inc	r0
+      000080 86 06            [24]  214 	mov	ar6,@r0
+      000082 A8 81            [24]  215 	mov	r0,sp
+      000084 E6               [12]  216 	mov	a,@r0
+      000085 2C               [12]  217 	add	a,r4
+      000086 FC               [12]  218 	mov	r4,a
+      000087 E4               [12]  219 	clr	a
+      000088 3D               [12]  220 	addc	a,r5
+      000089 FD               [12]  221 	mov	r5,a
+      00008A 8A 82            [24]  222 	mov	dpl,r2
+      00008C 8B 83            [24]  223 	mov	dph,r3
+      00008E 8F F0            [24]  224 	mov	b,r7
+      000090 12r00r00         [24]  225 	lcall	__gptrget
+      000093 FA               [12]  226 	mov	r2,a
+      000094 8C 82            [24]  227 	mov	dpl,r4
+      000096 8D 83            [24]  228 	mov	dph,r5
+      000098 8E F0            [24]  229 	mov	b,r6
+      00009A 12r00r00         [24]  230 	lcall	__gptrget
+      00009D FC               [12]  231 	mov	r4,a
+      00009E EA               [12]  232 	mov	a,r2
+      00009F B5 04 02         [24]  233 	cjne	a,ar4,00120$
+      0000A2 80 05            [24]  234 	sjmp	00105$
+      0000A4                        235 00120$:
+                                    236 ;	../../../core/net/rime/rimeaddr.c:73: return 0;
+      0000A4 90 00 00         [24]  237 	mov	dptr,#0x0000
+      0000A7 80 0D            [24]  238 	sjmp	00106$
+      0000A9                        239 00105$:
+                                    240 ;	../../../core/net/rime/rimeaddr.c:71: for(i = 0; i < RIMEADDR_SIZE; i++) {
+      0000A9 A8 81            [24]  241 	mov	r0,sp
+      0000AB 06               [12]  242 	inc	@r0
+      0000AC A8 81            [24]  243 	mov	r0,sp
+      0000AE B6 08 00         [24]  244 	cjne	@r0,#0x08,00121$
+      0000B1                        245 00121$:
+      0000B1 40 B1            [24]  246 	jc	00104$
+                                    247 ;	../../../core/net/rime/rimeaddr.c:76: return 1;
+      0000B3 90 00 01         [24]  248 	mov	dptr,#0x0001
+      0000B6                        249 00106$:
+                                    250 ;	../../../core/net/rime/rimeaddr.c:77: }
+      0000B6 E5 81            [12]  251 	mov	a,sp
+      0000B8 24 FC            [12]  252 	add	a,#0xfc
+      0000BA F5 81            [12]  253 	mov	sp,a
+      0000BC 02r00r00         [24]  254 	ljmp	__sdcc_banked_ret
+                                    255 ;------------------------------------------------------------
+                                    256 ;Allocation info for local variables in function 'rimeaddr_set_node_addr'
+                                    257 ;------------------------------------------------------------
+                                    258 ;t                         Allocated to registers r5 r6 r7 
+                                    259 ;------------------------------------------------------------
+                                    260 ;	../../../core/net/rime/rimeaddr.c:80: rimeaddr_set_node_addr(rimeaddr_t *t)
+                                    261 ;	-----------------------------------------
+                                    262 ;	 function rimeaddr_set_node_addr
+                                    263 ;	-----------------------------------------
+      0000BF                        264 _rimeaddr_set_node_addr:
+      0000BF AD 82            [24]  265 	mov	r5,dpl
+      0000C1 AE 83            [24]  266 	mov	r6,dph
+      0000C3 AF F0            [24]  267 	mov	r7,b
+                                    268 ;	../../../core/net/rime/rimeaddr.c:82: rimeaddr_copy(&rimeaddr_node_addr, t);
+      0000C5 C0 05            [24]  269 	push	ar5
+      0000C7 C0 06            [24]  270 	push	ar6
+      0000C9 C0 07            [24]  271 	push	ar7
+      0000CB 90r00r00         [24]  272 	mov	dptr,#_rimeaddr_node_addr
+      0000CE 75 F0 00         [24]  273 	mov	b,#0x00
+      0000D1 78r00            [12]  274 	mov	r0,#_rimeaddr_copy
+      0000D3 79s00            [12]  275 	mov	r1,#(_rimeaddr_copy >> 8)
+      0000D5 7As00            [12]  276 	mov	r2,#(_rimeaddr_copy >> 16)
+      0000D7 12r00r00         [24]  277 	lcall	__sdcc_banked_call
+      0000DA 15 81            [12]  278 	dec	sp
+      0000DC 15 81            [12]  279 	dec	sp
+      0000DE 15 81            [12]  280 	dec	sp
+                                    281 ;	../../../core/net/rime/rimeaddr.c:83: }
+      0000E0 02r00r00         [24]  282 	ljmp	__sdcc_banked_ret
+                                    283 	.area CSEG    (CODE)
+                                    284 	.area CONST   (CODE)
+      000000                        285 _rimeaddr_null:
+      000000 00                     286 	.db #0x00	; 0
+      000001 00                     287 	.db #0x00	; 0
+      000002 00                     288 	.db #0x00	; 0
+      000003 00                     289 	.db #0x00	; 0
+      000004 00                     290 	.db #0x00	; 0
+      000005 00                     291 	.db #0x00	; 0
+      000006 00                     292 	.db #0x00	; 0
+      000007 00                     293 	.db #0x00	; 0
+                                    294 	.area XINIT   (CODE)
+                                    295 	.area CABS    (ABS,CODE)

@@ -1,0 +1,666 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module ringbuf
+                                      6 	.optsdcc -mmcs51 --model-huge
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _ringbuf_init
+                                     12 	.globl _ringbuf_put
+                                     13 	.globl _ringbuf_get
+                                     14 	.globl _ringbuf_size
+                                     15 	.globl _ringbuf_elements
+                                     16 ;--------------------------------------------------------
+                                     17 ; special function registers
+                                     18 ;--------------------------------------------------------
+                                     19 	.area RSEG    (ABS,DATA)
+      000000                         20 	.org 0x0000
+                                     21 ;--------------------------------------------------------
+                                     22 ; special function bits
+                                     23 ;--------------------------------------------------------
+                                     24 	.area RSEG    (ABS,DATA)
+      000000                         25 	.org 0x0000
+                                     26 ;--------------------------------------------------------
+                                     27 ; overlayable register banks
+                                     28 ;--------------------------------------------------------
+                                     29 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                         30 	.ds 8
+                                     31 ;--------------------------------------------------------
+                                     32 ; internal ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area DSEG    (DATA)
+                                     35 ;--------------------------------------------------------
+                                     36 ; overlayable items in internal ram 
+                                     37 ;--------------------------------------------------------
+                                     38 ;--------------------------------------------------------
+                                     39 ; indirectly addressable internal ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area ISEG    (DATA)
+                                     42 ;--------------------------------------------------------
+                                     43 ; absolute internal ram data
+                                     44 ;--------------------------------------------------------
+                                     45 	.area IABS    (ABS,DATA)
+                                     46 	.area IABS    (ABS,DATA)
+                                     47 ;--------------------------------------------------------
+                                     48 ; bit data
+                                     49 ;--------------------------------------------------------
+                                     50 	.area BSEG    (BIT)
+                                     51 ;--------------------------------------------------------
+                                     52 ; paged external ram data
+                                     53 ;--------------------------------------------------------
+                                     54 	.area PSEG    (PAG,XDATA)
+                                     55 ;--------------------------------------------------------
+                                     56 ; external ram data
+                                     57 ;--------------------------------------------------------
+                                     58 	.area XSEG    (XDATA)
+                                     59 ;--------------------------------------------------------
+                                     60 ; absolute external ram data
+                                     61 ;--------------------------------------------------------
+                                     62 	.area XABS    (ABS,XDATA)
+                                     63 ;--------------------------------------------------------
+                                     64 ; external initialized ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area XISEG   (XDATA)
+                                     67 	.area HOME    (CODE)
+                                     68 	.area GSINIT0 (CODE)
+                                     69 	.area GSINIT1 (CODE)
+                                     70 	.area GSINIT2 (CODE)
+                                     71 	.area GSINIT3 (CODE)
+                                     72 	.area GSINIT4 (CODE)
+                                     73 	.area GSINIT5 (CODE)
+                                     74 	.area GSINIT  (CODE)
+                                     75 	.area GSFINAL (CODE)
+                                     76 	.area CSEG    (CODE)
+                                     77 ;--------------------------------------------------------
+                                     78 ; global & static initialisations
+                                     79 ;--------------------------------------------------------
+                                     80 	.area HOME    (CODE)
+                                     81 	.area GSINIT  (CODE)
+                                     82 	.area GSFINAL (CODE)
+                                     83 	.area GSINIT  (CODE)
+                                     84 ;--------------------------------------------------------
+                                     85 ; Home
+                                     86 ;--------------------------------------------------------
+                                     87 	.area HOME    (CODE)
+                                     88 	.area HOME    (CODE)
+                                     89 ;--------------------------------------------------------
+                                     90 ; code
+                                     91 ;--------------------------------------------------------
+                                     92 	.area BANK1   (CODE)
+                                     93 ;------------------------------------------------------------
+                                     94 ;Allocation info for local variables in function 'ringbuf_init'
+                                     95 ;------------------------------------------------------------
+                                     96 ;dataptr                   Allocated to stack - sp -8
+                                     97 ;size                      Allocated to stack - sp -9
+                                     98 ;r                         Allocated to stack - sp -2
+                                     99 ;------------------------------------------------------------
+                                    100 ;	../../../core/lib/ringbuf.c:43: ringbuf_init(struct ringbuf *r, uint8_t *dataptr, uint8_t size)
+                                    101 ;	-----------------------------------------
+                                    102 ;	 function ringbuf_init
+                                    103 ;	-----------------------------------------
+      000000                        104 _ringbuf_init:
+                           000007   105 	ar7 = 0x07
+                           000006   106 	ar6 = 0x06
+                           000005   107 	ar5 = 0x05
+                           000004   108 	ar4 = 0x04
+                           000003   109 	ar3 = 0x03
+                           000002   110 	ar2 = 0x02
+                           000001   111 	ar1 = 0x01
+                           000000   112 	ar0 = 0x00
+      000000 C0 82            [24]  113 	push	dpl
+      000002 C0 83            [24]  114 	push	dph
+      000004 C0 F0            [24]  115 	push	b
+                                    116 ;	../../../core/lib/ringbuf.c:45: r->data = dataptr;
+      000006 A8 81            [24]  117 	mov	r0,sp
+      000008 18               [12]  118 	dec	r0
+      000009 18               [12]  119 	dec	r0
+      00000A 86 82            [24]  120 	mov	dpl,@r0
+      00000C 08               [12]  121 	inc	r0
+      00000D 86 83            [24]  122 	mov	dph,@r0
+      00000F 08               [12]  123 	inc	r0
+      000010 86 F0            [24]  124 	mov	b,@r0
+      000012 E5 81            [12]  125 	mov	a,sp
+      000014 24 F8            [12]  126 	add	a,#0xf8
+      000016 F9               [12]  127 	mov	r1,a
+      000017 E7               [12]  128 	mov	a,@r1
+      000018 12r00r00         [24]  129 	lcall	__gptrput
+      00001B A3               [24]  130 	inc	dptr
+      00001C 09               [12]  131 	inc	r1
+      00001D E7               [12]  132 	mov	a,@r1
+      00001E 12r00r00         [24]  133 	lcall	__gptrput
+      000021 A3               [24]  134 	inc	dptr
+      000022 09               [12]  135 	inc	r1
+      000023 E7               [12]  136 	mov	a,@r1
+      000024 12r00r00         [24]  137 	lcall	__gptrput
+                                    138 ;	../../../core/lib/ringbuf.c:46: r->mask = size - 1;
+      000027 A8 81            [24]  139 	mov	r0,sp
+      000029 18               [12]  140 	dec	r0
+      00002A 18               [12]  141 	dec	r0
+      00002B 74 03            [12]  142 	mov	a,#0x03
+      00002D 26               [12]  143 	add	a,@r0
+      00002E FA               [12]  144 	mov	r2,a
+      00002F E4               [12]  145 	clr	a
+      000030 08               [12]  146 	inc	r0
+      000031 36               [12]  147 	addc	a,@r0
+      000032 FB               [12]  148 	mov	r3,a
+      000033 08               [12]  149 	inc	r0
+      000034 86 04            [24]  150 	mov	ar4,@r0
+      000036 E5 81            [12]  151 	mov	a,sp
+      000038 24 F7            [12]  152 	add	a,#0xf7
+      00003A F8               [12]  153 	mov	r0,a
+      00003B 86 07            [24]  154 	mov	ar7,@r0
+      00003D 1F               [12]  155 	dec	r7
+      00003E 8A 82            [24]  156 	mov	dpl,r2
+      000040 8B 83            [24]  157 	mov	dph,r3
+      000042 8C F0            [24]  158 	mov	b,r4
+      000044 EF               [12]  159 	mov	a,r7
+      000045 12r00r00         [24]  160 	lcall	__gptrput
+                                    161 ;	../../../core/lib/ringbuf.c:47: r->put_ptr = 0;
+      000048 A8 81            [24]  162 	mov	r0,sp
+      00004A 18               [12]  163 	dec	r0
+      00004B 18               [12]  164 	dec	r0
+      00004C 74 04            [12]  165 	mov	a,#0x04
+      00004E 26               [12]  166 	add	a,@r0
+      00004F FD               [12]  167 	mov	r5,a
+      000050 E4               [12]  168 	clr	a
+      000051 08               [12]  169 	inc	r0
+      000052 36               [12]  170 	addc	a,@r0
+      000053 FE               [12]  171 	mov	r6,a
+      000054 08               [12]  172 	inc	r0
+      000055 86 07            [24]  173 	mov	ar7,@r0
+      000057 8D 82            [24]  174 	mov	dpl,r5
+      000059 8E 83            [24]  175 	mov	dph,r6
+      00005B 8F F0            [24]  176 	mov	b,r7
+      00005D E4               [12]  177 	clr	a
+      00005E 12r00r00         [24]  178 	lcall	__gptrput
+                                    179 ;	../../../core/lib/ringbuf.c:48: r->get_ptr = 0;
+      000061 A8 81            [24]  180 	mov	r0,sp
+      000063 18               [12]  181 	dec	r0
+      000064 18               [12]  182 	dec	r0
+      000065 74 05            [12]  183 	mov	a,#0x05
+      000067 26               [12]  184 	add	a,@r0
+      000068 FD               [12]  185 	mov	r5,a
+      000069 E4               [12]  186 	clr	a
+      00006A 08               [12]  187 	inc	r0
+      00006B 36               [12]  188 	addc	a,@r0
+      00006C FE               [12]  189 	mov	r6,a
+      00006D 08               [12]  190 	inc	r0
+      00006E 86 07            [24]  191 	mov	ar7,@r0
+      000070 8D 82            [24]  192 	mov	dpl,r5
+      000072 8E 83            [24]  193 	mov	dph,r6
+      000074 8F F0            [24]  194 	mov	b,r7
+      000076 E4               [12]  195 	clr	a
+      000077 12r00r00         [24]  196 	lcall	__gptrput
+                                    197 ;	../../../core/lib/ringbuf.c:49: }
+      00007A 15 81            [12]  198 	dec	sp
+      00007C 15 81            [12]  199 	dec	sp
+      00007E 15 81            [12]  200 	dec	sp
+      000080 02r00r00         [24]  201 	ljmp	__sdcc_banked_ret
+                                    202 ;------------------------------------------------------------
+                                    203 ;Allocation info for local variables in function 'ringbuf_put'
+                                    204 ;------------------------------------------------------------
+                                    205 ;c                         Allocated to stack - sp -14
+                                    206 ;r                         Allocated to stack - sp -10
+                                    207 ;sloc0                     Allocated to stack - sp -7
+                                    208 ;sloc1                     Allocated to stack - sp -6
+                                    209 ;sloc2                     Allocated to stack - sp -4
+                                    210 ;sloc3                     Allocated to stack - sp -1
+                                    211 ;------------------------------------------------------------
+                                    212 ;	../../../core/lib/ringbuf.c:52: ringbuf_put(struct ringbuf *r, uint8_t c)
+                                    213 ;	-----------------------------------------
+                                    214 ;	 function ringbuf_put
+                                    215 ;	-----------------------------------------
+      000083                        216 _ringbuf_put:
+      000083 C0 82            [24]  217 	push	dpl
+      000085 C0 83            [24]  218 	push	dph
+      000087 C0 F0            [24]  219 	push	b
+      000089 E5 81            [12]  220 	mov	a,sp
+      00008B 24 08            [12]  221 	add	a,#0x08
+                                    222 ;	../../../core/lib/ringbuf.c:63: if(((r->put_ptr - r->get_ptr) & r->mask) == r->mask) {
+      00008D F5 81            [12]  223 	mov	sp,a
+      00008F 24 F6            [12]  224 	add	a,#0xf6
+      000091 F8               [12]  225 	mov	r0,a
+      000092 74 04            [12]  226 	mov	a,#0x04
+      000094 26               [12]  227 	add	a,@r0
+      000095 FA               [12]  228 	mov	r2,a
+      000096 E4               [12]  229 	clr	a
+      000097 08               [12]  230 	inc	r0
+      000098 36               [12]  231 	addc	a,@r0
+      000099 FB               [12]  232 	mov	r3,a
+      00009A 08               [12]  233 	inc	r0
+      00009B 86 04            [24]  234 	mov	ar4,@r0
+      00009D 8A 82            [24]  235 	mov	dpl,r2
+      00009F 8B 83            [24]  236 	mov	dph,r3
+      0000A1 8C F0            [24]  237 	mov	b,r4
+      0000A3 E5 81            [12]  238 	mov	a,sp
+      0000A5 24 F9            [12]  239 	add	a,#0xf9
+      0000A7 F8               [12]  240 	mov	r0,a
+      0000A8 12r00r00         [24]  241 	lcall	__gptrget
+      0000AB F6               [12]  242 	mov	@r0,a
+      0000AC E5 81            [12]  243 	mov	a,sp
+      0000AE 24 F9            [12]  244 	add	a,#0xf9
+      0000B0 F8               [12]  245 	mov	r0,a
+      0000B1 E5 81            [12]  246 	mov	a,sp
+      0000B3 24 FA            [12]  247 	add	a,#0xfa
+      0000B5 F9               [12]  248 	mov	r1,a
+      0000B6 E6               [12]  249 	mov	a,@r0
+      0000B7 F7               [12]  250 	mov	@r1,a
+      0000B8 09               [12]  251 	inc	r1
+      0000B9 77 00            [12]  252 	mov	@r1,#0x00
+      0000BB E5 81            [12]  253 	mov	a,sp
+      0000BD 24 F6            [12]  254 	add	a,#0xf6
+      0000BF F8               [12]  255 	mov	r0,a
+      0000C0 74 05            [12]  256 	mov	a,#0x05
+      0000C2 26               [12]  257 	add	a,@r0
+      0000C3 FD               [12]  258 	mov	r5,a
+      0000C4 E4               [12]  259 	clr	a
+      0000C5 08               [12]  260 	inc	r0
+      0000C6 36               [12]  261 	addc	a,@r0
+      0000C7 FE               [12]  262 	mov	r6,a
+      0000C8 08               [12]  263 	inc	r0
+      0000C9 86 07            [24]  264 	mov	ar7,@r0
+      0000CB 8D 82            [24]  265 	mov	dpl,r5
+      0000CD 8E 83            [24]  266 	mov	dph,r6
+      0000CF 8F F0            [24]  267 	mov	b,r7
+      0000D1 12r00r00         [24]  268 	lcall	__gptrget
+      0000D4 FD               [12]  269 	mov	r5,a
+      0000D5 7F 00            [12]  270 	mov	r7,#0x00
+      0000D7 E5 81            [12]  271 	mov	a,sp
+      0000D9 24 FA            [12]  272 	add	a,#0xfa
+      0000DB F8               [12]  273 	mov	r0,a
+      0000DC E6               [12]  274 	mov	a,@r0
+      0000DD C3               [12]  275 	clr	c
+      0000DE 9D               [12]  276 	subb	a,r5
+      0000DF FD               [12]  277 	mov	r5,a
+      0000E0 08               [12]  278 	inc	r0
+      0000E1 E6               [12]  279 	mov	a,@r0
+      0000E2 9F               [12]  280 	subb	a,r7
+      0000E3 FF               [12]  281 	mov	r7,a
+      0000E4 E5 81            [12]  282 	mov	a,sp
+      0000E6 24 F6            [12]  283 	add	a,#0xf6
+      0000E8 F8               [12]  284 	mov	r0,a
+      0000E9 E5 81            [12]  285 	mov	a,sp
+      0000EB 24 FC            [12]  286 	add	a,#0xfc
+      0000ED F9               [12]  287 	mov	r1,a
+      0000EE 74 03            [12]  288 	mov	a,#0x03
+      0000F0 26               [12]  289 	add	a,@r0
+      0000F1 F7               [12]  290 	mov	@r1,a
+      0000F2 E4               [12]  291 	clr	a
+      0000F3 08               [12]  292 	inc	r0
+      0000F4 36               [12]  293 	addc	a,@r0
+      0000F5 09               [12]  294 	inc	r1
+      0000F6 F7               [12]  295 	mov	@r1,a
+      0000F7 08               [12]  296 	inc	r0
+      0000F8 09               [12]  297 	inc	r1
+      0000F9 E6               [12]  298 	mov	a,@r0
+      0000FA F7               [12]  299 	mov	@r1,a
+      0000FB E5 81            [12]  300 	mov	a,sp
+      0000FD 24 FC            [12]  301 	add	a,#0xfc
+      0000FF F8               [12]  302 	mov	r0,a
+      000100 86 82            [24]  303 	mov	dpl,@r0
+      000102 08               [12]  304 	inc	r0
+      000103 86 83            [24]  305 	mov	dph,@r0
+      000105 08               [12]  306 	inc	r0
+      000106 86 F0            [24]  307 	mov	b,@r0
+      000108 12r00r00         [24]  308 	lcall	__gptrget
+      00010B FE               [12]  309 	mov	r6,a
+      00010C A8 81            [24]  310 	mov	r0,sp
+      00010E 18               [12]  311 	dec	r0
+      00010F A6 06            [24]  312 	mov	@r0,ar6
+      000111 08               [12]  313 	inc	r0
+      000112 76 00            [12]  314 	mov	@r0,#0x00
+      000114 A8 81            [24]  315 	mov	r0,sp
+      000116 18               [12]  316 	dec	r0
+      000117 E6               [12]  317 	mov	a,@r0
+      000118 52 05            [12]  318 	anl	ar5,a
+      00011A 08               [12]  319 	inc	r0
+      00011B E6               [12]  320 	mov	a,@r0
+      00011C 52 07            [12]  321 	anl	ar7,a
+      00011E A8 81            [24]  322 	mov	r0,sp
+      000120 18               [12]  323 	dec	r0
+      000121 E6               [12]  324 	mov	a,@r0
+      000122 B5 05 07         [24]  325 	cjne	a,ar5,00109$
+      000125 08               [12]  326 	inc	r0
+      000126 E6               [12]  327 	mov	a,@r0
+      000127 B5 07 02         [24]  328 	cjne	a,ar7,00109$
+      00012A 80 02            [24]  329 	sjmp	00110$
+      00012C                        330 00109$:
+      00012C 80 05            [24]  331 	sjmp	00102$
+      00012E                        332 00110$:
+                                    333 ;	../../../core/lib/ringbuf.c:64: return 0;
+      00012E 90 00 00         [24]  334 	mov	dptr,#0x0000
+      000131 80 60            [24]  335 	sjmp	00103$
+      000133                        336 00102$:
+                                    337 ;	../../../core/lib/ringbuf.c:66: r->data[r->put_ptr] = c;
+      000133 E5 81            [12]  338 	mov	a,sp
+      000135 24 F6            [12]  339 	add	a,#0xf6
+      000137 F8               [12]  340 	mov	r0,a
+      000138 86 82            [24]  341 	mov	dpl,@r0
+      00013A 08               [12]  342 	inc	r0
+      00013B 86 83            [24]  343 	mov	dph,@r0
+      00013D 08               [12]  344 	inc	r0
+      00013E 86 F0            [24]  345 	mov	b,@r0
+      000140 12r00r00         [24]  346 	lcall	__gptrget
+      000143 FD               [12]  347 	mov	r5,a
+      000144 A3               [24]  348 	inc	dptr
+      000145 12r00r00         [24]  349 	lcall	__gptrget
+      000148 FE               [12]  350 	mov	r6,a
+      000149 A3               [24]  351 	inc	dptr
+      00014A 12r00r00         [24]  352 	lcall	__gptrget
+      00014D FF               [12]  353 	mov	r7,a
+      00014E E5 81            [12]  354 	mov	a,sp
+      000150 24 F9            [12]  355 	add	a,#0xf9
+      000152 F8               [12]  356 	mov	r0,a
+      000153 E6               [12]  357 	mov	a,@r0
+      000154 2D               [12]  358 	add	a,r5
+      000155 FD               [12]  359 	mov	r5,a
+      000156 E4               [12]  360 	clr	a
+      000157 3E               [12]  361 	addc	a,r6
+      000158 FE               [12]  362 	mov	r6,a
+      000159 8D 82            [24]  363 	mov	dpl,r5
+      00015B 8E 83            [24]  364 	mov	dph,r6
+      00015D 8F F0            [24]  365 	mov	b,r7
+      00015F E5 81            [12]  366 	mov	a,sp
+      000161 24 F2            [12]  367 	add	a,#0xf2
+      000163 F8               [12]  368 	mov	r0,a
+      000164 E6               [12]  369 	mov	a,@r0
+      000165 12r00r00         [24]  370 	lcall	__gptrput
+                                    371 ;	../../../core/lib/ringbuf.c:67: r->put_ptr = (r->put_ptr + 1) & r->mask;
+      000168 8A 82            [24]  372 	mov	dpl,r2
+      00016A 8B 83            [24]  373 	mov	dph,r3
+      00016C 8C F0            [24]  374 	mov	b,r4
+      00016E 12r00r00         [24]  375 	lcall	__gptrget
+      000171 FF               [12]  376 	mov	r7,a
+      000172 0F               [12]  377 	inc	r7
+      000173 E5 81            [12]  378 	mov	a,sp
+      000175 24 FC            [12]  379 	add	a,#0xfc
+      000177 F8               [12]  380 	mov	r0,a
+      000178 86 82            [24]  381 	mov	dpl,@r0
+      00017A 08               [12]  382 	inc	r0
+      00017B 86 83            [24]  383 	mov	dph,@r0
+      00017D 08               [12]  384 	inc	r0
+      00017E 86 F0            [24]  385 	mov	b,@r0
+      000180 12r00r00         [24]  386 	lcall	__gptrget
+      000183 FE               [12]  387 	mov	r6,a
+      000184 52 07            [12]  388 	anl	ar7,a
+      000186 8A 82            [24]  389 	mov	dpl,r2
+      000188 8B 83            [24]  390 	mov	dph,r3
+      00018A 8C F0            [24]  391 	mov	b,r4
+      00018C EF               [12]  392 	mov	a,r7
+      00018D 12r00r00         [24]  393 	lcall	__gptrput
+                                    394 ;	../../../core/lib/ringbuf.c:68: return 1;
+      000190 90 00 01         [24]  395 	mov	dptr,#0x0001
+      000193                        396 00103$:
+                                    397 ;	../../../core/lib/ringbuf.c:69: }
+      000193 E5 81            [12]  398 	mov	a,sp
+      000195 24 F5            [12]  399 	add	a,#0xf5
+      000197 F5 81            [12]  400 	mov	sp,a
+      000199 02r00r00         [24]  401 	ljmp	__sdcc_banked_ret
+                                    402 ;------------------------------------------------------------
+                                    403 ;Allocation info for local variables in function 'ringbuf_get'
+                                    404 ;------------------------------------------------------------
+                                    405 ;r                         Allocated to stack - sp -5
+                                    406 ;c                         Allocated to registers r4 
+                                    407 ;sloc0                     Allocated to stack - sp -2
+                                    408 ;------------------------------------------------------------
+                                    409 ;	../../../core/lib/ringbuf.c:72: ringbuf_get(struct ringbuf *r)
+                                    410 ;	-----------------------------------------
+                                    411 ;	 function ringbuf_get
+                                    412 ;	-----------------------------------------
+      00019C                        413 _ringbuf_get:
+      00019C C0 82            [24]  414 	push	dpl
+      00019E C0 83            [24]  415 	push	dph
+      0001A0 C0 F0            [24]  416 	push	b
+      0001A2 05 81            [12]  417 	inc	sp
+      0001A4 05 81            [12]  418 	inc	sp
+      0001A6 05 81            [12]  419 	inc	sp
+                                    420 ;	../../../core/lib/ringbuf.c:86: if(((r->put_ptr - r->get_ptr) & r->mask) > 0) {
+      0001A8 E5 81            [12]  421 	mov	a,sp
+      0001AA 24 FB            [12]  422 	add	a,#0xfb
+      0001AC F8               [12]  423 	mov	r0,a
+      0001AD 74 04            [12]  424 	mov	a,#0x04
+      0001AF 26               [12]  425 	add	a,@r0
+      0001B0 FA               [12]  426 	mov	r2,a
+      0001B1 E4               [12]  427 	clr	a
+      0001B2 08               [12]  428 	inc	r0
+      0001B3 36               [12]  429 	addc	a,@r0
+      0001B4 FB               [12]  430 	mov	r3,a
+      0001B5 08               [12]  431 	inc	r0
+      0001B6 86 04            [24]  432 	mov	ar4,@r0
+      0001B8 8A 82            [24]  433 	mov	dpl,r2
+      0001BA 8B 83            [24]  434 	mov	dph,r3
+      0001BC 8C F0            [24]  435 	mov	b,r4
+      0001BE 12r00r00         [24]  436 	lcall	__gptrget
+      0001C1 FA               [12]  437 	mov	r2,a
+      0001C2 7C 00            [12]  438 	mov	r4,#0x00
+      0001C4 E5 81            [12]  439 	mov	a,sp
+      0001C6 24 FB            [12]  440 	add	a,#0xfb
+      0001C8 F8               [12]  441 	mov	r0,a
+      0001C9 A9 81            [24]  442 	mov	r1,sp
+      0001CB 19               [12]  443 	dec	r1
+      0001CC 19               [12]  444 	dec	r1
+      0001CD 74 05            [12]  445 	mov	a,#0x05
+      0001CF 26               [12]  446 	add	a,@r0
+      0001D0 F7               [12]  447 	mov	@r1,a
+      0001D1 E4               [12]  448 	clr	a
+      0001D2 08               [12]  449 	inc	r0
+      0001D3 36               [12]  450 	addc	a,@r0
+      0001D4 09               [12]  451 	inc	r1
+      0001D5 F7               [12]  452 	mov	@r1,a
+      0001D6 08               [12]  453 	inc	r0
+      0001D7 09               [12]  454 	inc	r1
+      0001D8 E6               [12]  455 	mov	a,@r0
+      0001D9 F7               [12]  456 	mov	@r1,a
+      0001DA A8 81            [24]  457 	mov	r0,sp
+      0001DC 18               [12]  458 	dec	r0
+      0001DD 18               [12]  459 	dec	r0
+      0001DE 86 82            [24]  460 	mov	dpl,@r0
+      0001E0 08               [12]  461 	inc	r0
+      0001E1 86 83            [24]  462 	mov	dph,@r0
+      0001E3 08               [12]  463 	inc	r0
+      0001E4 86 F0            [24]  464 	mov	b,@r0
+      0001E6 12r00r00         [24]  465 	lcall	__gptrget
+      0001E9 FB               [12]  466 	mov	r3,a
+      0001EA FE               [12]  467 	mov	r6,a
+      0001EB 7F 00            [12]  468 	mov	r7,#0x00
+      0001ED EA               [12]  469 	mov	a,r2
+      0001EE C3               [12]  470 	clr	c
+      0001EF 9E               [12]  471 	subb	a,r6
+      0001F0 FA               [12]  472 	mov	r2,a
+      0001F1 EC               [12]  473 	mov	a,r4
+      0001F2 9F               [12]  474 	subb	a,r7
+      0001F3 FC               [12]  475 	mov	r4,a
+      0001F4 E5 81            [12]  476 	mov	a,sp
+      0001F6 24 FB            [12]  477 	add	a,#0xfb
+      0001F8 F8               [12]  478 	mov	r0,a
+      0001F9 74 03            [12]  479 	mov	a,#0x03
+      0001FB 26               [12]  480 	add	a,@r0
+      0001FC FD               [12]  481 	mov	r5,a
+      0001FD E4               [12]  482 	clr	a
+      0001FE 08               [12]  483 	inc	r0
+      0001FF 36               [12]  484 	addc	a,@r0
+      000200 FE               [12]  485 	mov	r6,a
+      000201 08               [12]  486 	inc	r0
+      000202 86 07            [24]  487 	mov	ar7,@r0
+      000204 8D 82            [24]  488 	mov	dpl,r5
+      000206 8E 83            [24]  489 	mov	dph,r6
+      000208 8F F0            [24]  490 	mov	b,r7
+      00020A 12r00r00         [24]  491 	lcall	__gptrget
+      00020D FF               [12]  492 	mov	r7,a
+      00020E FD               [12]  493 	mov	r5,a
+      00020F 7E 00            [12]  494 	mov	r6,#0x00
+      000211 ED               [12]  495 	mov	a,r5
+      000212 52 02            [12]  496 	anl	ar2,a
+      000214 EE               [12]  497 	mov	a,r6
+      000215 52 04            [12]  498 	anl	ar4,a
+      000217 C3               [12]  499 	clr	c
+      000218 E4               [12]  500 	clr	a
+      000219 9A               [12]  501 	subb	a,r2
+      00021A 74 80            [12]  502 	mov	a,#(0x00 ^ 0x80)
+      00021C 8C F0            [24]  503 	mov	b,r4
+      00021E 63 F0 80         [24]  504 	xrl	b,#0x80
+      000221 95 F0            [12]  505 	subb	a,b
+      000223 50 47            [24]  506 	jnc	00102$
+                                    507 ;	../../../core/lib/ringbuf.c:87: c = r->data[r->get_ptr];
+      000225 E5 81            [12]  508 	mov	a,sp
+      000227 24 FB            [12]  509 	add	a,#0xfb
+      000229 F8               [12]  510 	mov	r0,a
+      00022A 86 82            [24]  511 	mov	dpl,@r0
+      00022C 08               [12]  512 	inc	r0
+      00022D 86 83            [24]  513 	mov	dph,@r0
+      00022F 08               [12]  514 	inc	r0
+      000230 86 F0            [24]  515 	mov	b,@r0
+      000232 12r00r00         [24]  516 	lcall	__gptrget
+      000235 FC               [12]  517 	mov	r4,a
+      000236 A3               [24]  518 	inc	dptr
+      000237 12r00r00         [24]  519 	lcall	__gptrget
+      00023A FD               [12]  520 	mov	r5,a
+      00023B A3               [24]  521 	inc	dptr
+      00023C 12r00r00         [24]  522 	lcall	__gptrget
+      00023F FE               [12]  523 	mov	r6,a
+      000240 EB               [12]  524 	mov	a,r3
+      000241 2C               [12]  525 	add	a,r4
+      000242 FC               [12]  526 	mov	r4,a
+      000243 E4               [12]  527 	clr	a
+      000244 3D               [12]  528 	addc	a,r5
+      000245 FD               [12]  529 	mov	r5,a
+      000246 8C 82            [24]  530 	mov	dpl,r4
+      000248 8D 83            [24]  531 	mov	dph,r5
+      00024A 8E F0            [24]  532 	mov	b,r6
+      00024C 12r00r00         [24]  533 	lcall	__gptrget
+      00024F FC               [12]  534 	mov	r4,a
+                                    535 ;	../../../core/lib/ringbuf.c:88: r->get_ptr = (r->get_ptr + 1) & r->mask;
+      000250 0B               [12]  536 	inc	r3
+      000251 EF               [12]  537 	mov	a,r7
+      000252 52 03            [12]  538 	anl	ar3,a
+      000254 A8 81            [24]  539 	mov	r0,sp
+      000256 18               [12]  540 	dec	r0
+      000257 18               [12]  541 	dec	r0
+      000258 86 82            [24]  542 	mov	dpl,@r0
+      00025A 08               [12]  543 	inc	r0
+      00025B 86 83            [24]  544 	mov	dph,@r0
+      00025D 08               [12]  545 	inc	r0
+      00025E 86 F0            [24]  546 	mov	b,@r0
+      000260 EB               [12]  547 	mov	a,r3
+      000261 12r00r00         [24]  548 	lcall	__gptrput
+                                    549 ;	../../../core/lib/ringbuf.c:89: return c;
+      000264 7F 00            [12]  550 	mov	r7,#0x00
+      000266 8C 82            [24]  551 	mov	dpl,r4
+      000268 8F 83            [24]  552 	mov	dph,r7
+      00026A 80 03            [24]  553 	sjmp	00104$
+      00026C                        554 00102$:
+                                    555 ;	../../../core/lib/ringbuf.c:91: return -1;
+      00026C 90 FF FF         [24]  556 	mov	dptr,#0xffff
+      00026F                        557 00104$:
+                                    558 ;	../../../core/lib/ringbuf.c:93: }
+      00026F E5 81            [12]  559 	mov	a,sp
+      000271 24 FA            [12]  560 	add	a,#0xfa
+      000273 F5 81            [12]  561 	mov	sp,a
+      000275 02r00r00         [24]  562 	ljmp	__sdcc_banked_ret
+                                    563 ;------------------------------------------------------------
+                                    564 ;Allocation info for local variables in function 'ringbuf_size'
+                                    565 ;------------------------------------------------------------
+                                    566 ;r                         Allocated to registers r5 r6 r7 
+                                    567 ;------------------------------------------------------------
+                                    568 ;	../../../core/lib/ringbuf.c:96: ringbuf_size(struct ringbuf *r)
+                                    569 ;	-----------------------------------------
+                                    570 ;	 function ringbuf_size
+                                    571 ;	-----------------------------------------
+      000278                        572 _ringbuf_size:
+      000278 AD 82            [24]  573 	mov	r5,dpl
+      00027A AE 83            [24]  574 	mov	r6,dph
+      00027C AF F0            [24]  575 	mov	r7,b
+                                    576 ;	../../../core/lib/ringbuf.c:98: return r->mask + 1;
+      00027E 74 03            [12]  577 	mov	a,#0x03
+      000280 2D               [12]  578 	add	a,r5
+      000281 FD               [12]  579 	mov	r5,a
+      000282 E4               [12]  580 	clr	a
+      000283 3E               [12]  581 	addc	a,r6
+      000284 FE               [12]  582 	mov	r6,a
+      000285 8D 82            [24]  583 	mov	dpl,r5
+      000287 8E 83            [24]  584 	mov	dph,r6
+      000289 8F F0            [24]  585 	mov	b,r7
+      00028B 12r00r00         [24]  586 	lcall	__gptrget
+      00028E FD               [12]  587 	mov	r5,a
+      00028F 7F 00            [12]  588 	mov	r7,#0x00
+      000291 0D               [12]  589 	inc	r5
+      000292 BD 00 01         [24]  590 	cjne	r5,#0x00,00103$
+      000295 0F               [12]  591 	inc	r7
+      000296                        592 00103$:
+      000296 8D 82            [24]  593 	mov	dpl,r5
+      000298 8F 83            [24]  594 	mov	dph,r7
+                                    595 ;	../../../core/lib/ringbuf.c:99: }
+      00029A 02r00r00         [24]  596 	ljmp	__sdcc_banked_ret
+                                    597 ;------------------------------------------------------------
+                                    598 ;Allocation info for local variables in function 'ringbuf_elements'
+                                    599 ;------------------------------------------------------------
+                                    600 ;r                         Allocated to registers r5 r6 r7 
+                                    601 ;------------------------------------------------------------
+                                    602 ;	../../../core/lib/ringbuf.c:102: ringbuf_elements(struct ringbuf *r)
+                                    603 ;	-----------------------------------------
+                                    604 ;	 function ringbuf_elements
+                                    605 ;	-----------------------------------------
+      00029D                        606 _ringbuf_elements:
+      00029D AD 82            [24]  607 	mov	r5,dpl
+      00029F AE 83            [24]  608 	mov	r6,dph
+      0002A1 AF F0            [24]  609 	mov	r7,b
+                                    610 ;	../../../core/lib/ringbuf.c:104: return (r->put_ptr - r->get_ptr) & r->mask;
+      0002A3 74 04            [12]  611 	mov	a,#0x04
+      0002A5 2D               [12]  612 	add	a,r5
+      0002A6 FA               [12]  613 	mov	r2,a
+      0002A7 E4               [12]  614 	clr	a
+      0002A8 3E               [12]  615 	addc	a,r6
+      0002A9 FB               [12]  616 	mov	r3,a
+      0002AA 8F 04            [24]  617 	mov	ar4,r7
+      0002AC 8A 82            [24]  618 	mov	dpl,r2
+      0002AE 8B 83            [24]  619 	mov	dph,r3
+      0002B0 8C F0            [24]  620 	mov	b,r4
+      0002B2 12r00r00         [24]  621 	lcall	__gptrget
+      0002B5 FA               [12]  622 	mov	r2,a
+      0002B6 7C 00            [12]  623 	mov	r4,#0x00
+      0002B8 74 05            [12]  624 	mov	a,#0x05
+      0002BA 2D               [12]  625 	add	a,r5
+      0002BB F8               [12]  626 	mov	r0,a
+      0002BC E4               [12]  627 	clr	a
+      0002BD 3E               [12]  628 	addc	a,r6
+      0002BE F9               [12]  629 	mov	r1,a
+      0002BF 8F 03            [24]  630 	mov	ar3,r7
+      0002C1 88 82            [24]  631 	mov	dpl,r0
+      0002C3 89 83            [24]  632 	mov	dph,r1
+      0002C5 8B F0            [24]  633 	mov	b,r3
+      0002C7 12r00r00         [24]  634 	lcall	__gptrget
+      0002CA F8               [12]  635 	mov	r0,a
+      0002CB 7B 00            [12]  636 	mov	r3,#0x00
+      0002CD EA               [12]  637 	mov	a,r2
+      0002CE C3               [12]  638 	clr	c
+      0002CF 98               [12]  639 	subb	a,r0
+      0002D0 FA               [12]  640 	mov	r2,a
+      0002D1 EC               [12]  641 	mov	a,r4
+      0002D2 9B               [12]  642 	subb	a,r3
+      0002D3 FC               [12]  643 	mov	r4,a
+      0002D4 74 03            [12]  644 	mov	a,#0x03
+      0002D6 2D               [12]  645 	add	a,r5
+      0002D7 FD               [12]  646 	mov	r5,a
+      0002D8 E4               [12]  647 	clr	a
+      0002D9 3E               [12]  648 	addc	a,r6
+      0002DA FE               [12]  649 	mov	r6,a
+      0002DB 8D 82            [24]  650 	mov	dpl,r5
+      0002DD 8E 83            [24]  651 	mov	dph,r6
+      0002DF 8F F0            [24]  652 	mov	b,r7
+      0002E1 12r00r00         [24]  653 	lcall	__gptrget
+      0002E4 FD               [12]  654 	mov	r5,a
+      0002E5 7F 00            [12]  655 	mov	r7,#0x00
+      0002E7 52 02            [12]  656 	anl	ar2,a
+      0002E9 EF               [12]  657 	mov	a,r7
+      0002EA 52 04            [12]  658 	anl	ar4,a
+      0002EC 8A 82            [24]  659 	mov	dpl,r2
+      0002EE 8C 83            [24]  660 	mov	dph,r4
+                                    661 ;	../../../core/lib/ringbuf.c:105: }
+      0002F0 02r00r00         [24]  662 	ljmp	__sdcc_banked_ret
+                                    663 	.area CSEG    (CODE)
+                                    664 	.area CONST   (CODE)
+                                    665 	.area XINIT   (CODE)
+                                    666 	.area CABS    (ABS,CODE)

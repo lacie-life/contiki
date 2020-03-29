@@ -1,0 +1,2548 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module ctimer
+                                      6 	.optsdcc -mmcs51 --model-huge
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _list_remove
+                                     12 	.globl _list_add
+                                     13 	.globl _list_head
+                                     14 	.globl _list_init
+                                     15 	.globl _etimer_stop
+                                     16 	.globl _etimer_expired
+                                     17 	.globl _etimer_restart
+                                     18 	.globl _etimer_reset
+                                     19 	.globl _etimer_set
+                                     20 	.globl _process_start
+                                     21 	.globl _ACTIVE
+                                     22 	.globl _TX_BYTE
+                                     23 	.globl _RX_BYTE
+                                     24 	.globl _ERR
+                                     25 	.globl _FE
+                                     26 	.globl _SLAVE
+                                     27 	.globl _RE
+                                     28 	.globl _MODE
+                                     29 	.globl _T3OVFIF
+                                     30 	.globl _T3CH0IF
+                                     31 	.globl _T3CH1IF
+                                     32 	.globl _T4OVFIF
+                                     33 	.globl _T4CH0IF
+                                     34 	.globl _T4CH1IF
+                                     35 	.globl _OVFIM
+                                     36 	.globl _B_0
+                                     37 	.globl _B_1
+                                     38 	.globl _B_2
+                                     39 	.globl _B_3
+                                     40 	.globl _B_4
+                                     41 	.globl _B_5
+                                     42 	.globl _B_6
+                                     43 	.globl _B_7
+                                     44 	.globl _P2IF
+                                     45 	.globl _UTX0IF
+                                     46 	.globl _UTX1IF
+                                     47 	.globl _P1IF
+                                     48 	.globl _WDTIF
+                                     49 	.globl _ACC_0
+                                     50 	.globl _ACC_1
+                                     51 	.globl _ACC_2
+                                     52 	.globl _ACC_3
+                                     53 	.globl _ACC_4
+                                     54 	.globl _ACC_5
+                                     55 	.globl _ACC_6
+                                     56 	.globl _ACC_7
+                                     57 	.globl _P
+                                     58 	.globl _F1
+                                     59 	.globl _OV
+                                     60 	.globl _RS0
+                                     61 	.globl _RS1
+                                     62 	.globl _F0
+                                     63 	.globl _AC
+                                     64 	.globl _CY
+                                     65 	.globl _DMAIF
+                                     66 	.globl _T1IF
+                                     67 	.globl _T2IF
+                                     68 	.globl _T3IF
+                                     69 	.globl _T4IF
+                                     70 	.globl _P0IF
+                                     71 	.globl _STIF
+                                     72 	.globl _DMAIE
+                                     73 	.globl _T1IE
+                                     74 	.globl _T2IE
+                                     75 	.globl _T3IE
+                                     76 	.globl _T4IE
+                                     77 	.globl _P0IE
+                                     78 	.globl _RFERRIE
+                                     79 	.globl _ADCIE
+                                     80 	.globl _URX0IE
+                                     81 	.globl _URX1IE
+                                     82 	.globl _ENCIE
+                                     83 	.globl _STIE
+                                     84 	.globl _EA
+                                     85 	.globl _P2_0
+                                     86 	.globl _P2_1
+                                     87 	.globl _P2_2
+                                     88 	.globl _P2_3
+                                     89 	.globl _P2_4
+                                     90 	.globl _P2_5
+                                     91 	.globl _P2_6
+                                     92 	.globl _P2_7
+                                     93 	.globl _ENCIF_0
+                                     94 	.globl _ENCIF_1
+                                     95 	.globl _P1_0
+                                     96 	.globl _P1_1
+                                     97 	.globl _P1_2
+                                     98 	.globl _P1_3
+                                     99 	.globl _P1_4
+                                    100 	.globl _P1_5
+                                    101 	.globl _P1_6
+                                    102 	.globl _P1_7
+                                    103 	.globl _IT0
+                                    104 	.globl _RFERRIF
+                                    105 	.globl _IT1
+                                    106 	.globl _URX0IF
+                                    107 	.globl _ADCIF
+                                    108 	.globl _URX1IF
+                                    109 	.globl _P0_0
+                                    110 	.globl _P0_1
+                                    111 	.globl _P0_2
+                                    112 	.globl _P0_3
+                                    113 	.globl _P0_4
+                                    114 	.globl _P0_5
+                                    115 	.globl _P0_6
+                                    116 	.globl _P0_7
+                                    117 	.globl _WDCTL
+                                    118 	.globl _U1GCR
+                                    119 	.globl _U1UCR
+                                    120 	.globl _U1BAUD
+                                    121 	.globl _U1DBUF
+                                    122 	.globl _U1CSR
+                                    123 	.globl _U0GCR
+                                    124 	.globl _U0UCR
+                                    125 	.globl _U0BAUD
+                                    126 	.globl _U0DBUF
+                                    127 	.globl _U0CSR
+                                    128 	.globl _TIMIF
+                                    129 	.globl _T4CC1
+                                    130 	.globl _T4CCTL1
+                                    131 	.globl _T4CC0
+                                    132 	.globl _T4CCTL0
+                                    133 	.globl _T4CTL
+                                    134 	.globl _T4CNT
+                                    135 	.globl _T3CC1
+                                    136 	.globl _T3CCTL1
+                                    137 	.globl _T3CC0
+                                    138 	.globl _T3CCTL0
+                                    139 	.globl _T3CTL
+                                    140 	.globl _T3CNT
+                                    141 	.globl _T2MSEL
+                                    142 	.globl _T2IRQM
+                                    143 	.globl _T2MOVF2
+                                    144 	.globl _T2MOVF1
+                                    145 	.globl _T2MOVF0
+                                    146 	.globl _T2M1
+                                    147 	.globl _T2M0
+                                    148 	.globl _T2IRQF
+                                    149 	.globl _T2EVTCFG
+                                    150 	.globl _T2CTRL
+                                    151 	.globl _T1STAT
+                                    152 	.globl _T1CCTL2
+                                    153 	.globl _T1CCTL1
+                                    154 	.globl _T1CCTL0
+                                    155 	.globl _T1CTL
+                                    156 	.globl _T1CNTH
+                                    157 	.globl _T1CNTL
+                                    158 	.globl _T1CC2H
+                                    159 	.globl _T1CC2L
+                                    160 	.globl _T1CC1H
+                                    161 	.globl _T1CC1L
+                                    162 	.globl _T1CC0H
+                                    163 	.globl _T1CC0L
+                                    164 	.globl _CLKCONSTA
+                                    165 	.globl _CLKCONCMD
+                                    166 	.globl _SLEEPSTA
+                                    167 	.globl _SLEEPCMD
+                                    168 	.globl _STLOAD
+                                    169 	.globl _ST2
+                                    170 	.globl _ST1
+                                    171 	.globl _ST0
+                                    172 	.globl _RFERRF
+                                    173 	.globl _RFIRQF0
+                                    174 	.globl _RFST
+                                    175 	.globl _RFD
+                                    176 	.globl _RFIRQF1
+                                    177 	.globl _PSBANK
+                                    178 	.globl _FMAP
+                                    179 	.globl _MEMCTR
+                                    180 	.globl __XPAGE
+                                    181 	.globl _MPAGE
+                                    182 	.globl _PMUX
+                                    183 	.globl _P2DIR
+                                    184 	.globl _P1DIR
+                                    185 	.globl _P0DIR
+                                    186 	.globl _P2INP
+                                    187 	.globl _P1INP
+                                    188 	.globl _P2SEL
+                                    189 	.globl _P1SEL
+                                    190 	.globl _P0SEL
+                                    191 	.globl _APCFG
+                                    192 	.globl _PERCFG
+                                    193 	.globl _P0INP
+                                    194 	.globl _P2IEN
+                                    195 	.globl _P1IEN
+                                    196 	.globl _P0IEN
+                                    197 	.globl _PICTL
+                                    198 	.globl _P2IFG
+                                    199 	.globl _P1IFG
+                                    200 	.globl _P0IFG
+                                    201 	.globl _DMAREQ
+                                    202 	.globl _DMAARM
+                                    203 	.globl _DMA0CFGH
+                                    204 	.globl _DMA0CFGL
+                                    205 	.globl _DMA1CFGH
+                                    206 	.globl _DMA1CFGL
+                                    207 	.globl _DMAIRQ
+                                    208 	.globl _ENCCS
+                                    209 	.globl _ENCDO
+                                    210 	.globl _ENCDI
+                                    211 	.globl _RNDH
+                                    212 	.globl _RNDL
+                                    213 	.globl _ADCH
+                                    214 	.globl _ADCL
+                                    215 	.globl _ADCCON3
+                                    216 	.globl _ADCCON2
+                                    217 	.globl _ADCCON1
+                                    218 	.globl _B
+                                    219 	.globl _IRCON2
+                                    220 	.globl _ACC
+                                    221 	.globl _PSW
+                                    222 	.globl _IRCON
+                                    223 	.globl _IP1
+                                    224 	.globl _IEN1
+                                    225 	.globl _IP0
+                                    226 	.globl _IEN0
+                                    227 	.globl _P2
+                                    228 	.globl _S1CON
+                                    229 	.globl _IEN2
+                                    230 	.globl _S0CON
+                                    231 	.globl _DPS
+                                    232 	.globl _P1
+                                    233 	.globl _TCON
+                                    234 	.globl _PCON
+                                    235 	.globl _DPH1
+                                    236 	.globl _DPL1
+                                    237 	.globl _DPH0
+                                    238 	.globl _DPL0
+                                    239 	.globl _SP
+                                    240 	.globl _P0
+                                    241 	.globl _ctimer_process
+                                    242 	.globl _X_IEEE_ADDR
+                                    243 	.globl _X_INFOPAGE
+                                    244 	.globl _X_P2DIR
+                                    245 	.globl _X_P1DIR
+                                    246 	.globl _X_P0DIR
+                                    247 	.globl _X_U1GCR
+                                    248 	.globl _X_U1UCR
+                                    249 	.globl _X_U1BAUD
+                                    250 	.globl _X_U1DBUF
+                                    251 	.globl _X_U1CSR
+                                    252 	.globl _X_P2INP
+                                    253 	.globl _X_P1INP
+                                    254 	.globl _X_P2SEL
+                                    255 	.globl _X_P1SEL
+                                    256 	.globl _X_P0SEL
+                                    257 	.globl _X_APCFG
+                                    258 	.globl _X_PERCFG
+                                    259 	.globl _X_T4CC1
+                                    260 	.globl _X_T4CCTL1
+                                    261 	.globl _X_T4CC0
+                                    262 	.globl _X_T4CCTL0
+                                    263 	.globl _X_T4CTL
+                                    264 	.globl _X_T4CNT
+                                    265 	.globl _X_RFIRQF0
+                                    266 	.globl _X_T1CCTL2
+                                    267 	.globl _X_T1CCTL1
+                                    268 	.globl _X_T1CCTL0
+                                    269 	.globl _X_T1CTL
+                                    270 	.globl _X_T1CNTH
+                                    271 	.globl _X_T1CNTL
+                                    272 	.globl _X_RFST
+                                    273 	.globl _X_T1CC2H
+                                    274 	.globl _X_T1CC2L
+                                    275 	.globl _X_T1CC1H
+                                    276 	.globl _X_T1CC1L
+                                    277 	.globl _X_T1CC0H
+                                    278 	.globl _X_T1CC0L
+                                    279 	.globl _X_RFD
+                                    280 	.globl _X_TIMIF
+                                    281 	.globl _X_DMAREQ
+                                    282 	.globl _X_DMAARM
+                                    283 	.globl _X_DMA0CFGH
+                                    284 	.globl _X_DMA0CFGL
+                                    285 	.globl _X_DMA1CFGH
+                                    286 	.globl _X_DMA1CFGL
+                                    287 	.globl _X_DMAIRQ
+                                    288 	.globl _X_T3CC1
+                                    289 	.globl _X_T3CCTL1
+                                    290 	.globl _X_T3CC0
+                                    291 	.globl _X_T3CCTL0
+                                    292 	.globl _X_T3CTL
+                                    293 	.globl _X_T3CNT
+                                    294 	.globl _X_WDCTL
+                                    295 	.globl _X_MEMCTR
+                                    296 	.globl _X_CLKCONCMD
+                                    297 	.globl _X_U0GCR
+                                    298 	.globl _X_U0UCR
+                                    299 	.globl _X_T2MSEL
+                                    300 	.globl _X_U0BAUD
+                                    301 	.globl _X_U0DBUF
+                                    302 	.globl _X_RFERRF
+                                    303 	.globl _X_SLEEPCMD
+                                    304 	.globl _X_RNDH
+                                    305 	.globl _X_RNDL
+                                    306 	.globl _X_ADCH
+                                    307 	.globl _X_ADCL
+                                    308 	.globl _X_ADCCON3
+                                    309 	.globl _X_ADCCON2
+                                    310 	.globl _X_ADCCON1
+                                    311 	.globl _X_ENCCS
+                                    312 	.globl _X_ENCDO
+                                    313 	.globl _X_ENCDI
+                                    314 	.globl _X_T1STAT
+                                    315 	.globl _X_PMUX
+                                    316 	.globl _X_STLOAD
+                                    317 	.globl _X_P2IEN
+                                    318 	.globl _X_P0IEN
+                                    319 	.globl _X_T2IRQM
+                                    320 	.globl _X_T2MOVF2
+                                    321 	.globl _X_T2MOVF1
+                                    322 	.globl _X_T2MOVF0
+                                    323 	.globl _X_T2M1
+                                    324 	.globl _X_T2M0
+                                    325 	.globl _X_T2IRQF
+                                    326 	.globl _X_P2
+                                    327 	.globl _X_PSBANK
+                                    328 	.globl _X_FMAP
+                                    329 	.globl _X_CLKCONSTA
+                                    330 	.globl _X_SLEEPSTA
+                                    331 	.globl _X_T2EVTCFG
+                                    332 	.globl _X_ST2
+                                    333 	.globl _X_ST1
+                                    334 	.globl _X_ST0
+                                    335 	.globl _X_T2CTRL
+                                    336 	.globl _X__XPAGE
+                                    337 	.globl _X_MPAGE
+                                    338 	.globl _X_RFIRQF1
+                                    339 	.globl _X_P1
+                                    340 	.globl _X_P0INP
+                                    341 	.globl _X_P1IEN
+                                    342 	.globl _X_PICTL
+                                    343 	.globl _X_P2IFG
+                                    344 	.globl _X_P1IFG
+                                    345 	.globl _X_P0IFG
+                                    346 	.globl _X_U0CSR
+                                    347 	.globl _X_P0
+                                    348 	.globl _USBF5
+                                    349 	.globl _USBF4
+                                    350 	.globl _USBF3
+                                    351 	.globl _USBF2
+                                    352 	.globl _USBF1
+                                    353 	.globl _USBF0
+                                    354 	.globl _USBCNTH
+                                    355 	.globl _USBCNTL
+                                    356 	.globl _USBCNT0
+                                    357 	.globl _USBCSOH
+                                    358 	.globl _USBCSOL
+                                    359 	.globl _USBMAXO
+                                    360 	.globl _USBCSIH
+                                    361 	.globl _USBCSIL
+                                    362 	.globl _USBCS0
+                                    363 	.globl _USBMAXI
+                                    364 	.globl _USBCTRL
+                                    365 	.globl _USBINDEX
+                                    366 	.globl _USBFRMH
+                                    367 	.globl _USBFRML
+                                    368 	.globl _USBCIE
+                                    369 	.globl _USBOIE
+                                    370 	.globl _USBIIE
+                                    371 	.globl _USBCIF
+                                    372 	.globl _USBOIF
+                                    373 	.globl _USBIIF
+                                    374 	.globl _USBPOW
+                                    375 	.globl _USBADDR
+                                    376 	.globl _CSPT
+                                    377 	.globl _CSPZ
+                                    378 	.globl _CSPY
+                                    379 	.globl _CSPX
+                                    380 	.globl _CSPSTAT
+                                    381 	.globl _CSPCTRL
+                                    382 	.globl _CSPPROG23
+                                    383 	.globl _CSPPROG22
+                                    384 	.globl _CSPPROG21
+                                    385 	.globl _CSPPROG20
+                                    386 	.globl _CSPPROG19
+                                    387 	.globl _CSPPROG18
+                                    388 	.globl _CSPPROG17
+                                    389 	.globl _CSPPROG16
+                                    390 	.globl _CSPPROG15
+                                    391 	.globl _CSPPROG14
+                                    392 	.globl _CSPPROG13
+                                    393 	.globl _CSPPROG12
+                                    394 	.globl _CSPPROG11
+                                    395 	.globl _CSPPROG10
+                                    396 	.globl _CSPPROG9
+                                    397 	.globl _CSPPROG8
+                                    398 	.globl _CSPPROG7
+                                    399 	.globl _CSPPROG6
+                                    400 	.globl _CSPPROG5
+                                    401 	.globl _CSPPROG4
+                                    402 	.globl _CSPPROG3
+                                    403 	.globl _CSPPROG2
+                                    404 	.globl _CSPPROG1
+                                    405 	.globl _CSPPROG0
+                                    406 	.globl _RFC_OBS_CTRL2
+                                    407 	.globl _RFC_OBS_CTRL1
+                                    408 	.globl _RFC_OBS_CTRL0
+                                    409 	.globl _TXFILTCFG
+                                    410 	.globl _PTEST1
+                                    411 	.globl _PTEST0
+                                    412 	.globl _ATEST
+                                    413 	.globl _DACTEST2
+                                    414 	.globl _DACTEST1
+                                    415 	.globl _DACTEST0
+                                    416 	.globl _MDMTEST1
+                                    417 	.globl _MDMTEST0
+                                    418 	.globl _ADCTEST2
+                                    419 	.globl _ADCTEST1
+                                    420 	.globl _ADCTEST0
+                                    421 	.globl _AGCCTRL3
+                                    422 	.globl _AGCCTRL2
+                                    423 	.globl _AGCCTRL1
+                                    424 	.globl _AGCCTRL0
+                                    425 	.globl _FSCAL3
+                                    426 	.globl _FSCAL2
+                                    427 	.globl _FSCAL1
+                                    428 	.globl _FSCAL0
+                                    429 	.globl _FSCTRL
+                                    430 	.globl _RXCTRL
+                                    431 	.globl _FREQEST
+                                    432 	.globl _MDMCTRL1
+                                    433 	.globl _MDMCTRL0
+                                    434 	.globl _RFRND
+                                    435 	.globl _RFERRM
+                                    436 	.globl _RFIRQM1
+                                    437 	.globl _RFIRQM0
+                                    438 	.globl _TXLAST_PTR
+                                    439 	.globl _TXFIRST_PTR
+                                    440 	.globl _RXP1_PTR
+                                    441 	.globl _RXLAST_PTR
+                                    442 	.globl _RXFIRST_PTR
+                                    443 	.globl _TXFIFOCNT
+                                    444 	.globl _RXFIFOCNT
+                                    445 	.globl _RXFIRST
+                                    446 	.globl _RSSISTAT
+                                    447 	.globl _RSSI
+                                    448 	.globl _CCACTRL1
+                                    449 	.globl _CCACTRL0
+                                    450 	.globl _FSMCTRL
+                                    451 	.globl _FIFOPCTRL
+                                    452 	.globl _FSMSTAT1
+                                    453 	.globl _FSMSTAT0
+                                    454 	.globl _TXCTRL
+                                    455 	.globl _TXPOWER
+                                    456 	.globl _FREQCTRL
+                                    457 	.globl _FREQTUNE
+                                    458 	.globl _RXMASKCLR
+                                    459 	.globl _RXMASKSET
+                                    460 	.globl _RXENABLE
+                                    461 	.globl _FRMCTRL1
+                                    462 	.globl _FRMCTRL0
+                                    463 	.globl _SRCEXTEN2
+                                    464 	.globl _SRCEXTEN1
+                                    465 	.globl _SRCEXTEN0
+                                    466 	.globl _SRCSHORTEN2
+                                    467 	.globl _SRCSHORTEN1
+                                    468 	.globl _SRCSHORTEN0
+                                    469 	.globl _SRCMATCH
+                                    470 	.globl _FRMFILT1
+                                    471 	.globl _FRMFILT0
+                                    472 	.globl _SHORT_ADDR1
+                                    473 	.globl _SHORT_ADDR0
+                                    474 	.globl _PAN_ID1
+                                    475 	.globl _PAN_ID0
+                                    476 	.globl _EXT_ADDR7
+                                    477 	.globl _EXT_ADDR6
+                                    478 	.globl _EXT_ADDR5
+                                    479 	.globl _EXT_ADDR4
+                                    480 	.globl _EXT_ADDR3
+                                    481 	.globl _EXT_ADDR2
+                                    482 	.globl _EXT_ADDR1
+                                    483 	.globl _EXT_ADDR0
+                                    484 	.globl _SRCSHORTPENDEN2
+                                    485 	.globl _SRCSHORTPENDEN1
+                                    486 	.globl _SRCSHORTPENDEN0
+                                    487 	.globl _SRCEXTPENDEN2
+                                    488 	.globl _SRCEXTPENDEN1
+                                    489 	.globl _SRCEXTPENDEN0
+                                    490 	.globl _SRCRESINDEX
+                                    491 	.globl _SRCRESMASK2
+                                    492 	.globl _SRCRESMASK1
+                                    493 	.globl _SRCRESMASK0
+                                    494 	.globl _SRC_ADDR_TABLE
+                                    495 	.globl _TXFIFO
+                                    496 	.globl _RXFIFO
+                                    497 	.globl _RFCORE_RAM
+                                    498 	.globl _CMPCTL
+                                    499 	.globl _OPAMPS
+                                    500 	.globl _OPAMPC
+                                    501 	.globl _STCV2
+                                    502 	.globl _STCV1
+                                    503 	.globl _STCV0
+                                    504 	.globl _STCS
+                                    505 	.globl _STCC
+                                    506 	.globl _T1CC4H
+                                    507 	.globl _T1CC4L
+                                    508 	.globl _T1CC3H
+                                    509 	.globl _T1CC3L
+                                    510 	.globl _XX_T1CC2H
+                                    511 	.globl _XX_T1CC2L
+                                    512 	.globl _XX_T1CC1H
+                                    513 	.globl _XX_T1CC1L
+                                    514 	.globl _XX_T1CC0H
+                                    515 	.globl _XX_T1CC0L
+                                    516 	.globl _T1CCTL4
+                                    517 	.globl _T1CCTL3
+                                    518 	.globl _XX_T1CCTL2
+                                    519 	.globl _XX_T1CCTL1
+                                    520 	.globl _XX_T1CCTL0
+                                    521 	.globl _CLD
+                                    522 	.globl _IRCTL
+                                    523 	.globl _CHIPINFO1
+                                    524 	.globl _CHIPINFO0
+                                    525 	.globl _FWDATA
+                                    526 	.globl _FADDRH
+                                    527 	.globl _FADDRL
+                                    528 	.globl _FCTL
+                                    529 	.globl _IVCTRL
+                                    530 	.globl _BATTMON
+                                    531 	.globl _SRCRC
+                                    532 	.globl _DBGDATA
+                                    533 	.globl _TESTREG0
+                                    534 	.globl _CHIPID
+                                    535 	.globl _CHVER
+                                    536 	.globl _OBSSEL5
+                                    537 	.globl _OBSSEL4
+                                    538 	.globl _OBSSEL3
+                                    539 	.globl _OBSSEL2
+                                    540 	.globl _OBSSEL1
+                                    541 	.globl _OBSSEL0
+                                    542 	.globl _I2CIO
+                                    543 	.globl _I2CWC
+                                    544 	.globl _I2CADDR
+                                    545 	.globl _I2CDATA
+                                    546 	.globl _I2CSTAT
+                                    547 	.globl _I2CCFG
+                                    548 	.globl _OPAMPMC
+                                    549 	.globl _MONMUX
+                                    550 	.globl _ctimer_init
+                                    551 	.globl _ctimer_set
+                                    552 	.globl _ctimer_reset
+                                    553 	.globl _ctimer_restart
+                                    554 	.globl _ctimer_stop
+                                    555 	.globl _ctimer_expired
+                                    556 ;--------------------------------------------------------
+                                    557 ; special function registers
+                                    558 ;--------------------------------------------------------
+                                    559 	.area RSEG    (ABS,DATA)
+      000000                        560 	.org 0x0000
+                           000080   561 _P0	=	0x0080
+                           000081   562 _SP	=	0x0081
+                           000082   563 _DPL0	=	0x0082
+                           000083   564 _DPH0	=	0x0083
+                           000084   565 _DPL1	=	0x0084
+                           000085   566 _DPH1	=	0x0085
+                           000087   567 _PCON	=	0x0087
+                           000088   568 _TCON	=	0x0088
+                           000090   569 _P1	=	0x0090
+                           000092   570 _DPS	=	0x0092
+                           000098   571 _S0CON	=	0x0098
+                           00009A   572 _IEN2	=	0x009a
+                           00009B   573 _S1CON	=	0x009b
+                           0000A0   574 _P2	=	0x00a0
+                           0000A8   575 _IEN0	=	0x00a8
+                           0000A9   576 _IP0	=	0x00a9
+                           0000B8   577 _IEN1	=	0x00b8
+                           0000B9   578 _IP1	=	0x00b9
+                           0000C0   579 _IRCON	=	0x00c0
+                           0000D0   580 _PSW	=	0x00d0
+                           0000E0   581 _ACC	=	0x00e0
+                           0000E8   582 _IRCON2	=	0x00e8
+                           0000F0   583 _B	=	0x00f0
+                           0000B4   584 _ADCCON1	=	0x00b4
+                           0000B5   585 _ADCCON2	=	0x00b5
+                           0000B6   586 _ADCCON3	=	0x00b6
+                           0000BA   587 _ADCL	=	0x00ba
+                           0000BB   588 _ADCH	=	0x00bb
+                           0000BC   589 _RNDL	=	0x00bc
+                           0000BD   590 _RNDH	=	0x00bd
+                           0000B1   591 _ENCDI	=	0x00b1
+                           0000B2   592 _ENCDO	=	0x00b2
+                           0000B3   593 _ENCCS	=	0x00b3
+                           0000D1   594 _DMAIRQ	=	0x00d1
+                           0000D2   595 _DMA1CFGL	=	0x00d2
+                           0000D3   596 _DMA1CFGH	=	0x00d3
+                           0000D4   597 _DMA0CFGL	=	0x00d4
+                           0000D5   598 _DMA0CFGH	=	0x00d5
+                           0000D6   599 _DMAARM	=	0x00d6
+                           0000D7   600 _DMAREQ	=	0x00d7
+                           000089   601 _P0IFG	=	0x0089
+                           00008A   602 _P1IFG	=	0x008a
+                           00008B   603 _P2IFG	=	0x008b
+                           00008C   604 _PICTL	=	0x008c
+                           0000AB   605 _P0IEN	=	0x00ab
+                           00008D   606 _P1IEN	=	0x008d
+                           0000AC   607 _P2IEN	=	0x00ac
+                           00008F   608 _P0INP	=	0x008f
+                           0000F1   609 _PERCFG	=	0x00f1
+                           0000F2   610 _APCFG	=	0x00f2
+                           0000F3   611 _P0SEL	=	0x00f3
+                           0000F4   612 _P1SEL	=	0x00f4
+                           0000F5   613 _P2SEL	=	0x00f5
+                           0000F6   614 _P1INP	=	0x00f6
+                           0000F7   615 _P2INP	=	0x00f7
+                           0000FD   616 _P0DIR	=	0x00fd
+                           0000FE   617 _P1DIR	=	0x00fe
+                           0000FF   618 _P2DIR	=	0x00ff
+                           0000AE   619 _PMUX	=	0x00ae
+                           000093   620 _MPAGE	=	0x0093
+                           000093   621 __XPAGE	=	0x0093
+                           0000C7   622 _MEMCTR	=	0x00c7
+                           00009F   623 _FMAP	=	0x009f
+                           00009F   624 _PSBANK	=	0x009f
+                           000091   625 _RFIRQF1	=	0x0091
+                           0000D9   626 _RFD	=	0x00d9
+                           0000E1   627 _RFST	=	0x00e1
+                           0000E9   628 _RFIRQF0	=	0x00e9
+                           0000BF   629 _RFERRF	=	0x00bf
+                           000095   630 _ST0	=	0x0095
+                           000096   631 _ST1	=	0x0096
+                           000097   632 _ST2	=	0x0097
+                           0000AD   633 _STLOAD	=	0x00ad
+                           0000BE   634 _SLEEPCMD	=	0x00be
+                           00009D   635 _SLEEPSTA	=	0x009d
+                           0000C6   636 _CLKCONCMD	=	0x00c6
+                           00009E   637 _CLKCONSTA	=	0x009e
+                           0000DA   638 _T1CC0L	=	0x00da
+                           0000DB   639 _T1CC0H	=	0x00db
+                           0000DC   640 _T1CC1L	=	0x00dc
+                           0000DD   641 _T1CC1H	=	0x00dd
+                           0000DE   642 _T1CC2L	=	0x00de
+                           0000DF   643 _T1CC2H	=	0x00df
+                           0000E2   644 _T1CNTL	=	0x00e2
+                           0000E3   645 _T1CNTH	=	0x00e3
+                           0000E4   646 _T1CTL	=	0x00e4
+                           0000E5   647 _T1CCTL0	=	0x00e5
+                           0000E6   648 _T1CCTL1	=	0x00e6
+                           0000E7   649 _T1CCTL2	=	0x00e7
+                           0000AF   650 _T1STAT	=	0x00af
+                           000094   651 _T2CTRL	=	0x0094
+                           00009C   652 _T2EVTCFG	=	0x009c
+                           0000A1   653 _T2IRQF	=	0x00a1
+                           0000A2   654 _T2M0	=	0x00a2
+                           0000A3   655 _T2M1	=	0x00a3
+                           0000A4   656 _T2MOVF0	=	0x00a4
+                           0000A5   657 _T2MOVF1	=	0x00a5
+                           0000A6   658 _T2MOVF2	=	0x00a6
+                           0000A7   659 _T2IRQM	=	0x00a7
+                           0000C3   660 _T2MSEL	=	0x00c3
+                           0000CA   661 _T3CNT	=	0x00ca
+                           0000CB   662 _T3CTL	=	0x00cb
+                           0000CC   663 _T3CCTL0	=	0x00cc
+                           0000CD   664 _T3CC0	=	0x00cd
+                           0000CE   665 _T3CCTL1	=	0x00ce
+                           0000CF   666 _T3CC1	=	0x00cf
+                           0000EA   667 _T4CNT	=	0x00ea
+                           0000EB   668 _T4CTL	=	0x00eb
+                           0000EC   669 _T4CCTL0	=	0x00ec
+                           0000ED   670 _T4CC0	=	0x00ed
+                           0000EE   671 _T4CCTL1	=	0x00ee
+                           0000EF   672 _T4CC1	=	0x00ef
+                           0000D8   673 _TIMIF	=	0x00d8
+                           000086   674 _U0CSR	=	0x0086
+                           0000C1   675 _U0DBUF	=	0x00c1
+                           0000C2   676 _U0BAUD	=	0x00c2
+                           0000C4   677 _U0UCR	=	0x00c4
+                           0000C5   678 _U0GCR	=	0x00c5
+                           0000F8   679 _U1CSR	=	0x00f8
+                           0000F9   680 _U1DBUF	=	0x00f9
+                           0000FA   681 _U1BAUD	=	0x00fa
+                           0000FB   682 _U1UCR	=	0x00fb
+                           0000FC   683 _U1GCR	=	0x00fc
+                           0000C9   684 _WDCTL	=	0x00c9
+                                    685 ;--------------------------------------------------------
+                                    686 ; special function bits
+                                    687 ;--------------------------------------------------------
+                                    688 	.area RSEG    (ABS,DATA)
+      000000                        689 	.org 0x0000
+                           000087   690 _P0_7	=	0x0087
+                           000086   691 _P0_6	=	0x0086
+                           000085   692 _P0_5	=	0x0085
+                           000084   693 _P0_4	=	0x0084
+                           000083   694 _P0_3	=	0x0083
+                           000082   695 _P0_2	=	0x0082
+                           000081   696 _P0_1	=	0x0081
+                           000080   697 _P0_0	=	0x0080
+                           00008F   698 _URX1IF	=	0x008f
+                           00008D   699 _ADCIF	=	0x008d
+                           00008B   700 _URX0IF	=	0x008b
+                           00008A   701 _IT1	=	0x008a
+                           000089   702 _RFERRIF	=	0x0089
+                           000088   703 _IT0	=	0x0088
+                           000097   704 _P1_7	=	0x0097
+                           000096   705 _P1_6	=	0x0096
+                           000095   706 _P1_5	=	0x0095
+                           000094   707 _P1_4	=	0x0094
+                           000093   708 _P1_3	=	0x0093
+                           000092   709 _P1_2	=	0x0092
+                           000091   710 _P1_1	=	0x0091
+                           000090   711 _P1_0	=	0x0090
+                           000099   712 _ENCIF_1	=	0x0099
+                           000098   713 _ENCIF_0	=	0x0098
+                           0000A7   714 _P2_7	=	0x00a7
+                           0000A6   715 _P2_6	=	0x00a6
+                           0000A5   716 _P2_5	=	0x00a5
+                           0000A4   717 _P2_4	=	0x00a4
+                           0000A3   718 _P2_3	=	0x00a3
+                           0000A2   719 _P2_2	=	0x00a2
+                           0000A1   720 _P2_1	=	0x00a1
+                           0000A0   721 _P2_0	=	0x00a0
+                           0000AF   722 _EA	=	0x00af
+                           0000AD   723 _STIE	=	0x00ad
+                           0000AC   724 _ENCIE	=	0x00ac
+                           0000AB   725 _URX1IE	=	0x00ab
+                           0000AA   726 _URX0IE	=	0x00aa
+                           0000A9   727 _ADCIE	=	0x00a9
+                           0000A8   728 _RFERRIE	=	0x00a8
+                           0000BD   729 _P0IE	=	0x00bd
+                           0000BC   730 _T4IE	=	0x00bc
+                           0000BB   731 _T3IE	=	0x00bb
+                           0000BA   732 _T2IE	=	0x00ba
+                           0000B9   733 _T1IE	=	0x00b9
+                           0000B8   734 _DMAIE	=	0x00b8
+                           0000C7   735 _STIF	=	0x00c7
+                           0000C5   736 _P0IF	=	0x00c5
+                           0000C4   737 _T4IF	=	0x00c4
+                           0000C3   738 _T3IF	=	0x00c3
+                           0000C2   739 _T2IF	=	0x00c2
+                           0000C1   740 _T1IF	=	0x00c1
+                           0000C0   741 _DMAIF	=	0x00c0
+                           0000D7   742 _CY	=	0x00d7
+                           0000D6   743 _AC	=	0x00d6
+                           0000D5   744 _F0	=	0x00d5
+                           0000D4   745 _RS1	=	0x00d4
+                           0000D3   746 _RS0	=	0x00d3
+                           0000D2   747 _OV	=	0x00d2
+                           0000D1   748 _F1	=	0x00d1
+                           0000D0   749 _P	=	0x00d0
+                           0000E7   750 _ACC_7	=	0x00e7
+                           0000E6   751 _ACC_6	=	0x00e6
+                           0000E5   752 _ACC_5	=	0x00e5
+                           0000E4   753 _ACC_4	=	0x00e4
+                           0000E3   754 _ACC_3	=	0x00e3
+                           0000E2   755 _ACC_2	=	0x00e2
+                           0000E1   756 _ACC_1	=	0x00e1
+                           0000E0   757 _ACC_0	=	0x00e0
+                           0000EC   758 _WDTIF	=	0x00ec
+                           0000EB   759 _P1IF	=	0x00eb
+                           0000EA   760 _UTX1IF	=	0x00ea
+                           0000E9   761 _UTX0IF	=	0x00e9
+                           0000E8   762 _P2IF	=	0x00e8
+                           0000F7   763 _B_7	=	0x00f7
+                           0000F6   764 _B_6	=	0x00f6
+                           0000F5   765 _B_5	=	0x00f5
+                           0000F4   766 _B_4	=	0x00f4
+                           0000F3   767 _B_3	=	0x00f3
+                           0000F2   768 _B_2	=	0x00f2
+                           0000F1   769 _B_1	=	0x00f1
+                           0000F0   770 _B_0	=	0x00f0
+                           0000DE   771 _OVFIM	=	0x00de
+                           0000DD   772 _T4CH1IF	=	0x00dd
+                           0000DC   773 _T4CH0IF	=	0x00dc
+                           0000DB   774 _T4OVFIF	=	0x00db
+                           0000DA   775 _T3CH1IF	=	0x00da
+                           0000D9   776 _T3CH0IF	=	0x00d9
+                           0000D8   777 _T3OVFIF	=	0x00d8
+                           0000FF   778 _MODE	=	0x00ff
+                           0000FE   779 _RE	=	0x00fe
+                           0000FD   780 _SLAVE	=	0x00fd
+                           0000FC   781 _FE	=	0x00fc
+                           0000FB   782 _ERR	=	0x00fb
+                           0000FA   783 _RX_BYTE	=	0x00fa
+                           0000F9   784 _TX_BYTE	=	0x00f9
+                           0000F8   785 _ACTIVE	=	0x00f8
+                                    786 ;--------------------------------------------------------
+                                    787 ; overlayable register banks
+                                    788 ;--------------------------------------------------------
+                                    789 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                        790 	.ds 8
+                                    791 ;--------------------------------------------------------
+                                    792 ; internal ram data
+                                    793 ;--------------------------------------------------------
+                                    794 	.area DSEG    (DATA)
+                                    795 ;--------------------------------------------------------
+                                    796 ; overlayable items in internal ram 
+                                    797 ;--------------------------------------------------------
+                                    798 ;--------------------------------------------------------
+                                    799 ; indirectly addressable internal ram data
+                                    800 ;--------------------------------------------------------
+                                    801 	.area ISEG    (DATA)
+                                    802 ;--------------------------------------------------------
+                                    803 ; absolute internal ram data
+                                    804 ;--------------------------------------------------------
+                                    805 	.area IABS    (ABS,DATA)
+                                    806 	.area IABS    (ABS,DATA)
+                                    807 ;--------------------------------------------------------
+                                    808 ; bit data
+                                    809 ;--------------------------------------------------------
+                                    810 	.area BSEG    (BIT)
+                                    811 ;--------------------------------------------------------
+                                    812 ; paged external ram data
+                                    813 ;--------------------------------------------------------
+                                    814 	.area PSEG    (PAG,XDATA)
+                                    815 ;--------------------------------------------------------
+                                    816 ; external ram data
+                                    817 ;--------------------------------------------------------
+                                    818 	.area XSEG    (XDATA)
+                           0061A6   819 _MONMUX	=	0x61a6
+                           0061A6   820 _OPAMPMC	=	0x61a6
+                           006230   821 _I2CCFG	=	0x6230
+                           006231   822 _I2CSTAT	=	0x6231
+                           006232   823 _I2CDATA	=	0x6232
+                           006233   824 _I2CADDR	=	0x6233
+                           006234   825 _I2CWC	=	0x6234
+                           006235   826 _I2CIO	=	0x6235
+                           006243   827 _OBSSEL0	=	0x6243
+                           006244   828 _OBSSEL1	=	0x6244
+                           006245   829 _OBSSEL2	=	0x6245
+                           006246   830 _OBSSEL3	=	0x6246
+                           006247   831 _OBSSEL4	=	0x6247
+                           006248   832 _OBSSEL5	=	0x6248
+                           006249   833 _CHVER	=	0x6249
+                           00624A   834 _CHIPID	=	0x624a
+                           00624B   835 _TESTREG0	=	0x624b
+                           006260   836 _DBGDATA	=	0x6260
+                           006262   837 _SRCRC	=	0x6262
+                           006264   838 _BATTMON	=	0x6264
+                           006265   839 _IVCTRL	=	0x6265
+                           006270   840 _FCTL	=	0x6270
+                           006271   841 _FADDRL	=	0x6271
+                           006272   842 _FADDRH	=	0x6272
+                           006273   843 _FWDATA	=	0x6273
+                           006276   844 _CHIPINFO0	=	0x6276
+                           006277   845 _CHIPINFO1	=	0x6277
+                           006281   846 _IRCTL	=	0x6281
+                           006290   847 _CLD	=	0x6290
+                           0062A0   848 _XX_T1CCTL0	=	0x62a0
+                           0062A1   849 _XX_T1CCTL1	=	0x62a1
+                           0062A2   850 _XX_T1CCTL2	=	0x62a2
+                           0062A3   851 _T1CCTL3	=	0x62a3
+                           0062A4   852 _T1CCTL4	=	0x62a4
+                           0062A6   853 _XX_T1CC0L	=	0x62a6
+                           0062A7   854 _XX_T1CC0H	=	0x62a7
+                           0062A8   855 _XX_T1CC1L	=	0x62a8
+                           0062A9   856 _XX_T1CC1H	=	0x62a9
+                           0062AA   857 _XX_T1CC2L	=	0x62aa
+                           0062AB   858 _XX_T1CC2H	=	0x62ab
+                           0062AC   859 _T1CC3L	=	0x62ac
+                           0062AD   860 _T1CC3H	=	0x62ad
+                           0062AE   861 _T1CC4L	=	0x62ae
+                           0062AF   862 _T1CC4H	=	0x62af
+                           0062B0   863 _STCC	=	0x62b0
+                           0062B1   864 _STCS	=	0x62b1
+                           0062B2   865 _STCV0	=	0x62b2
+                           0062B3   866 _STCV1	=	0x62b3
+                           0062B4   867 _STCV2	=	0x62b4
+                           0062C0   868 _OPAMPC	=	0x62c0
+                           0062C1   869 _OPAMPS	=	0x62c1
+                           0062D0   870 _CMPCTL	=	0x62d0
+                           006000   871 _RFCORE_RAM	=	0x6000
+                           006000   872 _RXFIFO	=	0x6000
+                           006080   873 _TXFIFO	=	0x6080
+                           006100   874 _SRC_ADDR_TABLE	=	0x6100
+                           006160   875 _SRCRESMASK0	=	0x6160
+                           006161   876 _SRCRESMASK1	=	0x6161
+                           006162   877 _SRCRESMASK2	=	0x6162
+                           006163   878 _SRCRESINDEX	=	0x6163
+                           006164   879 _SRCEXTPENDEN0	=	0x6164
+                           006165   880 _SRCEXTPENDEN1	=	0x6165
+                           006166   881 _SRCEXTPENDEN2	=	0x6166
+                           006167   882 _SRCSHORTPENDEN0	=	0x6167
+                           006168   883 _SRCSHORTPENDEN1	=	0x6168
+                           006169   884 _SRCSHORTPENDEN2	=	0x6169
+                           00616A   885 _EXT_ADDR0	=	0x616a
+                           00616B   886 _EXT_ADDR1	=	0x616b
+                           00616C   887 _EXT_ADDR2	=	0x616c
+                           00616D   888 _EXT_ADDR3	=	0x616d
+                           00616E   889 _EXT_ADDR4	=	0x616e
+                           00616F   890 _EXT_ADDR5	=	0x616f
+                           006170   891 _EXT_ADDR6	=	0x6170
+                           006171   892 _EXT_ADDR7	=	0x6171
+                           006172   893 _PAN_ID0	=	0x6172
+                           006173   894 _PAN_ID1	=	0x6173
+                           006174   895 _SHORT_ADDR0	=	0x6174
+                           006175   896 _SHORT_ADDR1	=	0x6175
+                           006180   897 _FRMFILT0	=	0x6180
+                           006181   898 _FRMFILT1	=	0x6181
+                           006182   899 _SRCMATCH	=	0x6182
+                           006183   900 _SRCSHORTEN0	=	0x6183
+                           006184   901 _SRCSHORTEN1	=	0x6184
+                           006185   902 _SRCSHORTEN2	=	0x6185
+                           006186   903 _SRCEXTEN0	=	0x6186
+                           006187   904 _SRCEXTEN1	=	0x6187
+                           006188   905 _SRCEXTEN2	=	0x6188
+                           006189   906 _FRMCTRL0	=	0x6189
+                           00618A   907 _FRMCTRL1	=	0x618a
+                           00618B   908 _RXENABLE	=	0x618b
+                           00618C   909 _RXMASKSET	=	0x618c
+                           00618D   910 _RXMASKCLR	=	0x618d
+                           00618E   911 _FREQTUNE	=	0x618e
+                           00618F   912 _FREQCTRL	=	0x618f
+                           006190   913 _TXPOWER	=	0x6190
+                           006191   914 _TXCTRL	=	0x6191
+                           006192   915 _FSMSTAT0	=	0x6192
+                           006193   916 _FSMSTAT1	=	0x6193
+                           006194   917 _FIFOPCTRL	=	0x6194
+                           006195   918 _FSMCTRL	=	0x6195
+                           006196   919 _CCACTRL0	=	0x6196
+                           006197   920 _CCACTRL1	=	0x6197
+                           006198   921 _RSSI	=	0x6198
+                           006199   922 _RSSISTAT	=	0x6199
+                           00619A   923 _RXFIRST	=	0x619a
+                           00619B   924 _RXFIFOCNT	=	0x619b
+                           00619C   925 _TXFIFOCNT	=	0x619c
+                           00619D   926 _RXFIRST_PTR	=	0x619d
+                           00619E   927 _RXLAST_PTR	=	0x619e
+                           00619F   928 _RXP1_PTR	=	0x619f
+                           0061A1   929 _TXFIRST_PTR	=	0x61a1
+                           0061A2   930 _TXLAST_PTR	=	0x61a2
+                           0061A3   931 _RFIRQM0	=	0x61a3
+                           0061A4   932 _RFIRQM1	=	0x61a4
+                           0061A5   933 _RFERRM	=	0x61a5
+                           0061A7   934 _RFRND	=	0x61a7
+                           0061A8   935 _MDMCTRL0	=	0x61a8
+                           0061A9   936 _MDMCTRL1	=	0x61a9
+                           0061AA   937 _FREQEST	=	0x61aa
+                           0061AB   938 _RXCTRL	=	0x61ab
+                           0061AC   939 _FSCTRL	=	0x61ac
+                           0061AD   940 _FSCAL0	=	0x61ad
+                           0061AE   941 _FSCAL1	=	0x61ae
+                           0061AF   942 _FSCAL2	=	0x61af
+                           0061B0   943 _FSCAL3	=	0x61b0
+                           0061B1   944 _AGCCTRL0	=	0x61b1
+                           0061B2   945 _AGCCTRL1	=	0x61b2
+                           0061B3   946 _AGCCTRL2	=	0x61b3
+                           0061B4   947 _AGCCTRL3	=	0x61b4
+                           0061B5   948 _ADCTEST0	=	0x61b5
+                           0061B6   949 _ADCTEST1	=	0x61b6
+                           0061B7   950 _ADCTEST2	=	0x61b7
+                           0061B8   951 _MDMTEST0	=	0x61b8
+                           0061B9   952 _MDMTEST1	=	0x61b9
+                           0061BA   953 _DACTEST0	=	0x61ba
+                           0061BB   954 _DACTEST1	=	0x61bb
+                           0061BC   955 _DACTEST2	=	0x61bc
+                           0061BD   956 _ATEST	=	0x61bd
+                           0061BE   957 _PTEST0	=	0x61be
+                           0061BF   958 _PTEST1	=	0x61bf
+                           0061FA   959 _TXFILTCFG	=	0x61fa
+                           0061EB   960 _RFC_OBS_CTRL0	=	0x61eb
+                           0061EC   961 _RFC_OBS_CTRL1	=	0x61ec
+                           0061ED   962 _RFC_OBS_CTRL2	=	0x61ed
+                           0061C0   963 _CSPPROG0	=	0x61c0
+                           0061C1   964 _CSPPROG1	=	0x61c1
+                           0061C2   965 _CSPPROG2	=	0x61c2
+                           0061C3   966 _CSPPROG3	=	0x61c3
+                           0061C4   967 _CSPPROG4	=	0x61c4
+                           0061C5   968 _CSPPROG5	=	0x61c5
+                           0061C6   969 _CSPPROG6	=	0x61c6
+                           0061C7   970 _CSPPROG7	=	0x61c7
+                           0061C8   971 _CSPPROG8	=	0x61c8
+                           0061C9   972 _CSPPROG9	=	0x61c9
+                           0061CA   973 _CSPPROG10	=	0x61ca
+                           0061CB   974 _CSPPROG11	=	0x61cb
+                           0061CC   975 _CSPPROG12	=	0x61cc
+                           0061CD   976 _CSPPROG13	=	0x61cd
+                           0061CE   977 _CSPPROG14	=	0x61ce
+                           0061CF   978 _CSPPROG15	=	0x61cf
+                           0061D0   979 _CSPPROG16	=	0x61d0
+                           0061D1   980 _CSPPROG17	=	0x61d1
+                           0061D2   981 _CSPPROG18	=	0x61d2
+                           0061D3   982 _CSPPROG19	=	0x61d3
+                           0061D4   983 _CSPPROG20	=	0x61d4
+                           0061D5   984 _CSPPROG21	=	0x61d5
+                           0061D6   985 _CSPPROG22	=	0x61d6
+                           0061D7   986 _CSPPROG23	=	0x61d7
+                           0061E0   987 _CSPCTRL	=	0x61e0
+                           0061E1   988 _CSPSTAT	=	0x61e1
+                           0061E2   989 _CSPX	=	0x61e2
+                           0061E3   990 _CSPY	=	0x61e3
+                           0061E4   991 _CSPZ	=	0x61e4
+                           0061E5   992 _CSPT	=	0x61e5
+                           006200   993 _USBADDR	=	0x6200
+                           006201   994 _USBPOW	=	0x6201
+                           006202   995 _USBIIF	=	0x6202
+                           006204   996 _USBOIF	=	0x6204
+                           006206   997 _USBCIF	=	0x6206
+                           006207   998 _USBIIE	=	0x6207
+                           006209   999 _USBOIE	=	0x6209
+                           00620B  1000 _USBCIE	=	0x620b
+                           00620C  1001 _USBFRML	=	0x620c
+                           00620D  1002 _USBFRMH	=	0x620d
+                           00620E  1003 _USBINDEX	=	0x620e
+                           00620F  1004 _USBCTRL	=	0x620f
+                           006210  1005 _USBMAXI	=	0x6210
+                           006211  1006 _USBCS0	=	0x6211
+                           006211  1007 _USBCSIL	=	0x6211
+                           006212  1008 _USBCSIH	=	0x6212
+                           006213  1009 _USBMAXO	=	0x6213
+                           006214  1010 _USBCSOL	=	0x6214
+                           006215  1011 _USBCSOH	=	0x6215
+                           006216  1012 _USBCNT0	=	0x6216
+                           006216  1013 _USBCNTL	=	0x6216
+                           006217  1014 _USBCNTH	=	0x6217
+                           006220  1015 _USBF0	=	0x6220
+                           006222  1016 _USBF1	=	0x6222
+                           006224  1017 _USBF2	=	0x6224
+                           006226  1018 _USBF3	=	0x6226
+                           006228  1019 _USBF4	=	0x6228
+                           00622A  1020 _USBF5	=	0x622a
+                           007080  1021 _X_P0	=	0x7080
+                           007086  1022 _X_U0CSR	=	0x7086
+                           007089  1023 _X_P0IFG	=	0x7089
+                           00708A  1024 _X_P1IFG	=	0x708a
+                           00708B  1025 _X_P2IFG	=	0x708b
+                           00708C  1026 _X_PICTL	=	0x708c
+                           00708D  1027 _X_P1IEN	=	0x708d
+                           00708F  1028 _X_P0INP	=	0x708f
+                           007090  1029 _X_P1	=	0x7090
+                           007091  1030 _X_RFIRQF1	=	0x7091
+                           007093  1031 _X_MPAGE	=	0x7093
+                           007093  1032 _X__XPAGE	=	0x7093
+                           007094  1033 _X_T2CTRL	=	0x7094
+                           007095  1034 _X_ST0	=	0x7095
+                           007096  1035 _X_ST1	=	0x7096
+                           007097  1036 _X_ST2	=	0x7097
+                           00709C  1037 _X_T2EVTCFG	=	0x709c
+                           00709D  1038 _X_SLEEPSTA	=	0x709d
+                           00709E  1039 _X_CLKCONSTA	=	0x709e
+                           00709F  1040 _X_FMAP	=	0x709f
+                           00709F  1041 _X_PSBANK	=	0x709f
+                           0070A0  1042 _X_P2	=	0x70a0
+                           0070A1  1043 _X_T2IRQF	=	0x70a1
+                           0070A2  1044 _X_T2M0	=	0x70a2
+                           0070A3  1045 _X_T2M1	=	0x70a3
+                           0070A4  1046 _X_T2MOVF0	=	0x70a4
+                           0070A5  1047 _X_T2MOVF1	=	0x70a5
+                           0070A6  1048 _X_T2MOVF2	=	0x70a6
+                           0070A7  1049 _X_T2IRQM	=	0x70a7
+                           0070AB  1050 _X_P0IEN	=	0x70ab
+                           0070AC  1051 _X_P2IEN	=	0x70ac
+                           0070AD  1052 _X_STLOAD	=	0x70ad
+                           0070AE  1053 _X_PMUX	=	0x70ae
+                           0070AF  1054 _X_T1STAT	=	0x70af
+                           0070B1  1055 _X_ENCDI	=	0x70b1
+                           0070B2  1056 _X_ENCDO	=	0x70b2
+                           0070B3  1057 _X_ENCCS	=	0x70b3
+                           0070B4  1058 _X_ADCCON1	=	0x70b4
+                           0070B5  1059 _X_ADCCON2	=	0x70b5
+                           0070B6  1060 _X_ADCCON3	=	0x70b6
+                           0070BA  1061 _X_ADCL	=	0x70ba
+                           0070BB  1062 _X_ADCH	=	0x70bb
+                           0070BC  1063 _X_RNDL	=	0x70bc
+                           0070BD  1064 _X_RNDH	=	0x70bd
+                           0070BE  1065 _X_SLEEPCMD	=	0x70be
+                           0070BF  1066 _X_RFERRF	=	0x70bf
+                           0070C1  1067 _X_U0DBUF	=	0x70c1
+                           0070C2  1068 _X_U0BAUD	=	0x70c2
+                           0070C3  1069 _X_T2MSEL	=	0x70c3
+                           0070C4  1070 _X_U0UCR	=	0x70c4
+                           0070C5  1071 _X_U0GCR	=	0x70c5
+                           0070C6  1072 _X_CLKCONCMD	=	0x70c6
+                           0070C7  1073 _X_MEMCTR	=	0x70c7
+                           0070C9  1074 _X_WDCTL	=	0x70c9
+                           0070CA  1075 _X_T3CNT	=	0x70ca
+                           0070CB  1076 _X_T3CTL	=	0x70cb
+                           0070CC  1077 _X_T3CCTL0	=	0x70cc
+                           0070CD  1078 _X_T3CC0	=	0x70cd
+                           0070CE  1079 _X_T3CCTL1	=	0x70ce
+                           0070CF  1080 _X_T3CC1	=	0x70cf
+                           0070D1  1081 _X_DMAIRQ	=	0x70d1
+                           0070D2  1082 _X_DMA1CFGL	=	0x70d2
+                           0070D3  1083 _X_DMA1CFGH	=	0x70d3
+                           0070D4  1084 _X_DMA0CFGL	=	0x70d4
+                           0070D5  1085 _X_DMA0CFGH	=	0x70d5
+                           0070D6  1086 _X_DMAARM	=	0x70d6
+                           0070D7  1087 _X_DMAREQ	=	0x70d7
+                           0070D8  1088 _X_TIMIF	=	0x70d8
+                           0070D9  1089 _X_RFD	=	0x70d9
+                           0070DA  1090 _X_T1CC0L	=	0x70da
+                           0070DB  1091 _X_T1CC0H	=	0x70db
+                           0070DC  1092 _X_T1CC1L	=	0x70dc
+                           0070DD  1093 _X_T1CC1H	=	0x70dd
+                           0070DE  1094 _X_T1CC2L	=	0x70de
+                           0070DF  1095 _X_T1CC2H	=	0x70df
+                           0070E1  1096 _X_RFST	=	0x70e1
+                           0070E2  1097 _X_T1CNTL	=	0x70e2
+                           0070E3  1098 _X_T1CNTH	=	0x70e3
+                           0070E4  1099 _X_T1CTL	=	0x70e4
+                           0070E5  1100 _X_T1CCTL0	=	0x70e5
+                           0070E6  1101 _X_T1CCTL1	=	0x70e6
+                           0070E7  1102 _X_T1CCTL2	=	0x70e7
+                           0070E9  1103 _X_RFIRQF0	=	0x70e9
+                           0070EA  1104 _X_T4CNT	=	0x70ea
+                           0070EB  1105 _X_T4CTL	=	0x70eb
+                           0070EC  1106 _X_T4CCTL0	=	0x70ec
+                           0070ED  1107 _X_T4CC0	=	0x70ed
+                           0070EE  1108 _X_T4CCTL1	=	0x70ee
+                           0070EF  1109 _X_T4CC1	=	0x70ef
+                           0070F1  1110 _X_PERCFG	=	0x70f1
+                           0070F2  1111 _X_APCFG	=	0x70f2
+                           0070F3  1112 _X_P0SEL	=	0x70f3
+                           0070F4  1113 _X_P1SEL	=	0x70f4
+                           0070F5  1114 _X_P2SEL	=	0x70f5
+                           0070F6  1115 _X_P1INP	=	0x70f6
+                           0070F7  1116 _X_P2INP	=	0x70f7
+                           0070F8  1117 _X_U1CSR	=	0x70f8
+                           0070F9  1118 _X_U1DBUF	=	0x70f9
+                           0070FA  1119 _X_U1BAUD	=	0x70fa
+                           0070FB  1120 _X_U1UCR	=	0x70fb
+                           0070FC  1121 _X_U1GCR	=	0x70fc
+                           0070FD  1122 _X_P0DIR	=	0x70fd
+                           0070FE  1123 _X_P1DIR	=	0x70fe
+                           0070FF  1124 _X_P2DIR	=	0x70ff
+                           007800  1125 _X_INFOPAGE	=	0x7800
+                           00780C  1126 _X_IEEE_ADDR	=	0x780c
+      000000                       1127 _initialized:
+      000000                       1128 	.ds 1
+                                   1129 ;--------------------------------------------------------
+                                   1130 ; absolute external ram data
+                                   1131 ;--------------------------------------------------------
+                                   1132 	.area XABS    (ABS,XDATA)
+                                   1133 ;--------------------------------------------------------
+                                   1134 ; external initialized ram data
+                                   1135 ;--------------------------------------------------------
+                                   1136 	.area XISEG   (XDATA)
+      000000                       1137 _ctimer_list_list:
+      000000                       1138 	.ds 3
+      000003                       1139 _ctimer_list:
+      000003                       1140 	.ds 3
+      000006                       1141 _ctimer_process::
+      000006                       1142 	.ds 10
+                                   1143 	.area HOME    (CODE)
+                                   1144 	.area GSINIT0 (CODE)
+                                   1145 	.area GSINIT1 (CODE)
+                                   1146 	.area GSINIT2 (CODE)
+                                   1147 	.area GSINIT3 (CODE)
+                                   1148 	.area GSINIT4 (CODE)
+                                   1149 	.area GSINIT5 (CODE)
+                                   1150 	.area GSINIT  (CODE)
+                                   1151 	.area GSFINAL (CODE)
+                                   1152 	.area CSEG    (CODE)
+                                   1153 ;--------------------------------------------------------
+                                   1154 ; global & static initialisations
+                                   1155 ;--------------------------------------------------------
+                                   1156 	.area HOME    (CODE)
+                                   1157 	.area GSINIT  (CODE)
+                                   1158 	.area GSFINAL (CODE)
+                                   1159 	.area GSINIT  (CODE)
+                                   1160 ;--------------------------------------------------------
+                                   1161 ; Home
+                                   1162 ;--------------------------------------------------------
+                                   1163 	.area HOME    (CODE)
+                                   1164 	.area HOME    (CODE)
+                                   1165 ;--------------------------------------------------------
+                                   1166 ; code
+                                   1167 ;--------------------------------------------------------
+                                   1168 	.area BANK1   (CODE)
+                                   1169 ;------------------------------------------------------------
+                                   1170 ;Allocation info for local variables in function 'process_thread_ctimer_process'
+                                   1171 ;------------------------------------------------------------
+                                   1172 ;ev                        Allocated to stack - sp -12
+                                   1173 ;data                      Allocated to stack - sp -15
+                                   1174 ;process_pt                Allocated to registers r5 r6 r7 
+                                   1175 ;c                         Allocated to stack - sp -5
+                                   1176 ;PT_YIELD_FLAG             Allocated to registers r4 
+                                   1177 ;tmp_current               Allocated to stack - sp -2
+                                   1178 ;sloc0                     Allocated to stack - sp -8
+                                   1179 ;------------------------------------------------------------
+                                   1180 ;	../../../core/sys/ctimer.c:63: PROCESS_THREAD(ctimer_process, ev, data)
+                                   1181 ;	-----------------------------------------
+                                   1182 ;	 function process_thread_ctimer_process
+                                   1183 ;	-----------------------------------------
+      000000                       1184 _process_thread_ctimer_process:
+                           000007  1185 	ar7 = 0x07
+                           000006  1186 	ar6 = 0x06
+                           000005  1187 	ar5 = 0x05
+                           000004  1188 	ar4 = 0x04
+                           000003  1189 	ar3 = 0x03
+                           000002  1190 	ar2 = 0x02
+                           000001  1191 	ar1 = 0x01
+                           000000  1192 	ar0 = 0x00
+      000000 E5 81            [12] 1193 	mov	a,sp
+      000002 24 09            [12] 1194 	add	a,#0x09
+      000004 F5 81            [12] 1195 	mov	sp,a
+                                   1196 ;	../../../core/sys/ctimer.c:66: PROCESS_BEGIN();
+      000006 AD 82            [24] 1197 	mov	r5,dpl
+      000008 AE 83            [24] 1198 	mov	r6,dph
+      00000A AF F0            [24] 1199 	mov	r7,b
+      00000C 7C 01            [12] 1200 	mov	r4,#0x01
+      00000E 12r00r00         [24] 1201 	lcall	__gptrget
+      000011 FA               [12] 1202 	mov	r2,a
+      000012 A3               [24] 1203 	inc	dptr
+      000013 12r00r00         [24] 1204 	lcall	__gptrget
+      000016 FB               [12] 1205 	mov	r3,a
+      000017 BA 00 05         [24] 1206 	cjne	r2,#0x00,00177$
+      00001A BB 00 02         [24] 1207 	cjne	r3,#0x00,00177$
+      00001D 80 0C            [24] 1208 	sjmp	00101$
+      00001F                       1209 00177$:
+      00001F BA 4A 06         [24] 1210 	cjne	r2,#0x4a,00178$
+      000022 BB 00 03         [24] 1211 	cjne	r3,#0x00,00178$
+      000025 02r01r10         [24] 1212 	ljmp	00103$
+      000028                       1213 00178$:
+      000028 02r02rEF         [24] 1214 	ljmp	00118$
+      00002B                       1215 00101$:
+                                   1216 ;	../../../core/sys/ctimer.c:68: for(c = list_head(ctimer_list); c != NULL; c = c->next) {
+      00002B C0 05            [24] 1217 	push	ar5
+      00002D C0 06            [24] 1218 	push	ar6
+      00002F C0 07            [24] 1219 	push	ar7
+      000031 90r00r03         [24] 1220 	mov	dptr,#_ctimer_list
+      000034 E0               [24] 1221 	movx	a,@dptr
+      000035 FA               [12] 1222 	mov	r2,a
+      000036 A3               [24] 1223 	inc	dptr
+      000037 E0               [24] 1224 	movx	a,@dptr
+      000038 FB               [12] 1225 	mov	r3,a
+      000039 A3               [24] 1226 	inc	dptr
+      00003A E0               [24] 1227 	movx	a,@dptr
+      00003B FF               [12] 1228 	mov	r7,a
+      00003C 8A 82            [24] 1229 	mov	dpl,r2
+      00003E 8B 83            [24] 1230 	mov	dph,r3
+      000040 8F F0            [24] 1231 	mov	b,r7
+      000042 78r00            [12] 1232 	mov	r0,#_list_head
+      000044 79s00            [12] 1233 	mov	r1,#(_list_head >> 8)
+      000046 7As00            [12] 1234 	mov	r2,#(_list_head >> 16)
+      000048 12r00r00         [24] 1235 	lcall	__sdcc_banked_call
+      00004B AD 82            [24] 1236 	mov	r5,dpl
+      00004D AE 83            [24] 1237 	mov	r6,dph
+      00004F AF F0            [24] 1238 	mov	r7,b
+      000051 E5 81            [12] 1239 	mov	a,sp
+      000053 24 F5            [12] 1240 	add	a,#0xf5
+      000055 F8               [12] 1241 	mov	r0,a
+      000056 A6 05            [24] 1242 	mov	@r0,ar5
+      000058 08               [12] 1243 	inc	r0
+      000059 A6 06            [24] 1244 	mov	@r0,ar6
+      00005B 08               [12] 1245 	inc	r0
+      00005C A6 07            [24] 1246 	mov	@r0,ar7
+                                   1247 ;	../../../core/sys/ctimer.c:87: PROCESS_END();
+      00005E D0 07            [24] 1248 	pop	ar7
+      000060 D0 06            [24] 1249 	pop	ar6
+      000062 D0 05            [24] 1250 	pop	ar5
+                                   1251 ;	../../../core/sys/ctimer.c:68: for(c = list_head(ctimer_list); c != NULL; c = c->next) {
+      000064                       1252 00120$:
+      000064 E5 81            [12] 1253 	mov	a,sp
+      000066 24 F8            [12] 1254 	add	a,#0xf8
+      000068 F8               [12] 1255 	mov	r0,a
+      000069 E6               [12] 1256 	mov	a,@r0
+      00006A 08               [12] 1257 	inc	r0
+      00006B 46               [12] 1258 	orl	a,@r0
+      00006C 70 03            [24] 1259 	jnz	00179$
+      00006E 02r00rF8         [24] 1260 	ljmp	00102$
+      000071                       1261 00179$:
+                                   1262 ;	../../../core/sys/ctimer.c:69: etimer_set(&c->etimer, c->etimer.timer.interval);
+      000071 C0 05            [24] 1263 	push	ar5
+      000073 C0 06            [24] 1264 	push	ar6
+      000075 C0 07            [24] 1265 	push	ar7
+      000077 E5 81            [12] 1266 	mov	a,sp
+      000079 24 F5            [12] 1267 	add	a,#0xf5
+      00007B F8               [12] 1268 	mov	r0,a
+      00007C 74 03            [12] 1269 	mov	a,#0x03
+      00007E 26               [12] 1270 	add	a,@r0
+      00007F FA               [12] 1271 	mov	r2,a
+      000080 E4               [12] 1272 	clr	a
+      000081 08               [12] 1273 	inc	r0
+      000082 36               [12] 1274 	addc	a,@r0
+      000083 FB               [12] 1275 	mov	r3,a
+      000084 08               [12] 1276 	inc	r0
+      000085 86 07            [24] 1277 	mov	ar7,@r0
+      000087 74 02            [12] 1278 	mov	a,#0x02
+      000089 2A               [12] 1279 	add	a,r2
+      00008A FA               [12] 1280 	mov	r2,a
+      00008B E4               [12] 1281 	clr	a
+      00008C 3B               [12] 1282 	addc	a,r3
+      00008D FB               [12] 1283 	mov	r3,a
+      00008E 8A 82            [24] 1284 	mov	dpl,r2
+      000090 8B 83            [24] 1285 	mov	dph,r3
+      000092 8F F0            [24] 1286 	mov	b,r7
+      000094 12r00r00         [24] 1287 	lcall	__gptrget
+      000097 FA               [12] 1288 	mov	r2,a
+      000098 A3               [24] 1289 	inc	dptr
+      000099 12r00r00         [24] 1290 	lcall	__gptrget
+      00009C FB               [12] 1291 	mov	r3,a
+      00009D E5 81            [12] 1292 	mov	a,sp
+      00009F 24 F5            [12] 1293 	add	a,#0xf5
+      0000A1 F8               [12] 1294 	mov	r0,a
+      0000A2 74 03            [12] 1295 	mov	a,#0x03
+      0000A4 26               [12] 1296 	add	a,@r0
+      0000A5 FD               [12] 1297 	mov	r5,a
+      0000A6 E4               [12] 1298 	clr	a
+      0000A7 08               [12] 1299 	inc	r0
+      0000A8 36               [12] 1300 	addc	a,@r0
+      0000A9 FE               [12] 1301 	mov	r6,a
+      0000AA 08               [12] 1302 	inc	r0
+      0000AB 86 07            [24] 1303 	mov	ar7,@r0
+      0000AD C0 07            [24] 1304 	push	ar7
+      0000AF C0 06            [24] 1305 	push	ar6
+      0000B1 C0 05            [24] 1306 	push	ar5
+      0000B3 C0 02            [24] 1307 	push	ar2
+      0000B5 C0 03            [24] 1308 	push	ar3
+      0000B7 8D 82            [24] 1309 	mov	dpl,r5
+      0000B9 8E 83            [24] 1310 	mov	dph,r6
+      0000BB 8F F0            [24] 1311 	mov	b,r7
+      0000BD 78r00            [12] 1312 	mov	r0,#_etimer_set
+      0000BF 79s00            [12] 1313 	mov	r1,#(_etimer_set >> 8)
+      0000C1 7As00            [12] 1314 	mov	r2,#(_etimer_set >> 16)
+      0000C3 12r00r00         [24] 1315 	lcall	__sdcc_banked_call
+      0000C6 15 81            [12] 1316 	dec	sp
+      0000C8 15 81            [12] 1317 	dec	sp
+      0000CA D0 05            [24] 1318 	pop	ar5
+      0000CC D0 06            [24] 1319 	pop	ar6
+      0000CE D0 07            [24] 1320 	pop	ar7
+                                   1321 ;	../../../core/sys/ctimer.c:68: for(c = list_head(ctimer_list); c != NULL; c = c->next) {
+      0000D0 E5 81            [12] 1322 	mov	a,sp
+      0000D2 24 F5            [12] 1323 	add	a,#0xf5
+      0000D4 F8               [12] 1324 	mov	r0,a
+      0000D5 86 82            [24] 1325 	mov	dpl,@r0
+      0000D7 08               [12] 1326 	inc	r0
+      0000D8 86 83            [24] 1327 	mov	dph,@r0
+      0000DA 08               [12] 1328 	inc	r0
+      0000DB 86 F0            [24] 1329 	mov	b,@r0
+      0000DD 12r00r00         [24] 1330 	lcall	__gptrget
+      0000E0 18               [12] 1331 	dec	r0
+      0000E1 18               [12] 1332 	dec	r0
+      0000E2 F6               [12] 1333 	mov	@r0,a
+      0000E3 A3               [24] 1334 	inc	dptr
+      0000E4 12r00r00         [24] 1335 	lcall	__gptrget
+      0000E7 08               [12] 1336 	inc	r0
+      0000E8 F6               [12] 1337 	mov	@r0,a
+      0000E9 A3               [24] 1338 	inc	dptr
+      0000EA 12r00r00         [24] 1339 	lcall	__gptrget
+      0000ED 08               [12] 1340 	inc	r0
+      0000EE F6               [12] 1341 	mov	@r0,a
+      0000EF D0 07            [24] 1342 	pop	ar7
+      0000F1 D0 06            [24] 1343 	pop	ar6
+      0000F3 D0 05            [24] 1344 	pop	ar5
+      0000F5 02r00r64         [24] 1345 	ljmp	00120$
+      0000F8                       1346 00102$:
+                                   1347 ;	../../../core/sys/ctimer.c:71: initialized = 1;
+      0000F8 90r00r00         [24] 1348 	mov	dptr,#_initialized
+      0000FB 74 01            [12] 1349 	mov	a,#0x01
+      0000FD F0               [24] 1350 	movx	@dptr,a
+                                   1351 ;	../../../core/sys/ctimer.c:73: while(1) {
+      0000FE                       1352 00116$:
+                                   1353 ;	../../../core/sys/ctimer.c:74: PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_TIMER);
+      0000FE 7C 00            [12] 1354 	mov	r4,#0x00
+      000100 8D 82            [24] 1355 	mov	dpl,r5
+      000102 8E 83            [24] 1356 	mov	dph,r6
+      000104 8F F0            [24] 1357 	mov	b,r7
+      000106 74 4A            [12] 1358 	mov	a,#0x4a
+      000108 12r00r00         [24] 1359 	lcall	__gptrput
+      00010B A3               [24] 1360 	inc	dptr
+      00010C E4               [12] 1361 	clr	a
+      00010D 12r00r00         [24] 1362 	lcall	__gptrput
+      000110                       1363 00103$:
+      000110 EC               [12] 1364 	mov	a,r4
+      000111 60 0A            [24] 1365 	jz	00104$
+      000113 E5 81            [12] 1366 	mov	a,sp
+      000115 24 F4            [12] 1367 	add	a,#0xf4
+      000117 F8               [12] 1368 	mov	r0,a
+      000118 B6 88 02         [24] 1369 	cjne	@r0,#0x88,00181$
+      00011B 80 06            [24] 1370 	sjmp	00108$
+      00011D                       1371 00181$:
+      00011D                       1372 00104$:
+      00011D 75 82 01         [24] 1373 	mov	dpl,#0x01
+      000120 02r03r00         [24] 1374 	ljmp	00125$
+      000123                       1375 00108$:
+                                   1376 ;	../../../core/sys/ctimer.c:75: for(c = list_head(ctimer_list); c != NULL; c = c->next) {
+      000123 90r00r03         [24] 1377 	mov	dptr,#_ctimer_list
+      000126 E0               [24] 1378 	movx	a,@dptr
+      000127 FA               [12] 1379 	mov	r2,a
+      000128 A3               [24] 1380 	inc	dptr
+      000129 E0               [24] 1381 	movx	a,@dptr
+      00012A FB               [12] 1382 	mov	r3,a
+      00012B A3               [24] 1383 	inc	dptr
+      00012C E0               [24] 1384 	movx	a,@dptr
+      00012D FC               [12] 1385 	mov	r4,a
+      00012E 8A 82            [24] 1386 	mov	dpl,r2
+      000130 8B 83            [24] 1387 	mov	dph,r3
+      000132 8C F0            [24] 1388 	mov	b,r4
+      000134 C0 07            [24] 1389 	push	ar7
+      000136 C0 06            [24] 1390 	push	ar6
+      000138 C0 05            [24] 1391 	push	ar5
+      00013A 78r00            [12] 1392 	mov	r0,#_list_head
+      00013C 79s00            [12] 1393 	mov	r1,#(_list_head >> 8)
+      00013E 7As00            [12] 1394 	mov	r2,#(_list_head >> 16)
+      000140 12r00r00         [24] 1395 	lcall	__sdcc_banked_call
+      000143 AA 82            [24] 1396 	mov	r2,dpl
+      000145 AB 83            [24] 1397 	mov	r3,dph
+      000147 AC F0            [24] 1398 	mov	r4,b
+      000149 D0 05            [24] 1399 	pop	ar5
+      00014B D0 06            [24] 1400 	pop	ar6
+      00014D D0 07            [24] 1401 	pop	ar7
+      00014F E5 81            [12] 1402 	mov	a,sp
+      000151 24 FB            [12] 1403 	add	a,#0xfb
+      000153 F8               [12] 1404 	mov	r0,a
+      000154 A6 02            [24] 1405 	mov	@r0,ar2
+      000156 08               [12] 1406 	inc	r0
+      000157 A6 03            [24] 1407 	mov	@r0,ar3
+      000159 08               [12] 1408 	inc	r0
+      00015A A6 04            [24] 1409 	mov	@r0,ar4
+      00015C                       1410 00123$:
+      00015C E5 81            [12] 1411 	mov	a,sp
+      00015E 24 FB            [12] 1412 	add	a,#0xfb
+      000160 F8               [12] 1413 	mov	r0,a
+      000161 E6               [12] 1414 	mov	a,@r0
+      000162 08               [12] 1415 	inc	r0
+      000163 46               [12] 1416 	orl	a,@r0
+      000164 60 98            [24] 1417 	jz	00116$
+                                   1418 ;	../../../core/sys/ctimer.c:76: if(&c->etimer == data) {
+      000166 C0 05            [24] 1419 	push	ar5
+      000168 C0 06            [24] 1420 	push	ar6
+      00016A C0 07            [24] 1421 	push	ar7
+      00016C E5 81            [12] 1422 	mov	a,sp
+      00016E 24 F8            [12] 1423 	add	a,#0xf8
+      000170 F8               [12] 1424 	mov	r0,a
+      000171 74 03            [12] 1425 	mov	a,#0x03
+      000173 26               [12] 1426 	add	a,@r0
+      000174 FD               [12] 1427 	mov	r5,a
+      000175 E4               [12] 1428 	clr	a
+      000176 08               [12] 1429 	inc	r0
+      000177 36               [12] 1430 	addc	a,@r0
+      000178 FE               [12] 1431 	mov	r6,a
+      000179 08               [12] 1432 	inc	r0
+      00017A 86 07            [24] 1433 	mov	ar7,@r0
+      00017C E5 81            [12] 1434 	mov	a,sp
+      00017E 24 EE            [12] 1435 	add	a,#0xee
+      000180 F8               [12] 1436 	mov	r0,a
+      000181 86 02            [24] 1437 	mov	ar2,@r0
+      000183 08               [12] 1438 	inc	r0
+      000184 86 03            [24] 1439 	mov	ar3,@r0
+      000186 08               [12] 1440 	inc	r0
+      000187 86 04            [24] 1441 	mov	ar4,@r0
+      000189 C0 02            [24] 1442 	push	ar2
+      00018B C0 03            [24] 1443 	push	ar3
+      00018D C0 04            [24] 1444 	push	ar4
+      00018F 8D 82            [24] 1445 	mov	dpl,r5
+      000191 8E 83            [24] 1446 	mov	dph,r6
+      000193 8F F0            [24] 1447 	mov	b,r7
+      000195 12r00r00         [24] 1448 	lcall	___gptr_cmp
+      000198 15 81            [12] 1449 	dec	sp
+      00019A 15 81            [12] 1450 	dec	sp
+      00019C 15 81            [12] 1451 	dec	sp
+      00019E 60 09            [24] 1452 	jz	00184$
+      0001A0 D0 07            [24] 1453 	pop	ar7
+      0001A2 D0 06            [24] 1454 	pop	ar6
+      0001A4 D0 05            [24] 1455 	pop	ar5
+      0001A6 02r02rCD         [24] 1456 	ljmp	00124$
+      0001A9                       1457 00184$:
+                                   1458 ;	../../../core/sys/ctimer.c:77: list_remove(ctimer_list, c);
+      0001A9 E5 81            [12] 1459 	mov	a,sp
+      0001AB 24 F8            [12] 1460 	add	a,#0xf8
+      0001AD F8               [12] 1461 	mov	r0,a
+      0001AE 86 02            [24] 1462 	mov	ar2,@r0
+      0001B0 08               [12] 1463 	inc	r0
+      0001B1 86 03            [24] 1464 	mov	ar3,@r0
+      0001B3 08               [12] 1465 	inc	r0
+      0001B4 86 04            [24] 1466 	mov	ar4,@r0
+      0001B6 90r00r03         [24] 1467 	mov	dptr,#_ctimer_list
+      0001B9 E0               [24] 1468 	movx	a,@dptr
+      0001BA FD               [12] 1469 	mov	r5,a
+      0001BB A3               [24] 1470 	inc	dptr
+      0001BC E0               [24] 1471 	movx	a,@dptr
+      0001BD FE               [12] 1472 	mov	r6,a
+      0001BE A3               [24] 1473 	inc	dptr
+      0001BF E0               [24] 1474 	movx	a,@dptr
+      0001C0 FF               [12] 1475 	mov	r7,a
+      0001C1 C0 07            [24] 1476 	push	ar7
+      0001C3 C0 06            [24] 1477 	push	ar6
+      0001C5 C0 05            [24] 1478 	push	ar5
+      0001C7 C0 02            [24] 1479 	push	ar2
+      0001C9 C0 03            [24] 1480 	push	ar3
+      0001CB C0 04            [24] 1481 	push	ar4
+      0001CD 8D 82            [24] 1482 	mov	dpl,r5
+      0001CF 8E 83            [24] 1483 	mov	dph,r6
+      0001D1 8F F0            [24] 1484 	mov	b,r7
+      0001D3 78r00            [12] 1485 	mov	r0,#_list_remove
+      0001D5 79s00            [12] 1486 	mov	r1,#(_list_remove >> 8)
+      0001D7 7As00            [12] 1487 	mov	r2,#(_list_remove >> 16)
+      0001D9 12r00r00         [24] 1488 	lcall	__sdcc_banked_call
+      0001DC 15 81            [12] 1489 	dec	sp
+      0001DE 15 81            [12] 1490 	dec	sp
+      0001E0 15 81            [12] 1491 	dec	sp
+      0001E2 D0 05            [24] 1492 	pop	ar5
+      0001E4 D0 06            [24] 1493 	pop	ar6
+      0001E6 D0 07            [24] 1494 	pop	ar7
+                                   1495 ;	../../../core/sys/ctimer.c:78: PROCESS_CONTEXT_BEGIN(c->p);
+      0001E8 90r00r00         [24] 1496 	mov	dptr,#_process_current
+      0001EB E0               [24] 1497 	movx	a,@dptr
+      0001EC FD               [12] 1498 	mov	r5,a
+      0001ED A3               [24] 1499 	inc	dptr
+      0001EE E0               [24] 1500 	movx	a,@dptr
+      0001EF FE               [12] 1501 	mov	r6,a
+      0001F0 A3               [24] 1502 	inc	dptr
+      0001F1 E0               [24] 1503 	movx	a,@dptr
+      0001F2 FF               [12] 1504 	mov	r7,a
+      0001F3 E5 81            [12] 1505 	mov	a,sp
+      0001F5 24 FB            [12] 1506 	add	a,#0xfb
+      0001F7 F8               [12] 1507 	mov	r0,a
+      0001F8 A6 05            [24] 1508 	mov	@r0,ar5
+      0001FA 08               [12] 1509 	inc	r0
+      0001FB A6 06            [24] 1510 	mov	@r0,ar6
+      0001FD 08               [12] 1511 	inc	r0
+      0001FE A6 07            [24] 1512 	mov	@r0,ar7
+      000200 E5 81            [12] 1513 	mov	a,sp
+      000202 24 F8            [12] 1514 	add	a,#0xf8
+      000204 F8               [12] 1515 	mov	r0,a
+      000205 74 0D            [12] 1516 	mov	a,#0x0d
+      000207 26               [12] 1517 	add	a,@r0
+      000208 FD               [12] 1518 	mov	r5,a
+      000209 E4               [12] 1519 	clr	a
+      00020A 08               [12] 1520 	inc	r0
+      00020B 36               [12] 1521 	addc	a,@r0
+      00020C FE               [12] 1522 	mov	r6,a
+      00020D 08               [12] 1523 	inc	r0
+      00020E 86 07            [24] 1524 	mov	ar7,@r0
+      000210 8D 82            [24] 1525 	mov	dpl,r5
+      000212 8E 83            [24] 1526 	mov	dph,r6
+      000214 8F F0            [24] 1527 	mov	b,r7
+      000216 12r00r00         [24] 1528 	lcall	__gptrget
+      000219 FD               [12] 1529 	mov	r5,a
+      00021A A3               [24] 1530 	inc	dptr
+      00021B 12r00r00         [24] 1531 	lcall	__gptrget
+      00021E FE               [12] 1532 	mov	r6,a
+      00021F A3               [24] 1533 	inc	dptr
+      000220 12r00r00         [24] 1534 	lcall	__gptrget
+      000223 FF               [12] 1535 	mov	r7,a
+      000224 90r00r00         [24] 1536 	mov	dptr,#_process_current
+      000227 ED               [12] 1537 	mov	a,r5
+      000228 F0               [24] 1538 	movx	@dptr,a
+      000229 EE               [12] 1539 	mov	a,r6
+      00022A A3               [24] 1540 	inc	dptr
+      00022B F0               [24] 1541 	movx	@dptr,a
+      00022C EF               [12] 1542 	mov	a,r7
+      00022D A3               [24] 1543 	inc	dptr
+      00022E F0               [24] 1544 	movx	@dptr,a
+                                   1545 ;	../../../core/sys/ctimer.c:79: if(c->f != NULL) {
+      00022F E5 81            [12] 1546 	mov	a,sp
+      000231 24 F8            [12] 1547 	add	a,#0xf8
+      000233 F8               [12] 1548 	mov	r0,a
+      000234 74 10            [12] 1549 	mov	a,#0x10
+      000236 26               [12] 1550 	add	a,@r0
+      000237 FD               [12] 1551 	mov	r5,a
+      000238 E4               [12] 1552 	clr	a
+      000239 08               [12] 1553 	inc	r0
+      00023A 36               [12] 1554 	addc	a,@r0
+      00023B FE               [12] 1555 	mov	r6,a
+      00023C 08               [12] 1556 	inc	r0
+      00023D 86 07            [24] 1557 	mov	ar7,@r0
+      00023F 8D 82            [24] 1558 	mov	dpl,r5
+      000241 8E 83            [24] 1559 	mov	dph,r6
+      000243 8F F0            [24] 1560 	mov	b,r7
+      000245 E5 81            [12] 1561 	mov	a,sp
+      000247 24 F5            [12] 1562 	add	a,#0xf5
+      000249 F8               [12] 1563 	mov	r0,a
+      00024A 12r00r00         [24] 1564 	lcall	__gptrget
+      00024D F6               [12] 1565 	mov	@r0,a
+      00024E A3               [24] 1566 	inc	dptr
+      00024F 12r00r00         [24] 1567 	lcall	__gptrget
+      000252 08               [12] 1568 	inc	r0
+      000253 F6               [12] 1569 	mov	@r0,a
+      000254 A3               [24] 1570 	inc	dptr
+      000255 12r00r00         [24] 1571 	lcall	__gptrget
+      000258 08               [12] 1572 	inc	r0
+      000259 F6               [12] 1573 	mov	@r0,a
+      00025A D0 07            [24] 1574 	pop	ar7
+      00025C D0 06            [24] 1575 	pop	ar6
+      00025E D0 05            [24] 1576 	pop	ar5
+      000260 E5 81            [12] 1577 	mov	a,sp
+      000262 24 F8            [12] 1578 	add	a,#0xf8
+      000264 F8               [12] 1579 	mov	r0,a
+      000265 E6               [12] 1580 	mov	a,@r0
+      000266 08               [12] 1581 	inc	r0
+      000267 46               [12] 1582 	orl	a,@r0
+      000268 60 4F            [24] 1583 	jz	00111$
+                                   1584 ;	../../../core/sys/ctimer.c:80: c->f(c->ptr);
+      00026A E5 81            [12] 1585 	mov	a,sp
+      00026C 24 FB            [12] 1586 	add	a,#0xfb
+      00026E F8               [12] 1587 	mov	r0,a
+      00026F 74 13            [12] 1588 	mov	a,#0x13
+      000271 26               [12] 1589 	add	a,@r0
+      000272 FA               [12] 1590 	mov	r2,a
+      000273 E4               [12] 1591 	clr	a
+      000274 08               [12] 1592 	inc	r0
+      000275 36               [12] 1593 	addc	a,@r0
+      000276 FB               [12] 1594 	mov	r3,a
+      000277 08               [12] 1595 	inc	r0
+      000278 86 04            [24] 1596 	mov	ar4,@r0
+      00027A 8A 82            [24] 1597 	mov	dpl,r2
+      00027C 8B 83            [24] 1598 	mov	dph,r3
+      00027E 8C F0            [24] 1599 	mov	b,r4
+      000280 12r00r00         [24] 1600 	lcall	__gptrget
+      000283 FA               [12] 1601 	mov	r2,a
+      000284 A3               [24] 1602 	inc	dptr
+      000285 12r00r00         [24] 1603 	lcall	__gptrget
+      000288 FB               [12] 1604 	mov	r3,a
+      000289 A3               [24] 1605 	inc	dptr
+      00028A 12r00r00         [24] 1606 	lcall	__gptrget
+      00028D FC               [12] 1607 	mov	r4,a
+      00028E C0 07            [24] 1608 	push	ar7
+      000290 C0 06            [24] 1609 	push	ar6
+      000292 C0 05            [24] 1610 	push	ar5
+      000294 E5 81            [12] 1611 	mov	a,sp
+      000296 24 F5            [12] 1612 	add	a,#0xf5
+      000298 F8               [12] 1613 	mov	r0,a
+      000299 E6               [12] 1614 	mov	a,@r0
+      00029A C0 E0            [24] 1615 	push	acc
+      00029C 08               [12] 1616 	inc	r0
+      00029D E6               [12] 1617 	mov	a,@r0
+      00029E C0 E0            [24] 1618 	push	acc
+      0002A0 08               [12] 1619 	inc	r0
+      0002A1 E6               [12] 1620 	mov	a,@r0
+      0002A2 C0 E0            [24] 1621 	push	acc
+      0002A4 8A 82            [24] 1622 	mov	dpl,r2
+      0002A6 8B 83            [24] 1623 	mov	dph,r3
+      0002A8 8C F0            [24] 1624 	mov	b,r4
+      0002AA D0 02            [24] 1625 	pop	ar2
+      0002AC D0 01            [24] 1626 	pop	ar1
+      0002AE D0 00            [24] 1627 	pop	ar0
+      0002B0 12r00r00         [24] 1628 	lcall	__sdcc_banked_call
+      0002B3 D0 05            [24] 1629 	pop	ar5
+      0002B5 D0 06            [24] 1630 	pop	ar6
+      0002B7 D0 07            [24] 1631 	pop	ar7
+      0002B9                       1632 00111$:
+                                   1633 ;	../../../core/sys/ctimer.c:82: PROCESS_CONTEXT_END(c->p);
+      0002B9 A8 81            [24] 1634 	mov	r0,sp
+      0002BB 18               [12] 1635 	dec	r0
+      0002BC 18               [12] 1636 	dec	r0
+      0002BD 90r00r00         [24] 1637 	mov	dptr,#_process_current
+      0002C0 E6               [12] 1638 	mov	a,@r0
+      0002C1 F0               [24] 1639 	movx	@dptr,a
+      0002C2 08               [12] 1640 	inc	r0
+      0002C3 E6               [12] 1641 	mov	a,@r0
+      0002C4 A3               [24] 1642 	inc	dptr
+      0002C5 F0               [24] 1643 	movx	@dptr,a
+      0002C6 08               [12] 1644 	inc	r0
+      0002C7 E6               [12] 1645 	mov	a,@r0
+      0002C8 A3               [24] 1646 	inc	dptr
+      0002C9 F0               [24] 1647 	movx	@dptr,a
+                                   1648 ;	../../../core/sys/ctimer.c:83: break;
+      0002CA 02r00rFE         [24] 1649 	ljmp	00116$
+      0002CD                       1650 00124$:
+                                   1651 ;	../../../core/sys/ctimer.c:75: for(c = list_head(ctimer_list); c != NULL; c = c->next) {
+      0002CD E5 81            [12] 1652 	mov	a,sp
+      0002CF 24 FB            [12] 1653 	add	a,#0xfb
+      0002D1 F8               [12] 1654 	mov	r0,a
+      0002D2 86 82            [24] 1655 	mov	dpl,@r0
+      0002D4 08               [12] 1656 	inc	r0
+      0002D5 86 83            [24] 1657 	mov	dph,@r0
+      0002D7 08               [12] 1658 	inc	r0
+      0002D8 86 F0            [24] 1659 	mov	b,@r0
+      0002DA 12r00r00         [24] 1660 	lcall	__gptrget
+      0002DD 18               [12] 1661 	dec	r0
+      0002DE 18               [12] 1662 	dec	r0
+      0002DF F6               [12] 1663 	mov	@r0,a
+      0002E0 A3               [24] 1664 	inc	dptr
+      0002E1 12r00r00         [24] 1665 	lcall	__gptrget
+      0002E4 08               [12] 1666 	inc	r0
+      0002E5 F6               [12] 1667 	mov	@r0,a
+      0002E6 A3               [24] 1668 	inc	dptr
+      0002E7 12r00r00         [24] 1669 	lcall	__gptrget
+      0002EA 08               [12] 1670 	inc	r0
+      0002EB F6               [12] 1671 	mov	@r0,a
+      0002EC 02r01r5C         [24] 1672 	ljmp	00123$
+                                   1673 ;	../../../core/sys/ctimer.c:87: PROCESS_END();
+      0002EF                       1674 00118$:
+      0002EF 8D 82            [24] 1675 	mov	dpl,r5
+      0002F1 8E 83            [24] 1676 	mov	dph,r6
+      0002F3 8F F0            [24] 1677 	mov	b,r7
+      0002F5 E4               [12] 1678 	clr	a
+      0002F6 12r00r00         [24] 1679 	lcall	__gptrput
+      0002F9 A3               [24] 1680 	inc	dptr
+      0002FA 12r00r00         [24] 1681 	lcall	__gptrput
+      0002FD 75 82 03         [24] 1682 	mov	dpl,#0x03
+      000300                       1683 00125$:
+                                   1684 ;	../../../core/sys/ctimer.c:88: }
+      000300 E5 81            [12] 1685 	mov	a,sp
+      000302 24 F7            [12] 1686 	add	a,#0xf7
+      000304 F5 81            [12] 1687 	mov	sp,a
+      000306 02r00r00         [24] 1688 	ljmp	__sdcc_banked_ret
+                                   1689 ;------------------------------------------------------------
+                                   1690 ;Allocation info for local variables in function 'ctimer_init'
+                                   1691 ;------------------------------------------------------------
+                                   1692 ;	../../../core/sys/ctimer.c:91: ctimer_init(void)
+                                   1693 ;	-----------------------------------------
+                                   1694 ;	 function ctimer_init
+                                   1695 ;	-----------------------------------------
+      000309                       1696 _ctimer_init:
+                                   1697 ;	../../../core/sys/ctimer.c:93: initialized = 0;
+      000309 90r00r00         [24] 1698 	mov	dptr,#_initialized
+      00030C E4               [12] 1699 	clr	a
+      00030D F0               [24] 1700 	movx	@dptr,a
+                                   1701 ;	../../../core/sys/ctimer.c:94: list_init(ctimer_list);
+      00030E 90r00r03         [24] 1702 	mov	dptr,#_ctimer_list
+      000311 E0               [24] 1703 	movx	a,@dptr
+      000312 FD               [12] 1704 	mov	r5,a
+      000313 A3               [24] 1705 	inc	dptr
+      000314 E0               [24] 1706 	movx	a,@dptr
+      000315 FE               [12] 1707 	mov	r6,a
+      000316 A3               [24] 1708 	inc	dptr
+      000317 E0               [24] 1709 	movx	a,@dptr
+      000318 FF               [12] 1710 	mov	r7,a
+      000319 8D 82            [24] 1711 	mov	dpl,r5
+      00031B 8E 83            [24] 1712 	mov	dph,r6
+      00031D 8F F0            [24] 1713 	mov	b,r7
+      00031F 78r00            [12] 1714 	mov	r0,#_list_init
+      000321 79s00            [12] 1715 	mov	r1,#(_list_init >> 8)
+      000323 7As00            [12] 1716 	mov	r2,#(_list_init >> 16)
+      000325 12r00r00         [24] 1717 	lcall	__sdcc_banked_call
+                                   1718 ;	../../../core/sys/ctimer.c:95: process_start(&ctimer_process, NULL);
+      000328 E4               [12] 1719 	clr	a
+      000329 C0 E0            [24] 1720 	push	acc
+      00032B C0 E0            [24] 1721 	push	acc
+      00032D C0 E0            [24] 1722 	push	acc
+      00032F 90r00r06         [24] 1723 	mov	dptr,#_ctimer_process
+      000332 75 F0 00         [24] 1724 	mov	b,#0x00
+      000335 78r00            [12] 1725 	mov	r0,#_process_start
+      000337 79s00            [12] 1726 	mov	r1,#(_process_start >> 8)
+      000339 7As00            [12] 1727 	mov	r2,#(_process_start >> 16)
+      00033B 12r00r00         [24] 1728 	lcall	__sdcc_banked_call
+      00033E 15 81            [12] 1729 	dec	sp
+      000340 15 81            [12] 1730 	dec	sp
+      000342 15 81            [12] 1731 	dec	sp
+                                   1732 ;	../../../core/sys/ctimer.c:96: }
+      000344 02r00r00         [24] 1733 	ljmp	__sdcc_banked_ret
+                                   1734 ;------------------------------------------------------------
+                                   1735 ;Allocation info for local variables in function 'ctimer_set'
+                                   1736 ;------------------------------------------------------------
+                                   1737 ;t                         Allocated to stack - sp -7
+                                   1738 ;f                         Allocated to stack - sp -10
+                                   1739 ;ptr                       Allocated to stack - sp -13
+                                   1740 ;c                         Allocated to stack - sp -2
+                                   1741 ;tmp_current               Allocated to registers r5 r6 r7 
+                                   1742 ;------------------------------------------------------------
+                                   1743 ;	../../../core/sys/ctimer.c:99: ctimer_set(struct ctimer *c, clock_time_t t,
+                                   1744 ;	-----------------------------------------
+                                   1745 ;	 function ctimer_set
+                                   1746 ;	-----------------------------------------
+      000347                       1747 _ctimer_set:
+      000347 C0 82            [24] 1748 	push	dpl
+      000349 C0 83            [24] 1749 	push	dph
+      00034B C0 F0            [24] 1750 	push	b
+                                   1751 ;	../../../core/sys/ctimer.c:103: c->p = PROCESS_CURRENT();
+      00034D A8 81            [24] 1752 	mov	r0,sp
+      00034F 18               [12] 1753 	dec	r0
+      000350 18               [12] 1754 	dec	r0
+      000351 74 0D            [12] 1755 	mov	a,#0x0d
+      000353 26               [12] 1756 	add	a,@r0
+      000354 FA               [12] 1757 	mov	r2,a
+      000355 E4               [12] 1758 	clr	a
+      000356 08               [12] 1759 	inc	r0
+      000357 36               [12] 1760 	addc	a,@r0
+      000358 FB               [12] 1761 	mov	r3,a
+      000359 08               [12] 1762 	inc	r0
+      00035A 86 04            [24] 1763 	mov	ar4,@r0
+      00035C 90r00r00         [24] 1764 	mov	dptr,#_process_current
+      00035F E0               [24] 1765 	movx	a,@dptr
+      000360 FD               [12] 1766 	mov	r5,a
+      000361 A3               [24] 1767 	inc	dptr
+      000362 E0               [24] 1768 	movx	a,@dptr
+      000363 FE               [12] 1769 	mov	r6,a
+      000364 A3               [24] 1770 	inc	dptr
+      000365 E0               [24] 1771 	movx	a,@dptr
+      000366 FF               [12] 1772 	mov	r7,a
+      000367 8A 82            [24] 1773 	mov	dpl,r2
+      000369 8B 83            [24] 1774 	mov	dph,r3
+      00036B 8C F0            [24] 1775 	mov	b,r4
+      00036D ED               [12] 1776 	mov	a,r5
+      00036E 12r00r00         [24] 1777 	lcall	__gptrput
+      000371 A3               [24] 1778 	inc	dptr
+      000372 EE               [12] 1779 	mov	a,r6
+      000373 12r00r00         [24] 1780 	lcall	__gptrput
+      000376 A3               [24] 1781 	inc	dptr
+      000377 EF               [12] 1782 	mov	a,r7
+      000378 12r00r00         [24] 1783 	lcall	__gptrput
+                                   1784 ;	../../../core/sys/ctimer.c:104: c->f = f;
+      00037B A8 81            [24] 1785 	mov	r0,sp
+      00037D 18               [12] 1786 	dec	r0
+      00037E 18               [12] 1787 	dec	r0
+      00037F 74 10            [12] 1788 	mov	a,#0x10
+      000381 26               [12] 1789 	add	a,@r0
+      000382 FD               [12] 1790 	mov	r5,a
+      000383 E4               [12] 1791 	clr	a
+      000384 08               [12] 1792 	inc	r0
+      000385 36               [12] 1793 	addc	a,@r0
+      000386 FE               [12] 1794 	mov	r6,a
+      000387 08               [12] 1795 	inc	r0
+      000388 86 07            [24] 1796 	mov	ar7,@r0
+      00038A 8D 82            [24] 1797 	mov	dpl,r5
+      00038C 8E 83            [24] 1798 	mov	dph,r6
+      00038E 8F F0            [24] 1799 	mov	b,r7
+      000390 E5 81            [12] 1800 	mov	a,sp
+      000392 24 F6            [12] 1801 	add	a,#0xf6
+      000394 F8               [12] 1802 	mov	r0,a
+      000395 E6               [12] 1803 	mov	a,@r0
+      000396 12r00r00         [24] 1804 	lcall	__gptrput
+      000399 A3               [24] 1805 	inc	dptr
+      00039A 08               [12] 1806 	inc	r0
+      00039B E6               [12] 1807 	mov	a,@r0
+      00039C 12r00r00         [24] 1808 	lcall	__gptrput
+      00039F A3               [24] 1809 	inc	dptr
+      0003A0 08               [12] 1810 	inc	r0
+      0003A1 E6               [12] 1811 	mov	a,@r0
+      0003A2 12r00r00         [24] 1812 	lcall	__gptrput
+                                   1813 ;	../../../core/sys/ctimer.c:105: c->ptr = ptr;
+      0003A5 A8 81            [24] 1814 	mov	r0,sp
+      0003A7 18               [12] 1815 	dec	r0
+      0003A8 18               [12] 1816 	dec	r0
+      0003A9 74 13            [12] 1817 	mov	a,#0x13
+      0003AB 26               [12] 1818 	add	a,@r0
+      0003AC FD               [12] 1819 	mov	r5,a
+      0003AD E4               [12] 1820 	clr	a
+      0003AE 08               [12] 1821 	inc	r0
+      0003AF 36               [12] 1822 	addc	a,@r0
+      0003B0 FE               [12] 1823 	mov	r6,a
+      0003B1 08               [12] 1824 	inc	r0
+      0003B2 86 07            [24] 1825 	mov	ar7,@r0
+      0003B4 8D 82            [24] 1826 	mov	dpl,r5
+      0003B6 8E 83            [24] 1827 	mov	dph,r6
+      0003B8 8F F0            [24] 1828 	mov	b,r7
+      0003BA E5 81            [12] 1829 	mov	a,sp
+      0003BC 24 F3            [12] 1830 	add	a,#0xf3
+      0003BE F8               [12] 1831 	mov	r0,a
+      0003BF E6               [12] 1832 	mov	a,@r0
+      0003C0 12r00r00         [24] 1833 	lcall	__gptrput
+      0003C3 A3               [24] 1834 	inc	dptr
+      0003C4 08               [12] 1835 	inc	r0
+      0003C5 E6               [12] 1836 	mov	a,@r0
+      0003C6 12r00r00         [24] 1837 	lcall	__gptrput
+      0003C9 A3               [24] 1838 	inc	dptr
+      0003CA 08               [12] 1839 	inc	r0
+      0003CB E6               [12] 1840 	mov	a,@r0
+      0003CC 12r00r00         [24] 1841 	lcall	__gptrput
+                                   1842 ;	../../../core/sys/ctimer.c:106: if(initialized) {
+      0003CF 90r00r00         [24] 1843 	mov	dptr,#_initialized
+      0003D2 E0               [24] 1844 	movx	a,@dptr
+      0003D3 60 5F            [24] 1845 	jz	00102$
+                                   1846 ;	../../../core/sys/ctimer.c:107: PROCESS_CONTEXT_BEGIN(&ctimer_process);
+      0003D5 90r00r00         [24] 1847 	mov	dptr,#_process_current
+      0003D8 E0               [24] 1848 	movx	a,@dptr
+      0003D9 FD               [12] 1849 	mov	r5,a
+      0003DA A3               [24] 1850 	inc	dptr
+      0003DB E0               [24] 1851 	movx	a,@dptr
+      0003DC FE               [12] 1852 	mov	r6,a
+      0003DD A3               [24] 1853 	inc	dptr
+      0003DE E0               [24] 1854 	movx	a,@dptr
+      0003DF FF               [12] 1855 	mov	r7,a
+      0003E0 90r00r00         [24] 1856 	mov	dptr,#_process_current
+      0003E3 74r06            [12] 1857 	mov	a,#_ctimer_process
+      0003E5 F0               [24] 1858 	movx	@dptr,a
+      0003E6 74s00            [12] 1859 	mov	a,#(_ctimer_process >> 8)
+      0003E8 A3               [24] 1860 	inc	dptr
+      0003E9 F0               [24] 1861 	movx	@dptr,a
+      0003EA E4               [12] 1862 	clr	a
+      0003EB A3               [24] 1863 	inc	dptr
+      0003EC F0               [24] 1864 	movx	@dptr,a
+                                   1865 ;	../../../core/sys/ctimer.c:108: etimer_set(&c->etimer, t);
+      0003ED A8 81            [24] 1866 	mov	r0,sp
+      0003EF 18               [12] 1867 	dec	r0
+      0003F0 18               [12] 1868 	dec	r0
+      0003F1 74 03            [12] 1869 	mov	a,#0x03
+      0003F3 26               [12] 1870 	add	a,@r0
+      0003F4 FA               [12] 1871 	mov	r2,a
+      0003F5 E4               [12] 1872 	clr	a
+      0003F6 08               [12] 1873 	inc	r0
+      0003F7 36               [12] 1874 	addc	a,@r0
+      0003F8 FB               [12] 1875 	mov	r3,a
+      0003F9 08               [12] 1876 	inc	r0
+      0003FA 86 04            [24] 1877 	mov	ar4,@r0
+      0003FC C0 07            [24] 1878 	push	ar7
+      0003FE C0 06            [24] 1879 	push	ar6
+      000400 C0 05            [24] 1880 	push	ar5
+      000402 E5 81            [12] 1881 	mov	a,sp
+      000404 24 F6            [12] 1882 	add	a,#0xf6
+      000406 F8               [12] 1883 	mov	r0,a
+      000407 E6               [12] 1884 	mov	a,@r0
+      000408 C0 E0            [24] 1885 	push	acc
+      00040A 08               [12] 1886 	inc	r0
+      00040B E6               [12] 1887 	mov	a,@r0
+      00040C C0 E0            [24] 1888 	push	acc
+      00040E 8A 82            [24] 1889 	mov	dpl,r2
+      000410 8B 83            [24] 1890 	mov	dph,r3
+      000412 8C F0            [24] 1891 	mov	b,r4
+      000414 78r00            [12] 1892 	mov	r0,#_etimer_set
+      000416 79s00            [12] 1893 	mov	r1,#(_etimer_set >> 8)
+      000418 7As00            [12] 1894 	mov	r2,#(_etimer_set >> 16)
+      00041A 12r00r00         [24] 1895 	lcall	__sdcc_banked_call
+      00041D 15 81            [12] 1896 	dec	sp
+      00041F 15 81            [12] 1897 	dec	sp
+      000421 D0 05            [24] 1898 	pop	ar5
+      000423 D0 06            [24] 1899 	pop	ar6
+      000425 D0 07            [24] 1900 	pop	ar7
+                                   1901 ;	../../../core/sys/ctimer.c:109: PROCESS_CONTEXT_END(&ctimer_process);
+      000427 90r00r00         [24] 1902 	mov	dptr,#_process_current
+      00042A ED               [12] 1903 	mov	a,r5
+      00042B F0               [24] 1904 	movx	@dptr,a
+      00042C EE               [12] 1905 	mov	a,r6
+      00042D A3               [24] 1906 	inc	dptr
+      00042E F0               [24] 1907 	movx	@dptr,a
+      00042F EF               [12] 1908 	mov	a,r7
+      000430 A3               [24] 1909 	inc	dptr
+      000431 F0               [24] 1910 	movx	@dptr,a
+      000432 80 2B            [24] 1911 	sjmp	00103$
+      000434                       1912 00102$:
+                                   1913 ;	../../../core/sys/ctimer.c:111: c->etimer.timer.interval = t;
+      000434 A8 81            [24] 1914 	mov	r0,sp
+      000436 18               [12] 1915 	dec	r0
+      000437 18               [12] 1916 	dec	r0
+      000438 74 03            [12] 1917 	mov	a,#0x03
+      00043A 26               [12] 1918 	add	a,@r0
+      00043B FD               [12] 1919 	mov	r5,a
+      00043C E4               [12] 1920 	clr	a
+      00043D 08               [12] 1921 	inc	r0
+      00043E 36               [12] 1922 	addc	a,@r0
+      00043F FE               [12] 1923 	mov	r6,a
+      000440 08               [12] 1924 	inc	r0
+      000441 86 07            [24] 1925 	mov	ar7,@r0
+      000443 74 02            [12] 1926 	mov	a,#0x02
+      000445 2D               [12] 1927 	add	a,r5
+      000446 FD               [12] 1928 	mov	r5,a
+      000447 E4               [12] 1929 	clr	a
+      000448 3E               [12] 1930 	addc	a,r6
+      000449 FE               [12] 1931 	mov	r6,a
+      00044A 8D 82            [24] 1932 	mov	dpl,r5
+      00044C 8E 83            [24] 1933 	mov	dph,r6
+      00044E 8F F0            [24] 1934 	mov	b,r7
+      000450 E5 81            [12] 1935 	mov	a,sp
+      000452 24 F9            [12] 1936 	add	a,#0xf9
+      000454 F8               [12] 1937 	mov	r0,a
+      000455 E6               [12] 1938 	mov	a,@r0
+      000456 12r00r00         [24] 1939 	lcall	__gptrput
+      000459 A3               [24] 1940 	inc	dptr
+      00045A 08               [12] 1941 	inc	r0
+      00045B E6               [12] 1942 	mov	a,@r0
+      00045C 12r00r00         [24] 1943 	lcall	__gptrput
+      00045F                       1944 00103$:
+                                   1945 ;	../../../core/sys/ctimer.c:114: list_remove(ctimer_list, c);
+      00045F A8 81            [24] 1946 	mov	r0,sp
+      000461 18               [12] 1947 	dec	r0
+      000462 18               [12] 1948 	dec	r0
+      000463 86 05            [24] 1949 	mov	ar5,@r0
+      000465 08               [12] 1950 	inc	r0
+      000466 86 06            [24] 1951 	mov	ar6,@r0
+      000468 08               [12] 1952 	inc	r0
+      000469 86 07            [24] 1953 	mov	ar7,@r0
+      00046B 90r00r03         [24] 1954 	mov	dptr,#_ctimer_list
+      00046E E0               [24] 1955 	movx	a,@dptr
+      00046F FA               [12] 1956 	mov	r2,a
+      000470 A3               [24] 1957 	inc	dptr
+      000471 E0               [24] 1958 	movx	a,@dptr
+      000472 FB               [12] 1959 	mov	r3,a
+      000473 A3               [24] 1960 	inc	dptr
+      000474 E0               [24] 1961 	movx	a,@dptr
+      000475 FC               [12] 1962 	mov	r4,a
+      000476 C0 05            [24] 1963 	push	ar5
+      000478 C0 06            [24] 1964 	push	ar6
+      00047A C0 07            [24] 1965 	push	ar7
+      00047C 8A 82            [24] 1966 	mov	dpl,r2
+      00047E 8B 83            [24] 1967 	mov	dph,r3
+      000480 8C F0            [24] 1968 	mov	b,r4
+      000482 78r00            [12] 1969 	mov	r0,#_list_remove
+      000484 79s00            [12] 1970 	mov	r1,#(_list_remove >> 8)
+      000486 7As00            [12] 1971 	mov	r2,#(_list_remove >> 16)
+      000488 12r00r00         [24] 1972 	lcall	__sdcc_banked_call
+      00048B 15 81            [12] 1973 	dec	sp
+      00048D 15 81            [12] 1974 	dec	sp
+      00048F 15 81            [12] 1975 	dec	sp
+                                   1976 ;	../../../core/sys/ctimer.c:115: list_add(ctimer_list, c);
+      000491 A8 81            [24] 1977 	mov	r0,sp
+      000493 18               [12] 1978 	dec	r0
+      000494 18               [12] 1979 	dec	r0
+      000495 86 05            [24] 1980 	mov	ar5,@r0
+      000497 08               [12] 1981 	inc	r0
+      000498 86 06            [24] 1982 	mov	ar6,@r0
+      00049A 08               [12] 1983 	inc	r0
+      00049B 86 07            [24] 1984 	mov	ar7,@r0
+      00049D 90r00r03         [24] 1985 	mov	dptr,#_ctimer_list
+      0004A0 E0               [24] 1986 	movx	a,@dptr
+      0004A1 FA               [12] 1987 	mov	r2,a
+      0004A2 A3               [24] 1988 	inc	dptr
+      0004A3 E0               [24] 1989 	movx	a,@dptr
+      0004A4 FB               [12] 1990 	mov	r3,a
+      0004A5 A3               [24] 1991 	inc	dptr
+      0004A6 E0               [24] 1992 	movx	a,@dptr
+      0004A7 FC               [12] 1993 	mov	r4,a
+      0004A8 C0 05            [24] 1994 	push	ar5
+      0004AA C0 06            [24] 1995 	push	ar6
+      0004AC C0 07            [24] 1996 	push	ar7
+      0004AE 8A 82            [24] 1997 	mov	dpl,r2
+      0004B0 8B 83            [24] 1998 	mov	dph,r3
+      0004B2 8C F0            [24] 1999 	mov	b,r4
+      0004B4 78r00            [12] 2000 	mov	r0,#_list_add
+      0004B6 79s00            [12] 2001 	mov	r1,#(_list_add >> 8)
+      0004B8 7As00            [12] 2002 	mov	r2,#(_list_add >> 16)
+      0004BA 12r00r00         [24] 2003 	lcall	__sdcc_banked_call
+      0004BD 15 81            [12] 2004 	dec	sp
+      0004BF 15 81            [12] 2005 	dec	sp
+      0004C1 15 81            [12] 2006 	dec	sp
+                                   2007 ;	../../../core/sys/ctimer.c:116: }
+      0004C3 15 81            [12] 2008 	dec	sp
+      0004C5 15 81            [12] 2009 	dec	sp
+      0004C7 15 81            [12] 2010 	dec	sp
+      0004C9 02r00r00         [24] 2011 	ljmp	__sdcc_banked_ret
+                                   2012 ;------------------------------------------------------------
+                                   2013 ;Allocation info for local variables in function 'ctimer_reset'
+                                   2014 ;------------------------------------------------------------
+                                   2015 ;c                         Allocated to stack - sp -2
+                                   2016 ;tmp_current               Allocated to registers r7 r6 r5 
+                                   2017 ;------------------------------------------------------------
+                                   2018 ;	../../../core/sys/ctimer.c:119: ctimer_reset(struct ctimer *c)
+                                   2019 ;	-----------------------------------------
+                                   2020 ;	 function ctimer_reset
+                                   2021 ;	-----------------------------------------
+      0004CC                       2022 _ctimer_reset:
+      0004CC C0 82            [24] 2023 	push	dpl
+      0004CE C0 83            [24] 2024 	push	dph
+      0004D0 C0 F0            [24] 2025 	push	b
+                                   2026 ;	../../../core/sys/ctimer.c:121: if(initialized) {
+      0004D2 90r00r00         [24] 2027 	mov	dptr,#_initialized
+      0004D5 E0               [24] 2028 	movx	a,@dptr
+      0004D6 60 53            [24] 2029 	jz	00102$
+                                   2030 ;	../../../core/sys/ctimer.c:122: PROCESS_CONTEXT_BEGIN(&ctimer_process);
+      0004D8 90r00r00         [24] 2031 	mov	dptr,#_process_current
+      0004DB E0               [24] 2032 	movx	a,@dptr
+      0004DC FA               [12] 2033 	mov	r2,a
+      0004DD A3               [24] 2034 	inc	dptr
+      0004DE E0               [24] 2035 	movx	a,@dptr
+      0004DF FB               [12] 2036 	mov	r3,a
+      0004E0 A3               [24] 2037 	inc	dptr
+      0004E1 E0               [24] 2038 	movx	a,@dptr
+      0004E2 FC               [12] 2039 	mov	r4,a
+      0004E3 8A 07            [24] 2040 	mov	ar7,r2
+      0004E5 8B 06            [24] 2041 	mov	ar6,r3
+      0004E7 8C 05            [24] 2042 	mov	ar5,r4
+      0004E9 90r00r00         [24] 2043 	mov	dptr,#_process_current
+      0004EC 74r06            [12] 2044 	mov	a,#_ctimer_process
+      0004EE F0               [24] 2045 	movx	@dptr,a
+      0004EF 74s00            [12] 2046 	mov	a,#(_ctimer_process >> 8)
+      0004F1 A3               [24] 2047 	inc	dptr
+      0004F2 F0               [24] 2048 	movx	@dptr,a
+      0004F3 E4               [12] 2049 	clr	a
+      0004F4 A3               [24] 2050 	inc	dptr
+      0004F5 F0               [24] 2051 	movx	@dptr,a
+                                   2052 ;	../../../core/sys/ctimer.c:123: etimer_reset(&c->etimer);
+      0004F6 A8 81            [24] 2053 	mov	r0,sp
+      0004F8 18               [12] 2054 	dec	r0
+      0004F9 18               [12] 2055 	dec	r0
+      0004FA 74 03            [12] 2056 	mov	a,#0x03
+      0004FC 26               [12] 2057 	add	a,@r0
+      0004FD FA               [12] 2058 	mov	r2,a
+      0004FE E4               [12] 2059 	clr	a
+      0004FF 08               [12] 2060 	inc	r0
+      000500 36               [12] 2061 	addc	a,@r0
+      000501 FB               [12] 2062 	mov	r3,a
+      000502 08               [12] 2063 	inc	r0
+      000503 86 04            [24] 2064 	mov	ar4,@r0
+      000505 8A 82            [24] 2065 	mov	dpl,r2
+      000507 8B 83            [24] 2066 	mov	dph,r3
+      000509 8C F0            [24] 2067 	mov	b,r4
+      00050B C0 07            [24] 2068 	push	ar7
+      00050D C0 06            [24] 2069 	push	ar6
+      00050F C0 05            [24] 2070 	push	ar5
+      000511 78r00            [12] 2071 	mov	r0,#_etimer_reset
+      000513 79s00            [12] 2072 	mov	r1,#(_etimer_reset >> 8)
+      000515 7As00            [12] 2073 	mov	r2,#(_etimer_reset >> 16)
+      000517 12r00r00         [24] 2074 	lcall	__sdcc_banked_call
+      00051A D0 05            [24] 2075 	pop	ar5
+      00051C D0 06            [24] 2076 	pop	ar6
+      00051E D0 07            [24] 2077 	pop	ar7
+                                   2078 ;	../../../core/sys/ctimer.c:124: PROCESS_CONTEXT_END(&ctimer_process);
+      000520 90r00r00         [24] 2079 	mov	dptr,#_process_current
+      000523 EF               [12] 2080 	mov	a,r7
+      000524 F0               [24] 2081 	movx	@dptr,a
+      000525 EE               [12] 2082 	mov	a,r6
+      000526 A3               [24] 2083 	inc	dptr
+      000527 F0               [24] 2084 	movx	@dptr,a
+      000528 ED               [12] 2085 	mov	a,r5
+      000529 A3               [24] 2086 	inc	dptr
+      00052A F0               [24] 2087 	movx	@dptr,a
+      00052B                       2088 00102$:
+                                   2089 ;	../../../core/sys/ctimer.c:127: list_remove(ctimer_list, c);
+      00052B A8 81            [24] 2090 	mov	r0,sp
+      00052D 18               [12] 2091 	dec	r0
+      00052E 18               [12] 2092 	dec	r0
+      00052F 86 02            [24] 2093 	mov	ar2,@r0
+      000531 08               [12] 2094 	inc	r0
+      000532 86 03            [24] 2095 	mov	ar3,@r0
+      000534 08               [12] 2096 	inc	r0
+      000535 86 04            [24] 2097 	mov	ar4,@r0
+      000537 90r00r03         [24] 2098 	mov	dptr,#_ctimer_list
+      00053A E0               [24] 2099 	movx	a,@dptr
+      00053B FD               [12] 2100 	mov	r5,a
+      00053C A3               [24] 2101 	inc	dptr
+      00053D E0               [24] 2102 	movx	a,@dptr
+      00053E FE               [12] 2103 	mov	r6,a
+      00053F A3               [24] 2104 	inc	dptr
+      000540 E0               [24] 2105 	movx	a,@dptr
+      000541 FF               [12] 2106 	mov	r7,a
+      000542 C0 02            [24] 2107 	push	ar2
+      000544 C0 03            [24] 2108 	push	ar3
+      000546 C0 04            [24] 2109 	push	ar4
+      000548 8D 82            [24] 2110 	mov	dpl,r5
+      00054A 8E 83            [24] 2111 	mov	dph,r6
+      00054C 8F F0            [24] 2112 	mov	b,r7
+      00054E 78r00            [12] 2113 	mov	r0,#_list_remove
+      000550 79s00            [12] 2114 	mov	r1,#(_list_remove >> 8)
+      000552 7As00            [12] 2115 	mov	r2,#(_list_remove >> 16)
+      000554 12r00r00         [24] 2116 	lcall	__sdcc_banked_call
+      000557 15 81            [12] 2117 	dec	sp
+      000559 15 81            [12] 2118 	dec	sp
+      00055B 15 81            [12] 2119 	dec	sp
+                                   2120 ;	../../../core/sys/ctimer.c:128: list_add(ctimer_list, c);
+      00055D A8 81            [24] 2121 	mov	r0,sp
+      00055F 18               [12] 2122 	dec	r0
+      000560 18               [12] 2123 	dec	r0
+      000561 86 05            [24] 2124 	mov	ar5,@r0
+      000563 08               [12] 2125 	inc	r0
+      000564 86 06            [24] 2126 	mov	ar6,@r0
+      000566 08               [12] 2127 	inc	r0
+      000567 86 07            [24] 2128 	mov	ar7,@r0
+      000569 90r00r03         [24] 2129 	mov	dptr,#_ctimer_list
+      00056C E0               [24] 2130 	movx	a,@dptr
+      00056D FA               [12] 2131 	mov	r2,a
+      00056E A3               [24] 2132 	inc	dptr
+      00056F E0               [24] 2133 	movx	a,@dptr
+      000570 FB               [12] 2134 	mov	r3,a
+      000571 A3               [24] 2135 	inc	dptr
+      000572 E0               [24] 2136 	movx	a,@dptr
+      000573 FC               [12] 2137 	mov	r4,a
+      000574 C0 05            [24] 2138 	push	ar5
+      000576 C0 06            [24] 2139 	push	ar6
+      000578 C0 07            [24] 2140 	push	ar7
+      00057A 8A 82            [24] 2141 	mov	dpl,r2
+      00057C 8B 83            [24] 2142 	mov	dph,r3
+      00057E 8C F0            [24] 2143 	mov	b,r4
+      000580 78r00            [12] 2144 	mov	r0,#_list_add
+      000582 79s00            [12] 2145 	mov	r1,#(_list_add >> 8)
+      000584 7As00            [12] 2146 	mov	r2,#(_list_add >> 16)
+      000586 12r00r00         [24] 2147 	lcall	__sdcc_banked_call
+      000589 15 81            [12] 2148 	dec	sp
+      00058B 15 81            [12] 2149 	dec	sp
+      00058D 15 81            [12] 2150 	dec	sp
+                                   2151 ;	../../../core/sys/ctimer.c:129: }
+      00058F 15 81            [12] 2152 	dec	sp
+      000591 15 81            [12] 2153 	dec	sp
+      000593 15 81            [12] 2154 	dec	sp
+      000595 02r00r00         [24] 2155 	ljmp	__sdcc_banked_ret
+                                   2156 ;------------------------------------------------------------
+                                   2157 ;Allocation info for local variables in function 'ctimer_restart'
+                                   2158 ;------------------------------------------------------------
+                                   2159 ;c                         Allocated to stack - sp -2
+                                   2160 ;tmp_current               Allocated to registers r7 r6 r5 
+                                   2161 ;------------------------------------------------------------
+                                   2162 ;	../../../core/sys/ctimer.c:132: ctimer_restart(struct ctimer *c)
+                                   2163 ;	-----------------------------------------
+                                   2164 ;	 function ctimer_restart
+                                   2165 ;	-----------------------------------------
+      000598                       2166 _ctimer_restart:
+      000598 C0 82            [24] 2167 	push	dpl
+      00059A C0 83            [24] 2168 	push	dph
+      00059C C0 F0            [24] 2169 	push	b
+                                   2170 ;	../../../core/sys/ctimer.c:134: if(initialized) {
+      00059E 90r00r00         [24] 2171 	mov	dptr,#_initialized
+      0005A1 E0               [24] 2172 	movx	a,@dptr
+      0005A2 60 53            [24] 2173 	jz	00102$
+                                   2174 ;	../../../core/sys/ctimer.c:135: PROCESS_CONTEXT_BEGIN(&ctimer_process);
+      0005A4 90r00r00         [24] 2175 	mov	dptr,#_process_current
+      0005A7 E0               [24] 2176 	movx	a,@dptr
+      0005A8 FA               [12] 2177 	mov	r2,a
+      0005A9 A3               [24] 2178 	inc	dptr
+      0005AA E0               [24] 2179 	movx	a,@dptr
+      0005AB FB               [12] 2180 	mov	r3,a
+      0005AC A3               [24] 2181 	inc	dptr
+      0005AD E0               [24] 2182 	movx	a,@dptr
+      0005AE FC               [12] 2183 	mov	r4,a
+      0005AF 8A 07            [24] 2184 	mov	ar7,r2
+      0005B1 8B 06            [24] 2185 	mov	ar6,r3
+      0005B3 8C 05            [24] 2186 	mov	ar5,r4
+      0005B5 90r00r00         [24] 2187 	mov	dptr,#_process_current
+      0005B8 74r06            [12] 2188 	mov	a,#_ctimer_process
+      0005BA F0               [24] 2189 	movx	@dptr,a
+      0005BB 74s00            [12] 2190 	mov	a,#(_ctimer_process >> 8)
+      0005BD A3               [24] 2191 	inc	dptr
+      0005BE F0               [24] 2192 	movx	@dptr,a
+      0005BF E4               [12] 2193 	clr	a
+      0005C0 A3               [24] 2194 	inc	dptr
+      0005C1 F0               [24] 2195 	movx	@dptr,a
+                                   2196 ;	../../../core/sys/ctimer.c:136: etimer_restart(&c->etimer);
+      0005C2 A8 81            [24] 2197 	mov	r0,sp
+      0005C4 18               [12] 2198 	dec	r0
+      0005C5 18               [12] 2199 	dec	r0
+      0005C6 74 03            [12] 2200 	mov	a,#0x03
+      0005C8 26               [12] 2201 	add	a,@r0
+      0005C9 FA               [12] 2202 	mov	r2,a
+      0005CA E4               [12] 2203 	clr	a
+      0005CB 08               [12] 2204 	inc	r0
+      0005CC 36               [12] 2205 	addc	a,@r0
+      0005CD FB               [12] 2206 	mov	r3,a
+      0005CE 08               [12] 2207 	inc	r0
+      0005CF 86 04            [24] 2208 	mov	ar4,@r0
+      0005D1 8A 82            [24] 2209 	mov	dpl,r2
+      0005D3 8B 83            [24] 2210 	mov	dph,r3
+      0005D5 8C F0            [24] 2211 	mov	b,r4
+      0005D7 C0 07            [24] 2212 	push	ar7
+      0005D9 C0 06            [24] 2213 	push	ar6
+      0005DB C0 05            [24] 2214 	push	ar5
+      0005DD 78r00            [12] 2215 	mov	r0,#_etimer_restart
+      0005DF 79s00            [12] 2216 	mov	r1,#(_etimer_restart >> 8)
+      0005E1 7As00            [12] 2217 	mov	r2,#(_etimer_restart >> 16)
+      0005E3 12r00r00         [24] 2218 	lcall	__sdcc_banked_call
+      0005E6 D0 05            [24] 2219 	pop	ar5
+      0005E8 D0 06            [24] 2220 	pop	ar6
+      0005EA D0 07            [24] 2221 	pop	ar7
+                                   2222 ;	../../../core/sys/ctimer.c:137: PROCESS_CONTEXT_END(&ctimer_process);
+      0005EC 90r00r00         [24] 2223 	mov	dptr,#_process_current
+      0005EF EF               [12] 2224 	mov	a,r7
+      0005F0 F0               [24] 2225 	movx	@dptr,a
+      0005F1 EE               [12] 2226 	mov	a,r6
+      0005F2 A3               [24] 2227 	inc	dptr
+      0005F3 F0               [24] 2228 	movx	@dptr,a
+      0005F4 ED               [12] 2229 	mov	a,r5
+      0005F5 A3               [24] 2230 	inc	dptr
+      0005F6 F0               [24] 2231 	movx	@dptr,a
+      0005F7                       2232 00102$:
+                                   2233 ;	../../../core/sys/ctimer.c:140: list_remove(ctimer_list, c);
+      0005F7 A8 81            [24] 2234 	mov	r0,sp
+      0005F9 18               [12] 2235 	dec	r0
+      0005FA 18               [12] 2236 	dec	r0
+      0005FB 86 02            [24] 2237 	mov	ar2,@r0
+      0005FD 08               [12] 2238 	inc	r0
+      0005FE 86 03            [24] 2239 	mov	ar3,@r0
+      000600 08               [12] 2240 	inc	r0
+      000601 86 04            [24] 2241 	mov	ar4,@r0
+      000603 90r00r03         [24] 2242 	mov	dptr,#_ctimer_list
+      000606 E0               [24] 2243 	movx	a,@dptr
+      000607 FD               [12] 2244 	mov	r5,a
+      000608 A3               [24] 2245 	inc	dptr
+      000609 E0               [24] 2246 	movx	a,@dptr
+      00060A FE               [12] 2247 	mov	r6,a
+      00060B A3               [24] 2248 	inc	dptr
+      00060C E0               [24] 2249 	movx	a,@dptr
+      00060D FF               [12] 2250 	mov	r7,a
+      00060E C0 02            [24] 2251 	push	ar2
+      000610 C0 03            [24] 2252 	push	ar3
+      000612 C0 04            [24] 2253 	push	ar4
+      000614 8D 82            [24] 2254 	mov	dpl,r5
+      000616 8E 83            [24] 2255 	mov	dph,r6
+      000618 8F F0            [24] 2256 	mov	b,r7
+      00061A 78r00            [12] 2257 	mov	r0,#_list_remove
+      00061C 79s00            [12] 2258 	mov	r1,#(_list_remove >> 8)
+      00061E 7As00            [12] 2259 	mov	r2,#(_list_remove >> 16)
+      000620 12r00r00         [24] 2260 	lcall	__sdcc_banked_call
+      000623 15 81            [12] 2261 	dec	sp
+      000625 15 81            [12] 2262 	dec	sp
+      000627 15 81            [12] 2263 	dec	sp
+                                   2264 ;	../../../core/sys/ctimer.c:141: list_add(ctimer_list, c);
+      000629 A8 81            [24] 2265 	mov	r0,sp
+      00062B 18               [12] 2266 	dec	r0
+      00062C 18               [12] 2267 	dec	r0
+      00062D 86 05            [24] 2268 	mov	ar5,@r0
+      00062F 08               [12] 2269 	inc	r0
+      000630 86 06            [24] 2270 	mov	ar6,@r0
+      000632 08               [12] 2271 	inc	r0
+      000633 86 07            [24] 2272 	mov	ar7,@r0
+      000635 90r00r03         [24] 2273 	mov	dptr,#_ctimer_list
+      000638 E0               [24] 2274 	movx	a,@dptr
+      000639 FA               [12] 2275 	mov	r2,a
+      00063A A3               [24] 2276 	inc	dptr
+      00063B E0               [24] 2277 	movx	a,@dptr
+      00063C FB               [12] 2278 	mov	r3,a
+      00063D A3               [24] 2279 	inc	dptr
+      00063E E0               [24] 2280 	movx	a,@dptr
+      00063F FC               [12] 2281 	mov	r4,a
+      000640 C0 05            [24] 2282 	push	ar5
+      000642 C0 06            [24] 2283 	push	ar6
+      000644 C0 07            [24] 2284 	push	ar7
+      000646 8A 82            [24] 2285 	mov	dpl,r2
+      000648 8B 83            [24] 2286 	mov	dph,r3
+      00064A 8C F0            [24] 2287 	mov	b,r4
+      00064C 78r00            [12] 2288 	mov	r0,#_list_add
+      00064E 79s00            [12] 2289 	mov	r1,#(_list_add >> 8)
+      000650 7As00            [12] 2290 	mov	r2,#(_list_add >> 16)
+      000652 12r00r00         [24] 2291 	lcall	__sdcc_banked_call
+      000655 15 81            [12] 2292 	dec	sp
+      000657 15 81            [12] 2293 	dec	sp
+      000659 15 81            [12] 2294 	dec	sp
+                                   2295 ;	../../../core/sys/ctimer.c:142: }
+      00065B 15 81            [12] 2296 	dec	sp
+      00065D 15 81            [12] 2297 	dec	sp
+      00065F 15 81            [12] 2298 	dec	sp
+      000661 02r00r00         [24] 2299 	ljmp	__sdcc_banked_ret
+                                   2300 ;------------------------------------------------------------
+                                   2301 ;Allocation info for local variables in function 'ctimer_stop'
+                                   2302 ;------------------------------------------------------------
+                                   2303 ;c                         Allocated to registers r5 r6 r7 
+                                   2304 ;sloc0                     Allocated to stack - sp -2
+                                   2305 ;------------------------------------------------------------
+                                   2306 ;	../../../core/sys/ctimer.c:145: ctimer_stop(struct ctimer *c)
+                                   2307 ;	-----------------------------------------
+                                   2308 ;	 function ctimer_stop
+                                   2309 ;	-----------------------------------------
+      000664                       2310 _ctimer_stop:
+      000664 05 81            [12] 2311 	inc	sp
+      000666 05 81            [12] 2312 	inc	sp
+      000668 05 81            [12] 2313 	inc	sp
+      00066A AD 82            [24] 2314 	mov	r5,dpl
+      00066C AE 83            [24] 2315 	mov	r6,dph
+      00066E AF F0            [24] 2316 	mov	r7,b
+                                   2317 ;	../../../core/sys/ctimer.c:147: if(initialized) {
+      000670 90r00r00         [24] 2318 	mov	dptr,#_initialized
+      000673 E0               [24] 2319 	movx	a,@dptr
+      000674 60 26            [24] 2320 	jz	00102$
+                                   2321 ;	../../../core/sys/ctimer.c:148: etimer_stop(&c->etimer);
+      000676 74 03            [12] 2322 	mov	a,#0x03
+      000678 2D               [12] 2323 	add	a,r5
+      000679 FA               [12] 2324 	mov	r2,a
+      00067A E4               [12] 2325 	clr	a
+      00067B 3E               [12] 2326 	addc	a,r6
+      00067C FB               [12] 2327 	mov	r3,a
+      00067D 8F 04            [24] 2328 	mov	ar4,r7
+      00067F 8A 82            [24] 2329 	mov	dpl,r2
+      000681 8B 83            [24] 2330 	mov	dph,r3
+      000683 8C F0            [24] 2331 	mov	b,r4
+      000685 C0 07            [24] 2332 	push	ar7
+      000687 C0 06            [24] 2333 	push	ar6
+      000689 C0 05            [24] 2334 	push	ar5
+      00068B 78r00            [12] 2335 	mov	r0,#_etimer_stop
+      00068D 79s00            [12] 2336 	mov	r1,#(_etimer_stop >> 8)
+      00068F 7As00            [12] 2337 	mov	r2,#(_etimer_stop >> 16)
+      000691 12r00r00         [24] 2338 	lcall	__sdcc_banked_call
+      000694 D0 05            [24] 2339 	pop	ar5
+      000696 D0 06            [24] 2340 	pop	ar6
+      000698 D0 07            [24] 2341 	pop	ar7
+      00069A 80 57            [24] 2342 	sjmp	00103$
+      00069C                       2343 00102$:
+                                   2344 ;	../../../core/sys/ctimer.c:150: c->etimer.next = NULL;
+      00069C 74 03            [12] 2345 	mov	a,#0x03
+      00069E 2D               [12] 2346 	add	a,r5
+      00069F FA               [12] 2347 	mov	r2,a
+      0006A0 E4               [12] 2348 	clr	a
+      0006A1 3E               [12] 2349 	addc	a,r6
+      0006A2 FB               [12] 2350 	mov	r3,a
+      0006A3 8F 04            [24] 2351 	mov	ar4,r7
+      0006A5 C0 05            [24] 2352 	push	ar5
+      0006A7 C0 06            [24] 2353 	push	ar6
+      0006A9 C0 07            [24] 2354 	push	ar7
+      0006AB E5 81            [12] 2355 	mov	a,sp
+      0006AD 24 FB            [12] 2356 	add	a,#0xfb
+      0006AF F8               [12] 2357 	mov	r0,a
+      0006B0 74 04            [12] 2358 	mov	a,#0x04
+      0006B2 2A               [12] 2359 	add	a,r2
+      0006B3 F6               [12] 2360 	mov	@r0,a
+      0006B4 E4               [12] 2361 	clr	a
+      0006B5 3B               [12] 2362 	addc	a,r3
+      0006B6 08               [12] 2363 	inc	r0
+      0006B7 F6               [12] 2364 	mov	@r0,a
+      0006B8 08               [12] 2365 	inc	r0
+      0006B9 A6 04            [24] 2366 	mov	@r0,ar4
+      0006BB E5 81            [12] 2367 	mov	a,sp
+      0006BD 24 FB            [12] 2368 	add	a,#0xfb
+      0006BF F8               [12] 2369 	mov	r0,a
+      0006C0 86 82            [24] 2370 	mov	dpl,@r0
+      0006C2 08               [12] 2371 	inc	r0
+      0006C3 86 83            [24] 2372 	mov	dph,@r0
+      0006C5 08               [12] 2373 	inc	r0
+      0006C6 86 F0            [24] 2374 	mov	b,@r0
+      0006C8 E4               [12] 2375 	clr	a
+      0006C9 12r00r00         [24] 2376 	lcall	__gptrput
+      0006CC A3               [24] 2377 	inc	dptr
+      0006CD 12r00r00         [24] 2378 	lcall	__gptrput
+      0006D0 A3               [24] 2379 	inc	dptr
+      0006D1 12r00r00         [24] 2380 	lcall	__gptrput
+                                   2381 ;	../../../core/sys/ctimer.c:151: c->etimer.p = PROCESS_NONE;
+      0006D4 74 07            [12] 2382 	mov	a,#0x07
+      0006D6 2A               [12] 2383 	add	a,r2
+      0006D7 FA               [12] 2384 	mov	r2,a
+      0006D8 E4               [12] 2385 	clr	a
+      0006D9 3B               [12] 2386 	addc	a,r3
+      0006DA FB               [12] 2387 	mov	r3,a
+      0006DB 8A 82            [24] 2388 	mov	dpl,r2
+      0006DD 8B 83            [24] 2389 	mov	dph,r3
+      0006DF 8C F0            [24] 2390 	mov	b,r4
+      0006E1 E4               [12] 2391 	clr	a
+      0006E2 12r00r00         [24] 2392 	lcall	__gptrput
+      0006E5 A3               [24] 2393 	inc	dptr
+      0006E6 12r00r00         [24] 2394 	lcall	__gptrput
+      0006E9 A3               [24] 2395 	inc	dptr
+      0006EA 12r00r00         [24] 2396 	lcall	__gptrput
+                                   2397 ;	../../../core/sys/ctimer.c:153: list_remove(ctimer_list, c);
+      0006ED D0 07            [24] 2398 	pop	ar7
+      0006EF D0 06            [24] 2399 	pop	ar6
+      0006F1 D0 05            [24] 2400 	pop	ar5
+                                   2401 ;	../../../core/sys/ctimer.c:151: c->etimer.p = PROCESS_NONE;
+      0006F3                       2402 00103$:
+                                   2403 ;	../../../core/sys/ctimer.c:153: list_remove(ctimer_list, c);
+      0006F3 90r00r03         [24] 2404 	mov	dptr,#_ctimer_list
+      0006F6 E0               [24] 2405 	movx	a,@dptr
+      0006F7 FA               [12] 2406 	mov	r2,a
+      0006F8 A3               [24] 2407 	inc	dptr
+      0006F9 E0               [24] 2408 	movx	a,@dptr
+      0006FA FB               [12] 2409 	mov	r3,a
+      0006FB A3               [24] 2410 	inc	dptr
+      0006FC E0               [24] 2411 	movx	a,@dptr
+      0006FD FC               [12] 2412 	mov	r4,a
+      0006FE C0 05            [24] 2413 	push	ar5
+      000700 C0 06            [24] 2414 	push	ar6
+      000702 C0 07            [24] 2415 	push	ar7
+      000704 8A 82            [24] 2416 	mov	dpl,r2
+      000706 8B 83            [24] 2417 	mov	dph,r3
+      000708 8C F0            [24] 2418 	mov	b,r4
+      00070A 78r00            [12] 2419 	mov	r0,#_list_remove
+      00070C 79s00            [12] 2420 	mov	r1,#(_list_remove >> 8)
+      00070E 7As00            [12] 2421 	mov	r2,#(_list_remove >> 16)
+      000710 12r00r00         [24] 2422 	lcall	__sdcc_banked_call
+      000713 15 81            [12] 2423 	dec	sp
+      000715 15 81            [12] 2424 	dec	sp
+      000717 15 81            [12] 2425 	dec	sp
+                                   2426 ;	../../../core/sys/ctimer.c:154: }
+      000719 15 81            [12] 2427 	dec	sp
+      00071B 15 81            [12] 2428 	dec	sp
+      00071D 15 81            [12] 2429 	dec	sp
+      00071F 02r00r00         [24] 2430 	ljmp	__sdcc_banked_ret
+                                   2431 ;------------------------------------------------------------
+                                   2432 ;Allocation info for local variables in function 'ctimer_expired'
+                                   2433 ;------------------------------------------------------------
+                                   2434 ;c                         Allocated to registers r5 r6 r7 
+                                   2435 ;t                         Allocated to registers r2 r3 r4 
+                                   2436 ;------------------------------------------------------------
+                                   2437 ;	../../../core/sys/ctimer.c:157: ctimer_expired(struct ctimer *c)
+                                   2438 ;	-----------------------------------------
+                                   2439 ;	 function ctimer_expired
+                                   2440 ;	-----------------------------------------
+      000722                       2441 _ctimer_expired:
+      000722 AD 82            [24] 2442 	mov	r5,dpl
+      000724 AE 83            [24] 2443 	mov	r6,dph
+      000726 AF F0            [24] 2444 	mov	r7,b
+                                   2445 ;	../../../core/sys/ctimer.c:160: if(initialized) {
+      000728 90r00r00         [24] 2446 	mov	dptr,#_initialized
+      00072B E0               [24] 2447 	movx	a,@dptr
+      00072C 60 1E            [24] 2448 	jz	00102$
+                                   2449 ;	../../../core/sys/ctimer.c:161: return etimer_expired(&c->etimer);
+      00072E 74 03            [12] 2450 	mov	a,#0x03
+      000730 2D               [12] 2451 	add	a,r5
+      000731 FA               [12] 2452 	mov	r2,a
+      000732 E4               [12] 2453 	clr	a
+      000733 3E               [12] 2454 	addc	a,r6
+      000734 FB               [12] 2455 	mov	r3,a
+      000735 8F 04            [24] 2456 	mov	ar4,r7
+      000737 8A 82            [24] 2457 	mov	dpl,r2
+      000739 8B 83            [24] 2458 	mov	dph,r3
+      00073B 8C F0            [24] 2459 	mov	b,r4
+      00073D 78r00            [12] 2460 	mov	r0,#_etimer_expired
+      00073F 79s00            [12] 2461 	mov	r1,#(_etimer_expired >> 8)
+      000741 7As00            [12] 2462 	mov	r2,#(_etimer_expired >> 16)
+      000743 12r00r00         [24] 2463 	lcall	__sdcc_banked_call
+      000746 AB 82            [24] 2464 	mov	r3,dpl
+      000748 AC 83            [24] 2465 	mov  r4,dph
+      00074A 80 65            [24] 2466 	sjmp	00109$
+      00074C                       2467 00102$:
+                                   2468 ;	../../../core/sys/ctimer.c:163: for(t = list_head(ctimer_list); t != NULL; t = t->next) {
+      00074C 90r00r03         [24] 2469 	mov	dptr,#_ctimer_list
+      00074F E0               [24] 2470 	movx	a,@dptr
+      000750 FA               [12] 2471 	mov	r2,a
+      000751 A3               [24] 2472 	inc	dptr
+      000752 E0               [24] 2473 	movx	a,@dptr
+      000753 FB               [12] 2474 	mov	r3,a
+      000754 A3               [24] 2475 	inc	dptr
+      000755 E0               [24] 2476 	movx	a,@dptr
+      000756 FC               [12] 2477 	mov	r4,a
+      000757 8A 82            [24] 2478 	mov	dpl,r2
+      000759 8B 83            [24] 2479 	mov	dph,r3
+      00075B 8C F0            [24] 2480 	mov	b,r4
+      00075D C0 07            [24] 2481 	push	ar7
+      00075F C0 06            [24] 2482 	push	ar6
+      000761 C0 05            [24] 2483 	push	ar5
+      000763 78r00            [12] 2484 	mov	r0,#_list_head
+      000765 79s00            [12] 2485 	mov	r1,#(_list_head >> 8)
+      000767 7As00            [12] 2486 	mov	r2,#(_list_head >> 16)
+      000769 12r00r00         [24] 2487 	lcall	__sdcc_banked_call
+      00076C AA 82            [24] 2488 	mov	r2,dpl
+      00076E AB 83            [24] 2489 	mov	r3,dph
+      000770 AC F0            [24] 2490 	mov	r4,b
+      000772 D0 05            [24] 2491 	pop	ar5
+      000774 D0 06            [24] 2492 	pop	ar6
+      000776 D0 07            [24] 2493 	pop	ar7
+      000778                       2494 00107$:
+      000778 EA               [12] 2495 	mov	a,r2
+      000779 4B               [12] 2496 	orl	a,r3
+      00077A 60 32            [24] 2497 	jz	00105$
+                                   2498 ;	../../../core/sys/ctimer.c:164: if(t == c) {
+      00077C C0 05            [24] 2499 	push	ar5
+      00077E C0 06            [24] 2500 	push	ar6
+      000780 C0 07            [24] 2501 	push	ar7
+      000782 8A 82            [24] 2502 	mov	dpl,r2
+      000784 8B 83            [24] 2503 	mov	dph,r3
+      000786 8C F0            [24] 2504 	mov	b,r4
+      000788 12r00r00         [24] 2505 	lcall	___gptr_cmp
+      00078B 15 81            [12] 2506 	dec	sp
+      00078D 15 81            [12] 2507 	dec	sp
+      00078F 15 81            [12] 2508 	dec	sp
+      000791 70 05            [24] 2509 	jnz	00108$
+                                   2510 ;	../../../core/sys/ctimer.c:165: return 0;
+      000793 90 00 00         [24] 2511 	mov	dptr,#0x0000
+      000796 80 19            [24] 2512 	sjmp	00109$
+      000798                       2513 00108$:
+                                   2514 ;	../../../core/sys/ctimer.c:163: for(t = list_head(ctimer_list); t != NULL; t = t->next) {
+      000798 8A 82            [24] 2515 	mov	dpl,r2
+      00079A 8B 83            [24] 2516 	mov	dph,r3
+      00079C 8C F0            [24] 2517 	mov	b,r4
+      00079E 12r00r00         [24] 2518 	lcall	__gptrget
+      0007A1 FA               [12] 2519 	mov	r2,a
+      0007A2 A3               [24] 2520 	inc	dptr
+      0007A3 12r00r00         [24] 2521 	lcall	__gptrget
+      0007A6 FB               [12] 2522 	mov	r3,a
+      0007A7 A3               [24] 2523 	inc	dptr
+      0007A8 12r00r00         [24] 2524 	lcall	__gptrget
+      0007AB FC               [12] 2525 	mov	r4,a
+      0007AC 80 CA            [24] 2526 	sjmp	00107$
+      0007AE                       2527 00105$:
+                                   2528 ;	../../../core/sys/ctimer.c:168: return 1;
+      0007AE 90 00 01         [24] 2529 	mov	dptr,#0x0001
+      0007B1                       2530 00109$:
+                                   2531 ;	../../../core/sys/ctimer.c:169: }
+      0007B1 02r00r00         [24] 2532 	ljmp	__sdcc_banked_ret
+                                   2533 	.area CSEG    (CODE)
+                                   2534 	.area CONST   (CODE)
+                                   2535 	.area XINIT   (CODE)
+      000000                       2536 __xinit__ctimer_list_list:
+                                   2537 ; generic printIvalPtr
+      000000 00 00 00              2538 	.byte #0x00,#0x00,#0x00
+      000003                       2539 __xinit__ctimer_list:
+      000003r00s00 00              2540 	.byte _ctimer_list_list, (_ctimer_list_list >> 8),#0x00
+      000006                       2541 __xinit__ctimer_process:
+                                   2542 ; generic printIvalPtr
+      000006 00 00 00              2543 	.byte #0x00,#0x00,#0x00
+      000009r00s00s00              2544 	.byte _process_thread_ctimer_process, (_process_thread_ctimer_process >> 8), (_process_thread_ctimer_process >> 16)
+      00000C 00 00                 2545 	.byte #0x00, #0x00
+      00000E 00                    2546 	.db #0x00	; 0
+      00000F 00                    2547 	.db #0x00	; 0
+                                   2548 	.area CABS    (ABS,CODE)

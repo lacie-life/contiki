@@ -1,0 +1,625 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stimer
+                                      6 	.optsdcc -mmcs51 --model-large
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _clock_seconds
+                                     12 	.globl _stimer_set
+                                     13 	.globl _stimer_reset
+                                     14 	.globl _stimer_restart
+                                     15 	.globl _stimer_expired
+                                     16 	.globl _stimer_remaining
+                                     17 	.globl _stimer_elapsed
+                                     18 ;--------------------------------------------------------
+                                     19 ; special function registers
+                                     20 ;--------------------------------------------------------
+                                     21 	.area RSEG    (ABS,DATA)
+      000000                         22 	.org 0x0000
+                                     23 ;--------------------------------------------------------
+                                     24 ; special function bits
+                                     25 ;--------------------------------------------------------
+                                     26 	.area RSEG    (ABS,DATA)
+      000000                         27 	.org 0x0000
+                                     28 ;--------------------------------------------------------
+                                     29 ; overlayable register banks
+                                     30 ;--------------------------------------------------------
+                                     31 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                         32 	.ds 8
+                                     33 ;--------------------------------------------------------
+                                     34 ; internal ram data
+                                     35 ;--------------------------------------------------------
+                                     36 	.area DSEG    (DATA)
+                                     37 ;--------------------------------------------------------
+                                     38 ; overlayable items in internal ram 
+                                     39 ;--------------------------------------------------------
+                                     40 ;--------------------------------------------------------
+                                     41 ; indirectly addressable internal ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area ISEG    (DATA)
+                                     44 ;--------------------------------------------------------
+                                     45 ; absolute internal ram data
+                                     46 ;--------------------------------------------------------
+                                     47 	.area IABS    (ABS,DATA)
+                                     48 	.area IABS    (ABS,DATA)
+                                     49 ;--------------------------------------------------------
+                                     50 ; bit data
+                                     51 ;--------------------------------------------------------
+                                     52 	.area BSEG    (BIT)
+                                     53 ;--------------------------------------------------------
+                                     54 ; paged external ram data
+                                     55 ;--------------------------------------------------------
+                                     56 	.area PSEG    (PAG,XDATA)
+                                     57 ;--------------------------------------------------------
+                                     58 ; external ram data
+                                     59 ;--------------------------------------------------------
+                                     60 	.area XSEG    (XDATA)
+                                     61 ;--------------------------------------------------------
+                                     62 ; absolute external ram data
+                                     63 ;--------------------------------------------------------
+                                     64 	.area XABS    (ABS,XDATA)
+                                     65 ;--------------------------------------------------------
+                                     66 ; external initialized ram data
+                                     67 ;--------------------------------------------------------
+                                     68 	.area XISEG   (XDATA)
+                                     69 	.area HOME    (CODE)
+                                     70 	.area GSINIT0 (CODE)
+                                     71 	.area GSINIT1 (CODE)
+                                     72 	.area GSINIT2 (CODE)
+                                     73 	.area GSINIT3 (CODE)
+                                     74 	.area GSINIT4 (CODE)
+                                     75 	.area GSINIT5 (CODE)
+                                     76 	.area GSINIT  (CODE)
+                                     77 	.area GSFINAL (CODE)
+                                     78 	.area CSEG    (CODE)
+                                     79 ;--------------------------------------------------------
+                                     80 ; global & static initialisations
+                                     81 ;--------------------------------------------------------
+                                     82 	.area HOME    (CODE)
+                                     83 	.area GSINIT  (CODE)
+                                     84 	.area GSFINAL (CODE)
+                                     85 	.area GSINIT  (CODE)
+                                     86 ;--------------------------------------------------------
+                                     87 ; Home
+                                     88 ;--------------------------------------------------------
+                                     89 	.area HOME    (CODE)
+                                     90 	.area HOME    (CODE)
+                                     91 ;--------------------------------------------------------
+                                     92 ; code
+                                     93 ;--------------------------------------------------------
+                                     94 	.area CSEG    (CODE)
+                                     95 ;------------------------------------------------------------
+                                     96 ;Allocation info for local variables in function 'stimer_set'
+                                     97 ;------------------------------------------------------------
+                                     98 ;interval                  Allocated to stack - sp -8
+                                     99 ;t                         Allocated to stack - sp -2
+                                    100 ;------------------------------------------------------------
+                                    101 ;	../../core/sys/stimer.c:67: stimer_set(struct stimer *t, unsigned long interval)
+                                    102 ;	-----------------------------------------
+                                    103 ;	 function stimer_set
+                                    104 ;	-----------------------------------------
+      000000                        105 _stimer_set:
+                           000007   106 	ar7 = 0x07
+                           000006   107 	ar6 = 0x06
+                           000005   108 	ar5 = 0x05
+                           000004   109 	ar4 = 0x04
+                           000003   110 	ar3 = 0x03
+                           000002   111 	ar2 = 0x02
+                           000001   112 	ar1 = 0x01
+                           000000   113 	ar0 = 0x00
+      000000 C0 82            [24]  114 	push	dpl
+      000002 C0 83            [24]  115 	push	dph
+      000004 C0 F0            [24]  116 	push	b
+                                    117 ;	../../core/sys/stimer.c:69: t->interval = interval;
+      000006 A8 81            [24]  118 	mov	r0,sp
+      000008 18               [12]  119 	dec	r0
+      000009 18               [12]  120 	dec	r0
+      00000A 74 04            [12]  121 	mov	a,#0x04
+      00000C 26               [12]  122 	add	a,@r0
+      00000D FA               [12]  123 	mov	r2,a
+      00000E E4               [12]  124 	clr	a
+      00000F 08               [12]  125 	inc	r0
+      000010 36               [12]  126 	addc	a,@r0
+      000011 FB               [12]  127 	mov	r3,a
+      000012 08               [12]  128 	inc	r0
+      000013 86 04            [24]  129 	mov	ar4,@r0
+      000015 8A 82            [24]  130 	mov	dpl,r2
+      000017 8B 83            [24]  131 	mov	dph,r3
+      000019 8C F0            [24]  132 	mov	b,r4
+      00001B E5 81            [12]  133 	mov	a,sp
+      00001D 24 F8            [12]  134 	add	a,#0xf8
+      00001F F8               [12]  135 	mov	r0,a
+      000020 E6               [12]  136 	mov	a,@r0
+      000021 12r00r00         [24]  137 	lcall	__gptrput
+      000024 A3               [24]  138 	inc	dptr
+      000025 08               [12]  139 	inc	r0
+      000026 E6               [12]  140 	mov	a,@r0
+      000027 12r00r00         [24]  141 	lcall	__gptrput
+      00002A A3               [24]  142 	inc	dptr
+      00002B 08               [12]  143 	inc	r0
+      00002C E6               [12]  144 	mov	a,@r0
+      00002D 12r00r00         [24]  145 	lcall	__gptrput
+      000030 A3               [24]  146 	inc	dptr
+      000031 08               [12]  147 	inc	r0
+      000032 E6               [12]  148 	mov	a,@r0
+      000033 12r00r00         [24]  149 	lcall	__gptrput
+                                    150 ;	../../core/sys/stimer.c:70: t->start = clock_seconds();
+      000036 12r00r00         [24]  151 	lcall	_clock_seconds
+      000039 AA 82            [24]  152 	mov	r2,dpl
+      00003B AB 83            [24]  153 	mov	r3,dph
+      00003D AC F0            [24]  154 	mov	r4,b
+      00003F FF               [12]  155 	mov	r7,a
+      000040 A8 81            [24]  156 	mov	r0,sp
+      000042 18               [12]  157 	dec	r0
+      000043 18               [12]  158 	dec	r0
+      000044 86 82            [24]  159 	mov	dpl,@r0
+      000046 08               [12]  160 	inc	r0
+      000047 86 83            [24]  161 	mov	dph,@r0
+      000049 08               [12]  162 	inc	r0
+      00004A 86 F0            [24]  163 	mov	b,@r0
+      00004C EA               [12]  164 	mov	a,r2
+      00004D 12r00r00         [24]  165 	lcall	__gptrput
+      000050 A3               [24]  166 	inc	dptr
+      000051 EB               [12]  167 	mov	a,r3
+      000052 12r00r00         [24]  168 	lcall	__gptrput
+      000055 A3               [24]  169 	inc	dptr
+      000056 EC               [12]  170 	mov	a,r4
+      000057 12r00r00         [24]  171 	lcall	__gptrput
+      00005A A3               [24]  172 	inc	dptr
+      00005B EF               [12]  173 	mov	a,r7
+      00005C 12r00r00         [24]  174 	lcall	__gptrput
+                                    175 ;	../../core/sys/stimer.c:71: }
+      00005F 15 81            [12]  176 	dec	sp
+      000061 15 81            [12]  177 	dec	sp
+      000063 15 81            [12]  178 	dec	sp
+      000065 22               [24]  179 	ret
+                                    180 ;------------------------------------------------------------
+                                    181 ;Allocation info for local variables in function 'stimer_reset'
+                                    182 ;------------------------------------------------------------
+                                    183 ;t                         Allocated to stack - sp -6
+                                    184 ;sloc0                     Allocated to stack - sp -3
+                                    185 ;sloc1                     Allocated to stack - sp +1
+                                    186 ;------------------------------------------------------------
+                                    187 ;	../../core/sys/stimer.c:87: stimer_reset(struct stimer *t)
+                                    188 ;	-----------------------------------------
+                                    189 ;	 function stimer_reset
+                                    190 ;	-----------------------------------------
+      000066                        191 _stimer_reset:
+      000066 C0 82            [24]  192 	push	dpl
+      000068 C0 83            [24]  193 	push	dph
+      00006A C0 F0            [24]  194 	push	b
+      00006C E5 81            [12]  195 	mov	a,sp
+      00006E 24 04            [12]  196 	add	a,#0x04
+                                    197 ;	../../core/sys/stimer.c:89: t->start += t->interval;
+      000070 F5 81            [12]  198 	mov	sp,a
+      000072 24 FA            [12]  199 	add	a,#0xfa
+      000074 F8               [12]  200 	mov	r0,a
+      000075 86 82            [24]  201 	mov	dpl,@r0
+      000077 08               [12]  202 	inc	r0
+      000078 86 83            [24]  203 	mov	dph,@r0
+      00007A 08               [12]  204 	inc	r0
+      00007B 86 F0            [24]  205 	mov	b,@r0
+      00007D E5 81            [12]  206 	mov	a,sp
+      00007F 24 FD            [12]  207 	add	a,#0xfd
+      000081 F9               [12]  208 	mov	r1,a
+      000082 12r00r00         [24]  209 	lcall	__gptrget
+      000085 F7               [12]  210 	mov	@r1,a
+      000086 A3               [24]  211 	inc	dptr
+      000087 12r00r00         [24]  212 	lcall	__gptrget
+      00008A 09               [12]  213 	inc	r1
+      00008B F7               [12]  214 	mov	@r1,a
+      00008C A3               [24]  215 	inc	dptr
+      00008D 12r00r00         [24]  216 	lcall	__gptrget
+      000090 09               [12]  217 	inc	r1
+      000091 F7               [12]  218 	mov	@r1,a
+      000092 A3               [24]  219 	inc	dptr
+      000093 12r00r00         [24]  220 	lcall	__gptrget
+      000096 09               [12]  221 	inc	r1
+      000097 F7               [12]  222 	mov	@r1,a
+      000098 E5 81            [12]  223 	mov	a,sp
+      00009A 24 FA            [12]  224 	add	a,#0xfa
+      00009C F8               [12]  225 	mov	r0,a
+      00009D 74 04            [12]  226 	mov	a,#0x04
+      00009F 26               [12]  227 	add	a,@r0
+      0000A0 FF               [12]  228 	mov	r7,a
+      0000A1 E4               [12]  229 	clr	a
+      0000A2 08               [12]  230 	inc	r0
+      0000A3 36               [12]  231 	addc	a,@r0
+      0000A4 FE               [12]  232 	mov	r6,a
+      0000A5 08               [12]  233 	inc	r0
+      0000A6 86 05            [24]  234 	mov	ar5,@r0
+      0000A8 8F 82            [24]  235 	mov	dpl,r7
+      0000AA 8E 83            [24]  236 	mov	dph,r6
+      0000AC 8D F0            [24]  237 	mov	b,r5
+      0000AE 12r00r00         [24]  238 	lcall	__gptrget
+      0000B1 FA               [12]  239 	mov	r2,a
+      0000B2 A3               [24]  240 	inc	dptr
+      0000B3 12r00r00         [24]  241 	lcall	__gptrget
+      0000B6 FB               [12]  242 	mov	r3,a
+      0000B7 A3               [24]  243 	inc	dptr
+      0000B8 12r00r00         [24]  244 	lcall	__gptrget
+      0000BB FC               [12]  245 	mov	r4,a
+      0000BC A3               [24]  246 	inc	dptr
+      0000BD 12r00r00         [24]  247 	lcall	__gptrget
+      0000C0 FD               [12]  248 	mov	r5,a
+      0000C1 E5 81            [12]  249 	mov	a,sp
+      0000C3 24 FD            [12]  250 	add	a,#0xfd
+      0000C5 F8               [12]  251 	mov	r0,a
+      0000C6 EA               [12]  252 	mov	a,r2
+      0000C7 26               [12]  253 	add	a,@r0
+      0000C8 FA               [12]  254 	mov	r2,a
+      0000C9 EB               [12]  255 	mov	a,r3
+      0000CA 08               [12]  256 	inc	r0
+      0000CB 36               [12]  257 	addc	a,@r0
+      0000CC FB               [12]  258 	mov	r3,a
+      0000CD EC               [12]  259 	mov	a,r4
+      0000CE 08               [12]  260 	inc	r0
+      0000CF 36               [12]  261 	addc	a,@r0
+      0000D0 FC               [12]  262 	mov	r4,a
+      0000D1 ED               [12]  263 	mov	a,r5
+      0000D2 08               [12]  264 	inc	r0
+      0000D3 36               [12]  265 	addc	a,@r0
+      0000D4 FD               [12]  266 	mov	r5,a
+      0000D5 E5 81            [12]  267 	mov	a,sp
+      0000D7 24 FA            [12]  268 	add	a,#0xfa
+      0000D9 F8               [12]  269 	mov	r0,a
+      0000DA 86 82            [24]  270 	mov	dpl,@r0
+      0000DC 08               [12]  271 	inc	r0
+      0000DD 86 83            [24]  272 	mov	dph,@r0
+      0000DF 08               [12]  273 	inc	r0
+      0000E0 86 F0            [24]  274 	mov	b,@r0
+      0000E2 EA               [12]  275 	mov	a,r2
+      0000E3 12r00r00         [24]  276 	lcall	__gptrput
+      0000E6 A3               [24]  277 	inc	dptr
+      0000E7 EB               [12]  278 	mov	a,r3
+      0000E8 12r00r00         [24]  279 	lcall	__gptrput
+      0000EB A3               [24]  280 	inc	dptr
+      0000EC EC               [12]  281 	mov	a,r4
+      0000ED 12r00r00         [24]  282 	lcall	__gptrput
+      0000F0 A3               [24]  283 	inc	dptr
+      0000F1 ED               [12]  284 	mov	a,r5
+      0000F2 12r00r00         [24]  285 	lcall	__gptrput
+                                    286 ;	../../core/sys/stimer.c:90: }
+      0000F5 E5 81            [12]  287 	mov	a,sp
+      0000F7 24 F9            [12]  288 	add	a,#0xf9
+      0000F9 F5 81            [12]  289 	mov	sp,a
+      0000FB 22               [24]  290 	ret
+                                    291 ;------------------------------------------------------------
+                                    292 ;Allocation info for local variables in function 'stimer_restart'
+                                    293 ;------------------------------------------------------------
+                                    294 ;t                         Allocated to registers r5 r6 r7 
+                                    295 ;------------------------------------------------------------
+                                    296 ;	../../core/sys/stimer.c:107: stimer_restart(struct stimer *t)
+                                    297 ;	-----------------------------------------
+                                    298 ;	 function stimer_restart
+                                    299 ;	-----------------------------------------
+      0000FC                        300 _stimer_restart:
+      0000FC AD 82            [24]  301 	mov	r5,dpl
+      0000FE AE 83            [24]  302 	mov	r6,dph
+      000100 AF F0            [24]  303 	mov	r7,b
+                                    304 ;	../../core/sys/stimer.c:109: t->start = clock_seconds();
+      000102 C0 07            [24]  305 	push	ar7
+      000104 C0 06            [24]  306 	push	ar6
+      000106 C0 05            [24]  307 	push	ar5
+      000108 12r00r00         [24]  308 	lcall	_clock_seconds
+      00010B A9 82            [24]  309 	mov	r1,dpl
+      00010D AA 83            [24]  310 	mov	r2,dph
+      00010F AB F0            [24]  311 	mov	r3,b
+      000111 FC               [12]  312 	mov	r4,a
+      000112 D0 05            [24]  313 	pop	ar5
+      000114 D0 06            [24]  314 	pop	ar6
+      000116 D0 07            [24]  315 	pop	ar7
+      000118 8D 82            [24]  316 	mov	dpl,r5
+      00011A 8E 83            [24]  317 	mov	dph,r6
+      00011C 8F F0            [24]  318 	mov	b,r7
+      00011E E9               [12]  319 	mov	a,r1
+      00011F 12r00r00         [24]  320 	lcall	__gptrput
+      000122 A3               [24]  321 	inc	dptr
+      000123 EA               [12]  322 	mov	a,r2
+      000124 12r00r00         [24]  323 	lcall	__gptrput
+      000127 A3               [24]  324 	inc	dptr
+      000128 EB               [12]  325 	mov	a,r3
+      000129 12r00r00         [24]  326 	lcall	__gptrput
+      00012C A3               [24]  327 	inc	dptr
+      00012D EC               [12]  328 	mov	a,r4
+                                    329 ;	../../core/sys/stimer.c:110: }
+      00012E 02r00r00         [24]  330 	ljmp	__gptrput
+                                    331 ;------------------------------------------------------------
+                                    332 ;Allocation info for local variables in function 'stimer_expired'
+                                    333 ;------------------------------------------------------------
+                                    334 ;t                         Allocated to registers r5 r7 r6 
+                                    335 ;sloc0                     Allocated to stack - sp -11
+                                    336 ;sloc1                     Allocated to stack - sp -7
+                                    337 ;sloc2                     Allocated to stack - sp -3
+                                    338 ;------------------------------------------------------------
+                                    339 ;	../../core/sys/stimer.c:124: stimer_expired(struct stimer *t)
+                                    340 ;	-----------------------------------------
+                                    341 ;	 function stimer_expired
+                                    342 ;	-----------------------------------------
+      000131                        343 _stimer_expired:
+      000131 E5 81            [12]  344 	mov	a,sp
+      000133 24 0C            [12]  345 	add	a,#0x0c
+      000135 F5 81            [12]  346 	mov	sp,a
+      000137 AD 82            [24]  347 	mov	r5,dpl
+      000139 AF 83            [24]  348 	mov	r7,dph
+      00013B AE F0            [24]  349 	mov	r6,b
+                                    350 ;	../../core/sys/stimer.c:126: return SCLOCK_GEQ(clock_seconds(), t->start + t->interval);
+      00013D C0 07            [24]  351 	push	ar7
+      00013F C0 06            [24]  352 	push	ar6
+      000141 C0 05            [24]  353 	push	ar5
+      000143 12r00r00         [24]  354 	lcall	_clock_seconds
+      000146 C8               [12]  355 	xch	a,r0
+      000147 E5 81            [12]  356 	mov	a,sp
+      000149 24 F2            [12]  357 	add	a,#0xf2
+      00014B C8               [12]  358 	xch	a,r0
+      00014C A6 82            [24]  359 	mov	@r0,dpl
+      00014E 08               [12]  360 	inc	r0
+      00014F A6 83            [24]  361 	mov	@r0,dph
+      000151 08               [12]  362 	inc	r0
+      000152 A6 F0            [24]  363 	mov	@r0,b
+      000154 08               [12]  364 	inc	r0
+      000155 F6               [12]  365 	mov	@r0,a
+      000156 D0 05            [24]  366 	pop	ar5
+      000158 D0 06            [24]  367 	pop	ar6
+      00015A D0 07            [24]  368 	pop	ar7
+      00015C 8D 82            [24]  369 	mov	dpl,r5
+      00015E 8F 83            [24]  370 	mov	dph,r7
+      000160 8E F0            [24]  371 	mov	b,r6
+      000162 E5 81            [12]  372 	mov	a,sp
+      000164 24 F9            [12]  373 	add	a,#0xf9
+      000166 F8               [12]  374 	mov	r0,a
+      000167 12r00r00         [24]  375 	lcall	__gptrget
+      00016A F6               [12]  376 	mov	@r0,a
+      00016B A3               [24]  377 	inc	dptr
+      00016C 12r00r00         [24]  378 	lcall	__gptrget
+      00016F 08               [12]  379 	inc	r0
+      000170 F6               [12]  380 	mov	@r0,a
+      000171 A3               [24]  381 	inc	dptr
+      000172 12r00r00         [24]  382 	lcall	__gptrget
+      000175 08               [12]  383 	inc	r0
+      000176 F6               [12]  384 	mov	@r0,a
+      000177 A3               [24]  385 	inc	dptr
+      000178 12r00r00         [24]  386 	lcall	__gptrget
+      00017B 08               [12]  387 	inc	r0
+      00017C F6               [12]  388 	mov	@r0,a
+      00017D 74 04            [12]  389 	mov	a,#0x04
+      00017F 2D               [12]  390 	add	a,r5
+      000180 FA               [12]  391 	mov	r2,a
+      000181 E4               [12]  392 	clr	a
+      000182 3F               [12]  393 	addc	a,r7
+      000183 FB               [12]  394 	mov	r3,a
+      000184 8E 04            [24]  395 	mov	ar4,r6
+      000186 8A 82            [24]  396 	mov	dpl,r2
+      000188 8B 83            [24]  397 	mov	dph,r3
+      00018A 8C F0            [24]  398 	mov	b,r4
+      00018C 12r00r00         [24]  399 	lcall	__gptrget
+      00018F FF               [12]  400 	mov	r7,a
+      000190 A3               [24]  401 	inc	dptr
+      000191 12r00r00         [24]  402 	lcall	__gptrget
+      000194 FE               [12]  403 	mov	r6,a
+      000195 A3               [24]  404 	inc	dptr
+      000196 12r00r00         [24]  405 	lcall	__gptrget
+      000199 FD               [12]  406 	mov	r5,a
+      00019A A3               [24]  407 	inc	dptr
+      00019B 12r00r00         [24]  408 	lcall	__gptrget
+      00019E FC               [12]  409 	mov	r4,a
+      00019F E5 81            [12]  410 	mov	a,sp
+      0001A1 24 F9            [12]  411 	add	a,#0xf9
+      0001A3 F8               [12]  412 	mov	r0,a
+      0001A4 EF               [12]  413 	mov	a,r7
+      0001A5 26               [12]  414 	add	a,@r0
+      0001A6 FF               [12]  415 	mov	r7,a
+      0001A7 EE               [12]  416 	mov	a,r6
+      0001A8 08               [12]  417 	inc	r0
+      0001A9 36               [12]  418 	addc	a,@r0
+      0001AA FE               [12]  419 	mov	r6,a
+      0001AB ED               [12]  420 	mov	a,r5
+      0001AC 08               [12]  421 	inc	r0
+      0001AD 36               [12]  422 	addc	a,@r0
+      0001AE FD               [12]  423 	mov	r5,a
+      0001AF EC               [12]  424 	mov	a,r4
+      0001B0 08               [12]  425 	inc	r0
+      0001B1 36               [12]  426 	addc	a,@r0
+      0001B2 FC               [12]  427 	mov	r4,a
+      0001B3 E5 81            [12]  428 	mov	a,sp
+      0001B5 24 F5            [12]  429 	add	a,#0xf5
+      0001B7 F8               [12]  430 	mov	r0,a
+      0001B8 E5 81            [12]  431 	mov	a,sp
+      0001BA 24 FD            [12]  432 	add	a,#0xfd
+      0001BC F9               [12]  433 	mov	r1,a
+      0001BD E6               [12]  434 	mov	a,@r0
+      0001BE C3               [12]  435 	clr	c
+      0001BF 9F               [12]  436 	subb	a,r7
+      0001C0 F7               [12]  437 	mov	@r1,a
+      0001C1 08               [12]  438 	inc	r0
+      0001C2 E6               [12]  439 	mov	a,@r0
+      0001C3 9E               [12]  440 	subb	a,r6
+      0001C4 09               [12]  441 	inc	r1
+      0001C5 F7               [12]  442 	mov	@r1,a
+      0001C6 08               [12]  443 	inc	r0
+      0001C7 E6               [12]  444 	mov	a,@r0
+      0001C8 9D               [12]  445 	subb	a,r5
+      0001C9 09               [12]  446 	inc	r1
+      0001CA F7               [12]  447 	mov	@r1,a
+      0001CB 08               [12]  448 	inc	r0
+      0001CC E6               [12]  449 	mov	a,@r0
+      0001CD 9C               [12]  450 	subb	a,r4
+      0001CE 09               [12]  451 	inc	r1
+      0001CF F7               [12]  452 	mov	@r1,a
+      0001D0 E5 81            [12]  453 	mov	a,sp
+      0001D2 24 FD            [12]  454 	add	a,#0xfd
+      0001D4 F8               [12]  455 	mov	r0,a
+      0001D5 C3               [12]  456 	clr	c
+      0001D6 E6               [12]  457 	mov	a,@r0
+      0001D7 94 FF            [12]  458 	subb	a,#0xff
+      0001D9 08               [12]  459 	inc	r0
+      0001DA E6               [12]  460 	mov	a,@r0
+      0001DB 94 FF            [12]  461 	subb	a,#0xff
+      0001DD 08               [12]  462 	inc	r0
+      0001DE E6               [12]  463 	mov	a,@r0
+      0001DF 94 FF            [12]  464 	subb	a,#0xff
+      0001E1 08               [12]  465 	inc	r0
+      0001E2 E6               [12]  466 	mov	a,@r0
+      0001E3 94 7F            [12]  467 	subb	a,#0x7f
+      0001E5 E4               [12]  468 	clr	a
+      0001E6 33               [12]  469 	rlc	a
+      0001E7 FC               [12]  470 	mov	r4,a
+      0001E8 7B 00            [12]  471 	mov	r3,#0x00
+      0001EA 8C 82            [24]  472 	mov	dpl,r4
+      0001EC 8B 83            [24]  473 	mov	dph,r3
+                                    474 ;	../../core/sys/stimer.c:127: }
+      0001EE E5 81            [12]  475 	mov	a,sp
+      0001F0 24 F4            [12]  476 	add	a,#0xf4
+      0001F2 F5 81            [12]  477 	mov	sp,a
+      0001F4 22               [24]  478 	ret
+                                    479 ;------------------------------------------------------------
+                                    480 ;Allocation info for local variables in function 'stimer_remaining'
+                                    481 ;------------------------------------------------------------
+                                    482 ;t                         Allocated to registers r7 r5 r6 
+                                    483 ;------------------------------------------------------------
+                                    484 ;	../../core/sys/stimer.c:140: stimer_remaining(struct stimer *t)
+                                    485 ;	-----------------------------------------
+                                    486 ;	 function stimer_remaining
+                                    487 ;	-----------------------------------------
+      0001F5                        488 _stimer_remaining:
+                                    489 ;	../../core/sys/stimer.c:142: return t->start + t->interval - clock_seconds();
+      0001F5 AF 82            [24]  490 	mov	r7,dpl
+      0001F7 AD 83            [24]  491 	mov	r5,dph
+      0001F9 AE F0            [24]  492 	mov	r6,b
+      0001FB 12r00r00         [24]  493 	lcall	__gptrget
+      0001FE F9               [12]  494 	mov	r1,a
+      0001FF A3               [24]  495 	inc	dptr
+      000200 12r00r00         [24]  496 	lcall	__gptrget
+      000203 FA               [12]  497 	mov	r2,a
+      000204 A3               [24]  498 	inc	dptr
+      000205 12r00r00         [24]  499 	lcall	__gptrget
+      000208 FB               [12]  500 	mov	r3,a
+      000209 A3               [24]  501 	inc	dptr
+      00020A 12r00r00         [24]  502 	lcall	__gptrget
+      00020D FC               [12]  503 	mov	r4,a
+      00020E 74 04            [12]  504 	mov	a,#0x04
+      000210 2F               [12]  505 	add	a,r7
+      000211 FF               [12]  506 	mov	r7,a
+      000212 E4               [12]  507 	clr	a
+      000213 3D               [12]  508 	addc	a,r5
+      000214 FD               [12]  509 	mov	r5,a
+      000215 8F 82            [24]  510 	mov	dpl,r7
+      000217 8D 83            [24]  511 	mov	dph,r5
+      000219 8E F0            [24]  512 	mov	b,r6
+      00021B 12r00r00         [24]  513 	lcall	__gptrget
+      00021E F8               [12]  514 	mov	r0,a
+      00021F A3               [24]  515 	inc	dptr
+      000220 12r00r00         [24]  516 	lcall	__gptrget
+      000223 FD               [12]  517 	mov	r5,a
+      000224 A3               [24]  518 	inc	dptr
+      000225 12r00r00         [24]  519 	lcall	__gptrget
+      000228 FE               [12]  520 	mov	r6,a
+      000229 A3               [24]  521 	inc	dptr
+      00022A 12r00r00         [24]  522 	lcall	__gptrget
+      00022D FF               [12]  523 	mov	r7,a
+      00022E E8               [12]  524 	mov	a,r0
+      00022F 29               [12]  525 	add	a,r1
+      000230 F9               [12]  526 	mov	r1,a
+      000231 ED               [12]  527 	mov	a,r5
+      000232 3A               [12]  528 	addc	a,r2
+      000233 FA               [12]  529 	mov	r2,a
+      000234 EE               [12]  530 	mov	a,r6
+      000235 3B               [12]  531 	addc	a,r3
+      000236 FB               [12]  532 	mov	r3,a
+      000237 EF               [12]  533 	mov	a,r7
+      000238 3C               [12]  534 	addc	a,r4
+      000239 FC               [12]  535 	mov	r4,a
+      00023A C0 04            [24]  536 	push	ar4
+      00023C C0 03            [24]  537 	push	ar3
+      00023E C0 02            [24]  538 	push	ar2
+      000240 C0 01            [24]  539 	push	ar1
+      000242 12r00r00         [24]  540 	lcall	_clock_seconds
+      000245 A8 82            [24]  541 	mov	r0,dpl
+      000247 AD 83            [24]  542 	mov	r5,dph
+      000249 AE F0            [24]  543 	mov	r6,b
+      00024B FF               [12]  544 	mov	r7,a
+      00024C D0 01            [24]  545 	pop	ar1
+      00024E D0 02            [24]  546 	pop	ar2
+      000250 D0 03            [24]  547 	pop	ar3
+      000252 D0 04            [24]  548 	pop	ar4
+      000254 E9               [12]  549 	mov	a,r1
+      000255 C3               [12]  550 	clr	c
+      000256 98               [12]  551 	subb	a,r0
+      000257 F9               [12]  552 	mov	r1,a
+      000258 EA               [12]  553 	mov	a,r2
+      000259 9D               [12]  554 	subb	a,r5
+      00025A FA               [12]  555 	mov	r2,a
+      00025B EB               [12]  556 	mov	a,r3
+      00025C 9E               [12]  557 	subb	a,r6
+      00025D FB               [12]  558 	mov	r3,a
+      00025E EC               [12]  559 	mov	a,r4
+      00025F 9F               [12]  560 	subb	a,r7
+      000260 89 82            [24]  561 	mov	dpl,r1
+      000262 8A 83            [24]  562 	mov	dph,r2
+      000264 8B F0            [24]  563 	mov	b,r3
+                                    564 ;	../../core/sys/stimer.c:143: }
+      000266 22               [24]  565 	ret
+                                    566 ;------------------------------------------------------------
+                                    567 ;Allocation info for local variables in function 'stimer_elapsed'
+                                    568 ;------------------------------------------------------------
+                                    569 ;t                         Allocated to registers r7 r5 r6 
+                                    570 ;------------------------------------------------------------
+                                    571 ;	../../core/sys/stimer.c:156: stimer_elapsed(struct stimer *t)
+                                    572 ;	-----------------------------------------
+                                    573 ;	 function stimer_elapsed
+                                    574 ;	-----------------------------------------
+      000267                        575 _stimer_elapsed:
+      000267 AF 82            [24]  576 	mov	r7,dpl
+      000269 AD 83            [24]  577 	mov	r5,dph
+      00026B AE F0            [24]  578 	mov	r6,b
+                                    579 ;	../../core/sys/stimer.c:158: return clock_seconds() - t->start;
+      00026D C0 07            [24]  580 	push	ar7
+      00026F C0 06            [24]  581 	push	ar6
+      000271 C0 05            [24]  582 	push	ar5
+      000273 12r00r00         [24]  583 	lcall	_clock_seconds
+      000276 A9 82            [24]  584 	mov	r1,dpl
+      000278 AA 83            [24]  585 	mov	r2,dph
+      00027A AB F0            [24]  586 	mov	r3,b
+      00027C FC               [12]  587 	mov	r4,a
+      00027D D0 05            [24]  588 	pop	ar5
+      00027F D0 06            [24]  589 	pop	ar6
+      000281 D0 07            [24]  590 	pop	ar7
+      000283 8F 82            [24]  591 	mov	dpl,r7
+      000285 8D 83            [24]  592 	mov	dph,r5
+      000287 8E F0            [24]  593 	mov	b,r6
+      000289 12r00r00         [24]  594 	lcall	__gptrget
+      00028C F8               [12]  595 	mov	r0,a
+      00028D A3               [24]  596 	inc	dptr
+      00028E 12r00r00         [24]  597 	lcall	__gptrget
+      000291 FD               [12]  598 	mov	r5,a
+      000292 A3               [24]  599 	inc	dptr
+      000293 12r00r00         [24]  600 	lcall	__gptrget
+      000296 FE               [12]  601 	mov	r6,a
+      000297 A3               [24]  602 	inc	dptr
+      000298 12r00r00         [24]  603 	lcall	__gptrget
+      00029B FF               [12]  604 	mov	r7,a
+      00029C E9               [12]  605 	mov	a,r1
+      00029D C3               [12]  606 	clr	c
+      00029E 98               [12]  607 	subb	a,r0
+      00029F F9               [12]  608 	mov	r1,a
+      0002A0 EA               [12]  609 	mov	a,r2
+      0002A1 9D               [12]  610 	subb	a,r5
+      0002A2 FA               [12]  611 	mov	r2,a
+      0002A3 EB               [12]  612 	mov	a,r3
+      0002A4 9E               [12]  613 	subb	a,r6
+      0002A5 FB               [12]  614 	mov	r3,a
+      0002A6 EC               [12]  615 	mov	a,r4
+      0002A7 9F               [12]  616 	subb	a,r7
+      0002A8 89 82            [24]  617 	mov	dpl,r1
+      0002AA 8A 83            [24]  618 	mov	dph,r2
+      0002AC 8B F0            [24]  619 	mov	b,r3
+                                    620 ;	../../core/sys/stimer.c:159: }
+      0002AE 22               [24]  621 	ret
+                                    622 	.area CSEG    (CODE)
+                                    623 	.area CONST   (CODE)
+                                    624 	.area XINIT   (CODE)
+                                    625 	.area CABS    (ABS,CODE)

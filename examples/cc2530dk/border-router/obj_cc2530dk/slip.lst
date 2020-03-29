@@ -1,0 +1,2479 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module slip
+                                      6 	.optsdcc -mmcs51 --model-huge
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _slip_arch_writeb
+                                     12 	.globl _tcpip_input
+                                     13 	.globl _process_poll
+                                     14 	.globl ___memcpy
+                                     15 	.globl _memset
+                                     16 	.globl _memcmp
+                                     17 	.globl _ACTIVE
+                                     18 	.globl _TX_BYTE
+                                     19 	.globl _RX_BYTE
+                                     20 	.globl _ERR
+                                     21 	.globl _FE
+                                     22 	.globl _SLAVE
+                                     23 	.globl _RE
+                                     24 	.globl _MODE
+                                     25 	.globl _T3OVFIF
+                                     26 	.globl _T3CH0IF
+                                     27 	.globl _T3CH1IF
+                                     28 	.globl _T4OVFIF
+                                     29 	.globl _T4CH0IF
+                                     30 	.globl _T4CH1IF
+                                     31 	.globl _OVFIM
+                                     32 	.globl _B_0
+                                     33 	.globl _B_1
+                                     34 	.globl _B_2
+                                     35 	.globl _B_3
+                                     36 	.globl _B_4
+                                     37 	.globl _B_5
+                                     38 	.globl _B_6
+                                     39 	.globl _B_7
+                                     40 	.globl _P2IF
+                                     41 	.globl _UTX0IF
+                                     42 	.globl _UTX1IF
+                                     43 	.globl _P1IF
+                                     44 	.globl _WDTIF
+                                     45 	.globl _ACC_0
+                                     46 	.globl _ACC_1
+                                     47 	.globl _ACC_2
+                                     48 	.globl _ACC_3
+                                     49 	.globl _ACC_4
+                                     50 	.globl _ACC_5
+                                     51 	.globl _ACC_6
+                                     52 	.globl _ACC_7
+                                     53 	.globl _P
+                                     54 	.globl _F1
+                                     55 	.globl _OV
+                                     56 	.globl _RS0
+                                     57 	.globl _RS1
+                                     58 	.globl _F0
+                                     59 	.globl _AC
+                                     60 	.globl _CY
+                                     61 	.globl _DMAIF
+                                     62 	.globl _T1IF
+                                     63 	.globl _T2IF
+                                     64 	.globl _T3IF
+                                     65 	.globl _T4IF
+                                     66 	.globl _P0IF
+                                     67 	.globl _STIF
+                                     68 	.globl _DMAIE
+                                     69 	.globl _T1IE
+                                     70 	.globl _T2IE
+                                     71 	.globl _T3IE
+                                     72 	.globl _T4IE
+                                     73 	.globl _P0IE
+                                     74 	.globl _RFERRIE
+                                     75 	.globl _ADCIE
+                                     76 	.globl _URX0IE
+                                     77 	.globl _URX1IE
+                                     78 	.globl _ENCIE
+                                     79 	.globl _STIE
+                                     80 	.globl _EA
+                                     81 	.globl _P2_0
+                                     82 	.globl _P2_1
+                                     83 	.globl _P2_2
+                                     84 	.globl _P2_3
+                                     85 	.globl _P2_4
+                                     86 	.globl _P2_5
+                                     87 	.globl _P2_6
+                                     88 	.globl _P2_7
+                                     89 	.globl _ENCIF_0
+                                     90 	.globl _ENCIF_1
+                                     91 	.globl _P1_0
+                                     92 	.globl _P1_1
+                                     93 	.globl _P1_2
+                                     94 	.globl _P1_3
+                                     95 	.globl _P1_4
+                                     96 	.globl _P1_5
+                                     97 	.globl _P1_6
+                                     98 	.globl _P1_7
+                                     99 	.globl _IT0
+                                    100 	.globl _RFERRIF
+                                    101 	.globl _IT1
+                                    102 	.globl _URX0IF
+                                    103 	.globl _ADCIF
+                                    104 	.globl _URX1IF
+                                    105 	.globl _P0_0
+                                    106 	.globl _P0_1
+                                    107 	.globl _P0_2
+                                    108 	.globl _P0_3
+                                    109 	.globl _P0_4
+                                    110 	.globl _P0_5
+                                    111 	.globl _P0_6
+                                    112 	.globl _P0_7
+                                    113 	.globl _WDCTL
+                                    114 	.globl _U1GCR
+                                    115 	.globl _U1UCR
+                                    116 	.globl _U1BAUD
+                                    117 	.globl _U1DBUF
+                                    118 	.globl _U1CSR
+                                    119 	.globl _U0GCR
+                                    120 	.globl _U0UCR
+                                    121 	.globl _U0BAUD
+                                    122 	.globl _U0DBUF
+                                    123 	.globl _U0CSR
+                                    124 	.globl _TIMIF
+                                    125 	.globl _T4CC1
+                                    126 	.globl _T4CCTL1
+                                    127 	.globl _T4CC0
+                                    128 	.globl _T4CCTL0
+                                    129 	.globl _T4CTL
+                                    130 	.globl _T4CNT
+                                    131 	.globl _T3CC1
+                                    132 	.globl _T3CCTL1
+                                    133 	.globl _T3CC0
+                                    134 	.globl _T3CCTL0
+                                    135 	.globl _T3CTL
+                                    136 	.globl _T3CNT
+                                    137 	.globl _T2MSEL
+                                    138 	.globl _T2IRQM
+                                    139 	.globl _T2MOVF2
+                                    140 	.globl _T2MOVF1
+                                    141 	.globl _T2MOVF0
+                                    142 	.globl _T2M1
+                                    143 	.globl _T2M0
+                                    144 	.globl _T2IRQF
+                                    145 	.globl _T2EVTCFG
+                                    146 	.globl _T2CTRL
+                                    147 	.globl _T1STAT
+                                    148 	.globl _T1CCTL2
+                                    149 	.globl _T1CCTL1
+                                    150 	.globl _T1CCTL0
+                                    151 	.globl _T1CTL
+                                    152 	.globl _T1CNTH
+                                    153 	.globl _T1CNTL
+                                    154 	.globl _T1CC2H
+                                    155 	.globl _T1CC2L
+                                    156 	.globl _T1CC1H
+                                    157 	.globl _T1CC1L
+                                    158 	.globl _T1CC0H
+                                    159 	.globl _T1CC0L
+                                    160 	.globl _CLKCONSTA
+                                    161 	.globl _CLKCONCMD
+                                    162 	.globl _SLEEPSTA
+                                    163 	.globl _SLEEPCMD
+                                    164 	.globl _STLOAD
+                                    165 	.globl _ST2
+                                    166 	.globl _ST1
+                                    167 	.globl _ST0
+                                    168 	.globl _RFERRF
+                                    169 	.globl _RFIRQF0
+                                    170 	.globl _RFST
+                                    171 	.globl _RFD
+                                    172 	.globl _RFIRQF1
+                                    173 	.globl _PSBANK
+                                    174 	.globl _FMAP
+                                    175 	.globl _MEMCTR
+                                    176 	.globl __XPAGE
+                                    177 	.globl _MPAGE
+                                    178 	.globl _PMUX
+                                    179 	.globl _P2DIR
+                                    180 	.globl _P1DIR
+                                    181 	.globl _P0DIR
+                                    182 	.globl _P2INP
+                                    183 	.globl _P1INP
+                                    184 	.globl _P2SEL
+                                    185 	.globl _P1SEL
+                                    186 	.globl _P0SEL
+                                    187 	.globl _APCFG
+                                    188 	.globl _PERCFG
+                                    189 	.globl _P0INP
+                                    190 	.globl _P2IEN
+                                    191 	.globl _P1IEN
+                                    192 	.globl _P0IEN
+                                    193 	.globl _PICTL
+                                    194 	.globl _P2IFG
+                                    195 	.globl _P1IFG
+                                    196 	.globl _P0IFG
+                                    197 	.globl _DMAREQ
+                                    198 	.globl _DMAARM
+                                    199 	.globl _DMA0CFGH
+                                    200 	.globl _DMA0CFGL
+                                    201 	.globl _DMA1CFGH
+                                    202 	.globl _DMA1CFGL
+                                    203 	.globl _DMAIRQ
+                                    204 	.globl _ENCCS
+                                    205 	.globl _ENCDO
+                                    206 	.globl _ENCDI
+                                    207 	.globl _RNDH
+                                    208 	.globl _RNDL
+                                    209 	.globl _ADCH
+                                    210 	.globl _ADCL
+                                    211 	.globl _ADCCON3
+                                    212 	.globl _ADCCON2
+                                    213 	.globl _ADCCON1
+                                    214 	.globl _B
+                                    215 	.globl _IRCON2
+                                    216 	.globl _ACC
+                                    217 	.globl _PSW
+                                    218 	.globl _IRCON
+                                    219 	.globl _IP1
+                                    220 	.globl _IEN1
+                                    221 	.globl _IP0
+                                    222 	.globl _IEN0
+                                    223 	.globl _P2
+                                    224 	.globl _S1CON
+                                    225 	.globl _IEN2
+                                    226 	.globl _S0CON
+                                    227 	.globl _DPS
+                                    228 	.globl _P1
+                                    229 	.globl _TCON
+                                    230 	.globl _PCON
+                                    231 	.globl _DPH1
+                                    232 	.globl _DPL1
+                                    233 	.globl _DPH0
+                                    234 	.globl _DPL0
+                                    235 	.globl _SP
+                                    236 	.globl _P0
+                                    237 	.globl _slip_process
+                                    238 	.globl _slip_active
+                                    239 	.globl _X_IEEE_ADDR
+                                    240 	.globl _X_INFOPAGE
+                                    241 	.globl _X_P2DIR
+                                    242 	.globl _X_P1DIR
+                                    243 	.globl _X_P0DIR
+                                    244 	.globl _X_U1GCR
+                                    245 	.globl _X_U1UCR
+                                    246 	.globl _X_U1BAUD
+                                    247 	.globl _X_U1DBUF
+                                    248 	.globl _X_U1CSR
+                                    249 	.globl _X_P2INP
+                                    250 	.globl _X_P1INP
+                                    251 	.globl _X_P2SEL
+                                    252 	.globl _X_P1SEL
+                                    253 	.globl _X_P0SEL
+                                    254 	.globl _X_APCFG
+                                    255 	.globl _X_PERCFG
+                                    256 	.globl _X_T4CC1
+                                    257 	.globl _X_T4CCTL1
+                                    258 	.globl _X_T4CC0
+                                    259 	.globl _X_T4CCTL0
+                                    260 	.globl _X_T4CTL
+                                    261 	.globl _X_T4CNT
+                                    262 	.globl _X_RFIRQF0
+                                    263 	.globl _X_T1CCTL2
+                                    264 	.globl _X_T1CCTL1
+                                    265 	.globl _X_T1CCTL0
+                                    266 	.globl _X_T1CTL
+                                    267 	.globl _X_T1CNTH
+                                    268 	.globl _X_T1CNTL
+                                    269 	.globl _X_RFST
+                                    270 	.globl _X_T1CC2H
+                                    271 	.globl _X_T1CC2L
+                                    272 	.globl _X_T1CC1H
+                                    273 	.globl _X_T1CC1L
+                                    274 	.globl _X_T1CC0H
+                                    275 	.globl _X_T1CC0L
+                                    276 	.globl _X_RFD
+                                    277 	.globl _X_TIMIF
+                                    278 	.globl _X_DMAREQ
+                                    279 	.globl _X_DMAARM
+                                    280 	.globl _X_DMA0CFGH
+                                    281 	.globl _X_DMA0CFGL
+                                    282 	.globl _X_DMA1CFGH
+                                    283 	.globl _X_DMA1CFGL
+                                    284 	.globl _X_DMAIRQ
+                                    285 	.globl _X_T3CC1
+                                    286 	.globl _X_T3CCTL1
+                                    287 	.globl _X_T3CC0
+                                    288 	.globl _X_T3CCTL0
+                                    289 	.globl _X_T3CTL
+                                    290 	.globl _X_T3CNT
+                                    291 	.globl _X_WDCTL
+                                    292 	.globl _X_MEMCTR
+                                    293 	.globl _X_CLKCONCMD
+                                    294 	.globl _X_U0GCR
+                                    295 	.globl _X_U0UCR
+                                    296 	.globl _X_T2MSEL
+                                    297 	.globl _X_U0BAUD
+                                    298 	.globl _X_U0DBUF
+                                    299 	.globl _X_RFERRF
+                                    300 	.globl _X_SLEEPCMD
+                                    301 	.globl _X_RNDH
+                                    302 	.globl _X_RNDL
+                                    303 	.globl _X_ADCH
+                                    304 	.globl _X_ADCL
+                                    305 	.globl _X_ADCCON3
+                                    306 	.globl _X_ADCCON2
+                                    307 	.globl _X_ADCCON1
+                                    308 	.globl _X_ENCCS
+                                    309 	.globl _X_ENCDO
+                                    310 	.globl _X_ENCDI
+                                    311 	.globl _X_T1STAT
+                                    312 	.globl _X_PMUX
+                                    313 	.globl _X_STLOAD
+                                    314 	.globl _X_P2IEN
+                                    315 	.globl _X_P0IEN
+                                    316 	.globl _X_T2IRQM
+                                    317 	.globl _X_T2MOVF2
+                                    318 	.globl _X_T2MOVF1
+                                    319 	.globl _X_T2MOVF0
+                                    320 	.globl _X_T2M1
+                                    321 	.globl _X_T2M0
+                                    322 	.globl _X_T2IRQF
+                                    323 	.globl _X_P2
+                                    324 	.globl _X_PSBANK
+                                    325 	.globl _X_FMAP
+                                    326 	.globl _X_CLKCONSTA
+                                    327 	.globl _X_SLEEPSTA
+                                    328 	.globl _X_T2EVTCFG
+                                    329 	.globl _X_ST2
+                                    330 	.globl _X_ST1
+                                    331 	.globl _X_ST0
+                                    332 	.globl _X_T2CTRL
+                                    333 	.globl _X__XPAGE
+                                    334 	.globl _X_MPAGE
+                                    335 	.globl _X_RFIRQF1
+                                    336 	.globl _X_P1
+                                    337 	.globl _X_P0INP
+                                    338 	.globl _X_P1IEN
+                                    339 	.globl _X_PICTL
+                                    340 	.globl _X_P2IFG
+                                    341 	.globl _X_P1IFG
+                                    342 	.globl _X_P0IFG
+                                    343 	.globl _X_U0CSR
+                                    344 	.globl _X_P0
+                                    345 	.globl _USBF5
+                                    346 	.globl _USBF4
+                                    347 	.globl _USBF3
+                                    348 	.globl _USBF2
+                                    349 	.globl _USBF1
+                                    350 	.globl _USBF0
+                                    351 	.globl _USBCNTH
+                                    352 	.globl _USBCNTL
+                                    353 	.globl _USBCNT0
+                                    354 	.globl _USBCSOH
+                                    355 	.globl _USBCSOL
+                                    356 	.globl _USBMAXO
+                                    357 	.globl _USBCSIH
+                                    358 	.globl _USBCSIL
+                                    359 	.globl _USBCS0
+                                    360 	.globl _USBMAXI
+                                    361 	.globl _USBCTRL
+                                    362 	.globl _USBINDEX
+                                    363 	.globl _USBFRMH
+                                    364 	.globl _USBFRML
+                                    365 	.globl _USBCIE
+                                    366 	.globl _USBOIE
+                                    367 	.globl _USBIIE
+                                    368 	.globl _USBCIF
+                                    369 	.globl _USBOIF
+                                    370 	.globl _USBIIF
+                                    371 	.globl _USBPOW
+                                    372 	.globl _USBADDR
+                                    373 	.globl _CSPT
+                                    374 	.globl _CSPZ
+                                    375 	.globl _CSPY
+                                    376 	.globl _CSPX
+                                    377 	.globl _CSPSTAT
+                                    378 	.globl _CSPCTRL
+                                    379 	.globl _CSPPROG23
+                                    380 	.globl _CSPPROG22
+                                    381 	.globl _CSPPROG21
+                                    382 	.globl _CSPPROG20
+                                    383 	.globl _CSPPROG19
+                                    384 	.globl _CSPPROG18
+                                    385 	.globl _CSPPROG17
+                                    386 	.globl _CSPPROG16
+                                    387 	.globl _CSPPROG15
+                                    388 	.globl _CSPPROG14
+                                    389 	.globl _CSPPROG13
+                                    390 	.globl _CSPPROG12
+                                    391 	.globl _CSPPROG11
+                                    392 	.globl _CSPPROG10
+                                    393 	.globl _CSPPROG9
+                                    394 	.globl _CSPPROG8
+                                    395 	.globl _CSPPROG7
+                                    396 	.globl _CSPPROG6
+                                    397 	.globl _CSPPROG5
+                                    398 	.globl _CSPPROG4
+                                    399 	.globl _CSPPROG3
+                                    400 	.globl _CSPPROG2
+                                    401 	.globl _CSPPROG1
+                                    402 	.globl _CSPPROG0
+                                    403 	.globl _RFC_OBS_CTRL2
+                                    404 	.globl _RFC_OBS_CTRL1
+                                    405 	.globl _RFC_OBS_CTRL0
+                                    406 	.globl _TXFILTCFG
+                                    407 	.globl _PTEST1
+                                    408 	.globl _PTEST0
+                                    409 	.globl _ATEST
+                                    410 	.globl _DACTEST2
+                                    411 	.globl _DACTEST1
+                                    412 	.globl _DACTEST0
+                                    413 	.globl _MDMTEST1
+                                    414 	.globl _MDMTEST0
+                                    415 	.globl _ADCTEST2
+                                    416 	.globl _ADCTEST1
+                                    417 	.globl _ADCTEST0
+                                    418 	.globl _AGCCTRL3
+                                    419 	.globl _AGCCTRL2
+                                    420 	.globl _AGCCTRL1
+                                    421 	.globl _AGCCTRL0
+                                    422 	.globl _FSCAL3
+                                    423 	.globl _FSCAL2
+                                    424 	.globl _FSCAL1
+                                    425 	.globl _FSCAL0
+                                    426 	.globl _FSCTRL
+                                    427 	.globl _RXCTRL
+                                    428 	.globl _FREQEST
+                                    429 	.globl _MDMCTRL1
+                                    430 	.globl _MDMCTRL0
+                                    431 	.globl _RFRND
+                                    432 	.globl _RFERRM
+                                    433 	.globl _RFIRQM1
+                                    434 	.globl _RFIRQM0
+                                    435 	.globl _TXLAST_PTR
+                                    436 	.globl _TXFIRST_PTR
+                                    437 	.globl _RXP1_PTR
+                                    438 	.globl _RXLAST_PTR
+                                    439 	.globl _RXFIRST_PTR
+                                    440 	.globl _TXFIFOCNT
+                                    441 	.globl _RXFIFOCNT
+                                    442 	.globl _RXFIRST
+                                    443 	.globl _RSSISTAT
+                                    444 	.globl _RSSI
+                                    445 	.globl _CCACTRL1
+                                    446 	.globl _CCACTRL0
+                                    447 	.globl _FSMCTRL
+                                    448 	.globl _FIFOPCTRL
+                                    449 	.globl _FSMSTAT1
+                                    450 	.globl _FSMSTAT0
+                                    451 	.globl _TXCTRL
+                                    452 	.globl _TXPOWER
+                                    453 	.globl _FREQCTRL
+                                    454 	.globl _FREQTUNE
+                                    455 	.globl _RXMASKCLR
+                                    456 	.globl _RXMASKSET
+                                    457 	.globl _RXENABLE
+                                    458 	.globl _FRMCTRL1
+                                    459 	.globl _FRMCTRL0
+                                    460 	.globl _SRCEXTEN2
+                                    461 	.globl _SRCEXTEN1
+                                    462 	.globl _SRCEXTEN0
+                                    463 	.globl _SRCSHORTEN2
+                                    464 	.globl _SRCSHORTEN1
+                                    465 	.globl _SRCSHORTEN0
+                                    466 	.globl _SRCMATCH
+                                    467 	.globl _FRMFILT1
+                                    468 	.globl _FRMFILT0
+                                    469 	.globl _SHORT_ADDR1
+                                    470 	.globl _SHORT_ADDR0
+                                    471 	.globl _PAN_ID1
+                                    472 	.globl _PAN_ID0
+                                    473 	.globl _EXT_ADDR7
+                                    474 	.globl _EXT_ADDR6
+                                    475 	.globl _EXT_ADDR5
+                                    476 	.globl _EXT_ADDR4
+                                    477 	.globl _EXT_ADDR3
+                                    478 	.globl _EXT_ADDR2
+                                    479 	.globl _EXT_ADDR1
+                                    480 	.globl _EXT_ADDR0
+                                    481 	.globl _SRCSHORTPENDEN2
+                                    482 	.globl _SRCSHORTPENDEN1
+                                    483 	.globl _SRCSHORTPENDEN0
+                                    484 	.globl _SRCEXTPENDEN2
+                                    485 	.globl _SRCEXTPENDEN1
+                                    486 	.globl _SRCEXTPENDEN0
+                                    487 	.globl _SRCRESINDEX
+                                    488 	.globl _SRCRESMASK2
+                                    489 	.globl _SRCRESMASK1
+                                    490 	.globl _SRCRESMASK0
+                                    491 	.globl _SRC_ADDR_TABLE
+                                    492 	.globl _TXFIFO
+                                    493 	.globl _RXFIFO
+                                    494 	.globl _RFCORE_RAM
+                                    495 	.globl _CMPCTL
+                                    496 	.globl _OPAMPS
+                                    497 	.globl _OPAMPC
+                                    498 	.globl _STCV2
+                                    499 	.globl _STCV1
+                                    500 	.globl _STCV0
+                                    501 	.globl _STCS
+                                    502 	.globl _STCC
+                                    503 	.globl _T1CC4H
+                                    504 	.globl _T1CC4L
+                                    505 	.globl _T1CC3H
+                                    506 	.globl _T1CC3L
+                                    507 	.globl _XX_T1CC2H
+                                    508 	.globl _XX_T1CC2L
+                                    509 	.globl _XX_T1CC1H
+                                    510 	.globl _XX_T1CC1L
+                                    511 	.globl _XX_T1CC0H
+                                    512 	.globl _XX_T1CC0L
+                                    513 	.globl _T1CCTL4
+                                    514 	.globl _T1CCTL3
+                                    515 	.globl _XX_T1CCTL2
+                                    516 	.globl _XX_T1CCTL1
+                                    517 	.globl _XX_T1CCTL0
+                                    518 	.globl _CLD
+                                    519 	.globl _IRCTL
+                                    520 	.globl _CHIPINFO1
+                                    521 	.globl _CHIPINFO0
+                                    522 	.globl _FWDATA
+                                    523 	.globl _FADDRH
+                                    524 	.globl _FADDRL
+                                    525 	.globl _FCTL
+                                    526 	.globl _IVCTRL
+                                    527 	.globl _BATTMON
+                                    528 	.globl _SRCRC
+                                    529 	.globl _DBGDATA
+                                    530 	.globl _TESTREG0
+                                    531 	.globl _CHIPID
+                                    532 	.globl _CHVER
+                                    533 	.globl _OBSSEL5
+                                    534 	.globl _OBSSEL4
+                                    535 	.globl _OBSSEL3
+                                    536 	.globl _OBSSEL2
+                                    537 	.globl _OBSSEL1
+                                    538 	.globl _OBSSEL0
+                                    539 	.globl _I2CIO
+                                    540 	.globl _I2CWC
+                                    541 	.globl _I2CADDR
+                                    542 	.globl _I2CDATA
+                                    543 	.globl _I2CSTAT
+                                    544 	.globl _I2CCFG
+                                    545 	.globl _OPAMPMC
+                                    546 	.globl _MONMUX
+                                    547 	.globl _slip_set_input_callback
+                                    548 	.globl _slip_send
+                                    549 	.globl _slip_write
+                                    550 	.globl _slip_input_byte
+                                    551 ;--------------------------------------------------------
+                                    552 ; special function registers
+                                    553 ;--------------------------------------------------------
+                                    554 	.area RSEG    (ABS,DATA)
+      000000                        555 	.org 0x0000
+                           000080   556 _P0	=	0x0080
+                           000081   557 _SP	=	0x0081
+                           000082   558 _DPL0	=	0x0082
+                           000083   559 _DPH0	=	0x0083
+                           000084   560 _DPL1	=	0x0084
+                           000085   561 _DPH1	=	0x0085
+                           000087   562 _PCON	=	0x0087
+                           000088   563 _TCON	=	0x0088
+                           000090   564 _P1	=	0x0090
+                           000092   565 _DPS	=	0x0092
+                           000098   566 _S0CON	=	0x0098
+                           00009A   567 _IEN2	=	0x009a
+                           00009B   568 _S1CON	=	0x009b
+                           0000A0   569 _P2	=	0x00a0
+                           0000A8   570 _IEN0	=	0x00a8
+                           0000A9   571 _IP0	=	0x00a9
+                           0000B8   572 _IEN1	=	0x00b8
+                           0000B9   573 _IP1	=	0x00b9
+                           0000C0   574 _IRCON	=	0x00c0
+                           0000D0   575 _PSW	=	0x00d0
+                           0000E0   576 _ACC	=	0x00e0
+                           0000E8   577 _IRCON2	=	0x00e8
+                           0000F0   578 _B	=	0x00f0
+                           0000B4   579 _ADCCON1	=	0x00b4
+                           0000B5   580 _ADCCON2	=	0x00b5
+                           0000B6   581 _ADCCON3	=	0x00b6
+                           0000BA   582 _ADCL	=	0x00ba
+                           0000BB   583 _ADCH	=	0x00bb
+                           0000BC   584 _RNDL	=	0x00bc
+                           0000BD   585 _RNDH	=	0x00bd
+                           0000B1   586 _ENCDI	=	0x00b1
+                           0000B2   587 _ENCDO	=	0x00b2
+                           0000B3   588 _ENCCS	=	0x00b3
+                           0000D1   589 _DMAIRQ	=	0x00d1
+                           0000D2   590 _DMA1CFGL	=	0x00d2
+                           0000D3   591 _DMA1CFGH	=	0x00d3
+                           0000D4   592 _DMA0CFGL	=	0x00d4
+                           0000D5   593 _DMA0CFGH	=	0x00d5
+                           0000D6   594 _DMAARM	=	0x00d6
+                           0000D7   595 _DMAREQ	=	0x00d7
+                           000089   596 _P0IFG	=	0x0089
+                           00008A   597 _P1IFG	=	0x008a
+                           00008B   598 _P2IFG	=	0x008b
+                           00008C   599 _PICTL	=	0x008c
+                           0000AB   600 _P0IEN	=	0x00ab
+                           00008D   601 _P1IEN	=	0x008d
+                           0000AC   602 _P2IEN	=	0x00ac
+                           00008F   603 _P0INP	=	0x008f
+                           0000F1   604 _PERCFG	=	0x00f1
+                           0000F2   605 _APCFG	=	0x00f2
+                           0000F3   606 _P0SEL	=	0x00f3
+                           0000F4   607 _P1SEL	=	0x00f4
+                           0000F5   608 _P2SEL	=	0x00f5
+                           0000F6   609 _P1INP	=	0x00f6
+                           0000F7   610 _P2INP	=	0x00f7
+                           0000FD   611 _P0DIR	=	0x00fd
+                           0000FE   612 _P1DIR	=	0x00fe
+                           0000FF   613 _P2DIR	=	0x00ff
+                           0000AE   614 _PMUX	=	0x00ae
+                           000093   615 _MPAGE	=	0x0093
+                           000093   616 __XPAGE	=	0x0093
+                           0000C7   617 _MEMCTR	=	0x00c7
+                           00009F   618 _FMAP	=	0x009f
+                           00009F   619 _PSBANK	=	0x009f
+                           000091   620 _RFIRQF1	=	0x0091
+                           0000D9   621 _RFD	=	0x00d9
+                           0000E1   622 _RFST	=	0x00e1
+                           0000E9   623 _RFIRQF0	=	0x00e9
+                           0000BF   624 _RFERRF	=	0x00bf
+                           000095   625 _ST0	=	0x0095
+                           000096   626 _ST1	=	0x0096
+                           000097   627 _ST2	=	0x0097
+                           0000AD   628 _STLOAD	=	0x00ad
+                           0000BE   629 _SLEEPCMD	=	0x00be
+                           00009D   630 _SLEEPSTA	=	0x009d
+                           0000C6   631 _CLKCONCMD	=	0x00c6
+                           00009E   632 _CLKCONSTA	=	0x009e
+                           0000DA   633 _T1CC0L	=	0x00da
+                           0000DB   634 _T1CC0H	=	0x00db
+                           0000DC   635 _T1CC1L	=	0x00dc
+                           0000DD   636 _T1CC1H	=	0x00dd
+                           0000DE   637 _T1CC2L	=	0x00de
+                           0000DF   638 _T1CC2H	=	0x00df
+                           0000E2   639 _T1CNTL	=	0x00e2
+                           0000E3   640 _T1CNTH	=	0x00e3
+                           0000E4   641 _T1CTL	=	0x00e4
+                           0000E5   642 _T1CCTL0	=	0x00e5
+                           0000E6   643 _T1CCTL1	=	0x00e6
+                           0000E7   644 _T1CCTL2	=	0x00e7
+                           0000AF   645 _T1STAT	=	0x00af
+                           000094   646 _T2CTRL	=	0x0094
+                           00009C   647 _T2EVTCFG	=	0x009c
+                           0000A1   648 _T2IRQF	=	0x00a1
+                           0000A2   649 _T2M0	=	0x00a2
+                           0000A3   650 _T2M1	=	0x00a3
+                           0000A4   651 _T2MOVF0	=	0x00a4
+                           0000A5   652 _T2MOVF1	=	0x00a5
+                           0000A6   653 _T2MOVF2	=	0x00a6
+                           0000A7   654 _T2IRQM	=	0x00a7
+                           0000C3   655 _T2MSEL	=	0x00c3
+                           0000CA   656 _T3CNT	=	0x00ca
+                           0000CB   657 _T3CTL	=	0x00cb
+                           0000CC   658 _T3CCTL0	=	0x00cc
+                           0000CD   659 _T3CC0	=	0x00cd
+                           0000CE   660 _T3CCTL1	=	0x00ce
+                           0000CF   661 _T3CC1	=	0x00cf
+                           0000EA   662 _T4CNT	=	0x00ea
+                           0000EB   663 _T4CTL	=	0x00eb
+                           0000EC   664 _T4CCTL0	=	0x00ec
+                           0000ED   665 _T4CC0	=	0x00ed
+                           0000EE   666 _T4CCTL1	=	0x00ee
+                           0000EF   667 _T4CC1	=	0x00ef
+                           0000D8   668 _TIMIF	=	0x00d8
+                           000086   669 _U0CSR	=	0x0086
+                           0000C1   670 _U0DBUF	=	0x00c1
+                           0000C2   671 _U0BAUD	=	0x00c2
+                           0000C4   672 _U0UCR	=	0x00c4
+                           0000C5   673 _U0GCR	=	0x00c5
+                           0000F8   674 _U1CSR	=	0x00f8
+                           0000F9   675 _U1DBUF	=	0x00f9
+                           0000FA   676 _U1BAUD	=	0x00fa
+                           0000FB   677 _U1UCR	=	0x00fb
+                           0000FC   678 _U1GCR	=	0x00fc
+                           0000C9   679 _WDCTL	=	0x00c9
+                                    680 ;--------------------------------------------------------
+                                    681 ; special function bits
+                                    682 ;--------------------------------------------------------
+                                    683 	.area RSEG    (ABS,DATA)
+      000000                        684 	.org 0x0000
+                           000087   685 _P0_7	=	0x0087
+                           000086   686 _P0_6	=	0x0086
+                           000085   687 _P0_5	=	0x0085
+                           000084   688 _P0_4	=	0x0084
+                           000083   689 _P0_3	=	0x0083
+                           000082   690 _P0_2	=	0x0082
+                           000081   691 _P0_1	=	0x0081
+                           000080   692 _P0_0	=	0x0080
+                           00008F   693 _URX1IF	=	0x008f
+                           00008D   694 _ADCIF	=	0x008d
+                           00008B   695 _URX0IF	=	0x008b
+                           00008A   696 _IT1	=	0x008a
+                           000089   697 _RFERRIF	=	0x0089
+                           000088   698 _IT0	=	0x0088
+                           000097   699 _P1_7	=	0x0097
+                           000096   700 _P1_6	=	0x0096
+                           000095   701 _P1_5	=	0x0095
+                           000094   702 _P1_4	=	0x0094
+                           000093   703 _P1_3	=	0x0093
+                           000092   704 _P1_2	=	0x0092
+                           000091   705 _P1_1	=	0x0091
+                           000090   706 _P1_0	=	0x0090
+                           000099   707 _ENCIF_1	=	0x0099
+                           000098   708 _ENCIF_0	=	0x0098
+                           0000A7   709 _P2_7	=	0x00a7
+                           0000A6   710 _P2_6	=	0x00a6
+                           0000A5   711 _P2_5	=	0x00a5
+                           0000A4   712 _P2_4	=	0x00a4
+                           0000A3   713 _P2_3	=	0x00a3
+                           0000A2   714 _P2_2	=	0x00a2
+                           0000A1   715 _P2_1	=	0x00a1
+                           0000A0   716 _P2_0	=	0x00a0
+                           0000AF   717 _EA	=	0x00af
+                           0000AD   718 _STIE	=	0x00ad
+                           0000AC   719 _ENCIE	=	0x00ac
+                           0000AB   720 _URX1IE	=	0x00ab
+                           0000AA   721 _URX0IE	=	0x00aa
+                           0000A9   722 _ADCIE	=	0x00a9
+                           0000A8   723 _RFERRIE	=	0x00a8
+                           0000BD   724 _P0IE	=	0x00bd
+                           0000BC   725 _T4IE	=	0x00bc
+                           0000BB   726 _T3IE	=	0x00bb
+                           0000BA   727 _T2IE	=	0x00ba
+                           0000B9   728 _T1IE	=	0x00b9
+                           0000B8   729 _DMAIE	=	0x00b8
+                           0000C7   730 _STIF	=	0x00c7
+                           0000C5   731 _P0IF	=	0x00c5
+                           0000C4   732 _T4IF	=	0x00c4
+                           0000C3   733 _T3IF	=	0x00c3
+                           0000C2   734 _T2IF	=	0x00c2
+                           0000C1   735 _T1IF	=	0x00c1
+                           0000C0   736 _DMAIF	=	0x00c0
+                           0000D7   737 _CY	=	0x00d7
+                           0000D6   738 _AC	=	0x00d6
+                           0000D5   739 _F0	=	0x00d5
+                           0000D4   740 _RS1	=	0x00d4
+                           0000D3   741 _RS0	=	0x00d3
+                           0000D2   742 _OV	=	0x00d2
+                           0000D1   743 _F1	=	0x00d1
+                           0000D0   744 _P	=	0x00d0
+                           0000E7   745 _ACC_7	=	0x00e7
+                           0000E6   746 _ACC_6	=	0x00e6
+                           0000E5   747 _ACC_5	=	0x00e5
+                           0000E4   748 _ACC_4	=	0x00e4
+                           0000E3   749 _ACC_3	=	0x00e3
+                           0000E2   750 _ACC_2	=	0x00e2
+                           0000E1   751 _ACC_1	=	0x00e1
+                           0000E0   752 _ACC_0	=	0x00e0
+                           0000EC   753 _WDTIF	=	0x00ec
+                           0000EB   754 _P1IF	=	0x00eb
+                           0000EA   755 _UTX1IF	=	0x00ea
+                           0000E9   756 _UTX0IF	=	0x00e9
+                           0000E8   757 _P2IF	=	0x00e8
+                           0000F7   758 _B_7	=	0x00f7
+                           0000F6   759 _B_6	=	0x00f6
+                           0000F5   760 _B_5	=	0x00f5
+                           0000F4   761 _B_4	=	0x00f4
+                           0000F3   762 _B_3	=	0x00f3
+                           0000F2   763 _B_2	=	0x00f2
+                           0000F1   764 _B_1	=	0x00f1
+                           0000F0   765 _B_0	=	0x00f0
+                           0000DE   766 _OVFIM	=	0x00de
+                           0000DD   767 _T4CH1IF	=	0x00dd
+                           0000DC   768 _T4CH0IF	=	0x00dc
+                           0000DB   769 _T4OVFIF	=	0x00db
+                           0000DA   770 _T3CH1IF	=	0x00da
+                           0000D9   771 _T3CH0IF	=	0x00d9
+                           0000D8   772 _T3OVFIF	=	0x00d8
+                           0000FF   773 _MODE	=	0x00ff
+                           0000FE   774 _RE	=	0x00fe
+                           0000FD   775 _SLAVE	=	0x00fd
+                           0000FC   776 _FE	=	0x00fc
+                           0000FB   777 _ERR	=	0x00fb
+                           0000FA   778 _RX_BYTE	=	0x00fa
+                           0000F9   779 _TX_BYTE	=	0x00f9
+                           0000F8   780 _ACTIVE	=	0x00f8
+                                    781 ;--------------------------------------------------------
+                                    782 ; overlayable register banks
+                                    783 ;--------------------------------------------------------
+                                    784 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                        785 	.ds 8
+                                    786 ;--------------------------------------------------------
+                                    787 ; internal ram data
+                                    788 ;--------------------------------------------------------
+                                    789 	.area DSEG    (DATA)
+                                    790 ;--------------------------------------------------------
+                                    791 ; overlayable items in internal ram 
+                                    792 ;--------------------------------------------------------
+                                    793 ;--------------------------------------------------------
+                                    794 ; indirectly addressable internal ram data
+                                    795 ;--------------------------------------------------------
+                                    796 	.area ISEG    (DATA)
+                                    797 ;--------------------------------------------------------
+                                    798 ; absolute internal ram data
+                                    799 ;--------------------------------------------------------
+                                    800 	.area IABS    (ABS,DATA)
+                                    801 	.area IABS    (ABS,DATA)
+                                    802 ;--------------------------------------------------------
+                                    803 ; bit data
+                                    804 ;--------------------------------------------------------
+                                    805 	.area BSEG    (BIT)
+                                    806 ;--------------------------------------------------------
+                                    807 ; paged external ram data
+                                    808 ;--------------------------------------------------------
+                                    809 	.area PSEG    (PAG,XDATA)
+                                    810 ;--------------------------------------------------------
+                                    811 ; external ram data
+                                    812 ;--------------------------------------------------------
+                                    813 	.area XSEG    (XDATA)
+                           0061A6   814 _MONMUX	=	0x61a6
+                           0061A6   815 _OPAMPMC	=	0x61a6
+                           006230   816 _I2CCFG	=	0x6230
+                           006231   817 _I2CSTAT	=	0x6231
+                           006232   818 _I2CDATA	=	0x6232
+                           006233   819 _I2CADDR	=	0x6233
+                           006234   820 _I2CWC	=	0x6234
+                           006235   821 _I2CIO	=	0x6235
+                           006243   822 _OBSSEL0	=	0x6243
+                           006244   823 _OBSSEL1	=	0x6244
+                           006245   824 _OBSSEL2	=	0x6245
+                           006246   825 _OBSSEL3	=	0x6246
+                           006247   826 _OBSSEL4	=	0x6247
+                           006248   827 _OBSSEL5	=	0x6248
+                           006249   828 _CHVER	=	0x6249
+                           00624A   829 _CHIPID	=	0x624a
+                           00624B   830 _TESTREG0	=	0x624b
+                           006260   831 _DBGDATA	=	0x6260
+                           006262   832 _SRCRC	=	0x6262
+                           006264   833 _BATTMON	=	0x6264
+                           006265   834 _IVCTRL	=	0x6265
+                           006270   835 _FCTL	=	0x6270
+                           006271   836 _FADDRL	=	0x6271
+                           006272   837 _FADDRH	=	0x6272
+                           006273   838 _FWDATA	=	0x6273
+                           006276   839 _CHIPINFO0	=	0x6276
+                           006277   840 _CHIPINFO1	=	0x6277
+                           006281   841 _IRCTL	=	0x6281
+                           006290   842 _CLD	=	0x6290
+                           0062A0   843 _XX_T1CCTL0	=	0x62a0
+                           0062A1   844 _XX_T1CCTL1	=	0x62a1
+                           0062A2   845 _XX_T1CCTL2	=	0x62a2
+                           0062A3   846 _T1CCTL3	=	0x62a3
+                           0062A4   847 _T1CCTL4	=	0x62a4
+                           0062A6   848 _XX_T1CC0L	=	0x62a6
+                           0062A7   849 _XX_T1CC0H	=	0x62a7
+                           0062A8   850 _XX_T1CC1L	=	0x62a8
+                           0062A9   851 _XX_T1CC1H	=	0x62a9
+                           0062AA   852 _XX_T1CC2L	=	0x62aa
+                           0062AB   853 _XX_T1CC2H	=	0x62ab
+                           0062AC   854 _T1CC3L	=	0x62ac
+                           0062AD   855 _T1CC3H	=	0x62ad
+                           0062AE   856 _T1CC4L	=	0x62ae
+                           0062AF   857 _T1CC4H	=	0x62af
+                           0062B0   858 _STCC	=	0x62b0
+                           0062B1   859 _STCS	=	0x62b1
+                           0062B2   860 _STCV0	=	0x62b2
+                           0062B3   861 _STCV1	=	0x62b3
+                           0062B4   862 _STCV2	=	0x62b4
+                           0062C0   863 _OPAMPC	=	0x62c0
+                           0062C1   864 _OPAMPS	=	0x62c1
+                           0062D0   865 _CMPCTL	=	0x62d0
+                           006000   866 _RFCORE_RAM	=	0x6000
+                           006000   867 _RXFIFO	=	0x6000
+                           006080   868 _TXFIFO	=	0x6080
+                           006100   869 _SRC_ADDR_TABLE	=	0x6100
+                           006160   870 _SRCRESMASK0	=	0x6160
+                           006161   871 _SRCRESMASK1	=	0x6161
+                           006162   872 _SRCRESMASK2	=	0x6162
+                           006163   873 _SRCRESINDEX	=	0x6163
+                           006164   874 _SRCEXTPENDEN0	=	0x6164
+                           006165   875 _SRCEXTPENDEN1	=	0x6165
+                           006166   876 _SRCEXTPENDEN2	=	0x6166
+                           006167   877 _SRCSHORTPENDEN0	=	0x6167
+                           006168   878 _SRCSHORTPENDEN1	=	0x6168
+                           006169   879 _SRCSHORTPENDEN2	=	0x6169
+                           00616A   880 _EXT_ADDR0	=	0x616a
+                           00616B   881 _EXT_ADDR1	=	0x616b
+                           00616C   882 _EXT_ADDR2	=	0x616c
+                           00616D   883 _EXT_ADDR3	=	0x616d
+                           00616E   884 _EXT_ADDR4	=	0x616e
+                           00616F   885 _EXT_ADDR5	=	0x616f
+                           006170   886 _EXT_ADDR6	=	0x6170
+                           006171   887 _EXT_ADDR7	=	0x6171
+                           006172   888 _PAN_ID0	=	0x6172
+                           006173   889 _PAN_ID1	=	0x6173
+                           006174   890 _SHORT_ADDR0	=	0x6174
+                           006175   891 _SHORT_ADDR1	=	0x6175
+                           006180   892 _FRMFILT0	=	0x6180
+                           006181   893 _FRMFILT1	=	0x6181
+                           006182   894 _SRCMATCH	=	0x6182
+                           006183   895 _SRCSHORTEN0	=	0x6183
+                           006184   896 _SRCSHORTEN1	=	0x6184
+                           006185   897 _SRCSHORTEN2	=	0x6185
+                           006186   898 _SRCEXTEN0	=	0x6186
+                           006187   899 _SRCEXTEN1	=	0x6187
+                           006188   900 _SRCEXTEN2	=	0x6188
+                           006189   901 _FRMCTRL0	=	0x6189
+                           00618A   902 _FRMCTRL1	=	0x618a
+                           00618B   903 _RXENABLE	=	0x618b
+                           00618C   904 _RXMASKSET	=	0x618c
+                           00618D   905 _RXMASKCLR	=	0x618d
+                           00618E   906 _FREQTUNE	=	0x618e
+                           00618F   907 _FREQCTRL	=	0x618f
+                           006190   908 _TXPOWER	=	0x6190
+                           006191   909 _TXCTRL	=	0x6191
+                           006192   910 _FSMSTAT0	=	0x6192
+                           006193   911 _FSMSTAT1	=	0x6193
+                           006194   912 _FIFOPCTRL	=	0x6194
+                           006195   913 _FSMCTRL	=	0x6195
+                           006196   914 _CCACTRL0	=	0x6196
+                           006197   915 _CCACTRL1	=	0x6197
+                           006198   916 _RSSI	=	0x6198
+                           006199   917 _RSSISTAT	=	0x6199
+                           00619A   918 _RXFIRST	=	0x619a
+                           00619B   919 _RXFIFOCNT	=	0x619b
+                           00619C   920 _TXFIFOCNT	=	0x619c
+                           00619D   921 _RXFIRST_PTR	=	0x619d
+                           00619E   922 _RXLAST_PTR	=	0x619e
+                           00619F   923 _RXP1_PTR	=	0x619f
+                           0061A1   924 _TXFIRST_PTR	=	0x61a1
+                           0061A2   925 _TXLAST_PTR	=	0x61a2
+                           0061A3   926 _RFIRQM0	=	0x61a3
+                           0061A4   927 _RFIRQM1	=	0x61a4
+                           0061A5   928 _RFERRM	=	0x61a5
+                           0061A7   929 _RFRND	=	0x61a7
+                           0061A8   930 _MDMCTRL0	=	0x61a8
+                           0061A9   931 _MDMCTRL1	=	0x61a9
+                           0061AA   932 _FREQEST	=	0x61aa
+                           0061AB   933 _RXCTRL	=	0x61ab
+                           0061AC   934 _FSCTRL	=	0x61ac
+                           0061AD   935 _FSCAL0	=	0x61ad
+                           0061AE   936 _FSCAL1	=	0x61ae
+                           0061AF   937 _FSCAL2	=	0x61af
+                           0061B0   938 _FSCAL3	=	0x61b0
+                           0061B1   939 _AGCCTRL0	=	0x61b1
+                           0061B2   940 _AGCCTRL1	=	0x61b2
+                           0061B3   941 _AGCCTRL2	=	0x61b3
+                           0061B4   942 _AGCCTRL3	=	0x61b4
+                           0061B5   943 _ADCTEST0	=	0x61b5
+                           0061B6   944 _ADCTEST1	=	0x61b6
+                           0061B7   945 _ADCTEST2	=	0x61b7
+                           0061B8   946 _MDMTEST0	=	0x61b8
+                           0061B9   947 _MDMTEST1	=	0x61b9
+                           0061BA   948 _DACTEST0	=	0x61ba
+                           0061BB   949 _DACTEST1	=	0x61bb
+                           0061BC   950 _DACTEST2	=	0x61bc
+                           0061BD   951 _ATEST	=	0x61bd
+                           0061BE   952 _PTEST0	=	0x61be
+                           0061BF   953 _PTEST1	=	0x61bf
+                           0061FA   954 _TXFILTCFG	=	0x61fa
+                           0061EB   955 _RFC_OBS_CTRL0	=	0x61eb
+                           0061EC   956 _RFC_OBS_CTRL1	=	0x61ec
+                           0061ED   957 _RFC_OBS_CTRL2	=	0x61ed
+                           0061C0   958 _CSPPROG0	=	0x61c0
+                           0061C1   959 _CSPPROG1	=	0x61c1
+                           0061C2   960 _CSPPROG2	=	0x61c2
+                           0061C3   961 _CSPPROG3	=	0x61c3
+                           0061C4   962 _CSPPROG4	=	0x61c4
+                           0061C5   963 _CSPPROG5	=	0x61c5
+                           0061C6   964 _CSPPROG6	=	0x61c6
+                           0061C7   965 _CSPPROG7	=	0x61c7
+                           0061C8   966 _CSPPROG8	=	0x61c8
+                           0061C9   967 _CSPPROG9	=	0x61c9
+                           0061CA   968 _CSPPROG10	=	0x61ca
+                           0061CB   969 _CSPPROG11	=	0x61cb
+                           0061CC   970 _CSPPROG12	=	0x61cc
+                           0061CD   971 _CSPPROG13	=	0x61cd
+                           0061CE   972 _CSPPROG14	=	0x61ce
+                           0061CF   973 _CSPPROG15	=	0x61cf
+                           0061D0   974 _CSPPROG16	=	0x61d0
+                           0061D1   975 _CSPPROG17	=	0x61d1
+                           0061D2   976 _CSPPROG18	=	0x61d2
+                           0061D3   977 _CSPPROG19	=	0x61d3
+                           0061D4   978 _CSPPROG20	=	0x61d4
+                           0061D5   979 _CSPPROG21	=	0x61d5
+                           0061D6   980 _CSPPROG22	=	0x61d6
+                           0061D7   981 _CSPPROG23	=	0x61d7
+                           0061E0   982 _CSPCTRL	=	0x61e0
+                           0061E1   983 _CSPSTAT	=	0x61e1
+                           0061E2   984 _CSPX	=	0x61e2
+                           0061E3   985 _CSPY	=	0x61e3
+                           0061E4   986 _CSPZ	=	0x61e4
+                           0061E5   987 _CSPT	=	0x61e5
+                           006200   988 _USBADDR	=	0x6200
+                           006201   989 _USBPOW	=	0x6201
+                           006202   990 _USBIIF	=	0x6202
+                           006204   991 _USBOIF	=	0x6204
+                           006206   992 _USBCIF	=	0x6206
+                           006207   993 _USBIIE	=	0x6207
+                           006209   994 _USBOIE	=	0x6209
+                           00620B   995 _USBCIE	=	0x620b
+                           00620C   996 _USBFRML	=	0x620c
+                           00620D   997 _USBFRMH	=	0x620d
+                           00620E   998 _USBINDEX	=	0x620e
+                           00620F   999 _USBCTRL	=	0x620f
+                           006210  1000 _USBMAXI	=	0x6210
+                           006211  1001 _USBCS0	=	0x6211
+                           006211  1002 _USBCSIL	=	0x6211
+                           006212  1003 _USBCSIH	=	0x6212
+                           006213  1004 _USBMAXO	=	0x6213
+                           006214  1005 _USBCSOL	=	0x6214
+                           006215  1006 _USBCSOH	=	0x6215
+                           006216  1007 _USBCNT0	=	0x6216
+                           006216  1008 _USBCNTL	=	0x6216
+                           006217  1009 _USBCNTH	=	0x6217
+                           006220  1010 _USBF0	=	0x6220
+                           006222  1011 _USBF1	=	0x6222
+                           006224  1012 _USBF2	=	0x6224
+                           006226  1013 _USBF3	=	0x6226
+                           006228  1014 _USBF4	=	0x6228
+                           00622A  1015 _USBF5	=	0x622a
+                           007080  1016 _X_P0	=	0x7080
+                           007086  1017 _X_U0CSR	=	0x7086
+                           007089  1018 _X_P0IFG	=	0x7089
+                           00708A  1019 _X_P1IFG	=	0x708a
+                           00708B  1020 _X_P2IFG	=	0x708b
+                           00708C  1021 _X_PICTL	=	0x708c
+                           00708D  1022 _X_P1IEN	=	0x708d
+                           00708F  1023 _X_P0INP	=	0x708f
+                           007090  1024 _X_P1	=	0x7090
+                           007091  1025 _X_RFIRQF1	=	0x7091
+                           007093  1026 _X_MPAGE	=	0x7093
+                           007093  1027 _X__XPAGE	=	0x7093
+                           007094  1028 _X_T2CTRL	=	0x7094
+                           007095  1029 _X_ST0	=	0x7095
+                           007096  1030 _X_ST1	=	0x7096
+                           007097  1031 _X_ST2	=	0x7097
+                           00709C  1032 _X_T2EVTCFG	=	0x709c
+                           00709D  1033 _X_SLEEPSTA	=	0x709d
+                           00709E  1034 _X_CLKCONSTA	=	0x709e
+                           00709F  1035 _X_FMAP	=	0x709f
+                           00709F  1036 _X_PSBANK	=	0x709f
+                           0070A0  1037 _X_P2	=	0x70a0
+                           0070A1  1038 _X_T2IRQF	=	0x70a1
+                           0070A2  1039 _X_T2M0	=	0x70a2
+                           0070A3  1040 _X_T2M1	=	0x70a3
+                           0070A4  1041 _X_T2MOVF0	=	0x70a4
+                           0070A5  1042 _X_T2MOVF1	=	0x70a5
+                           0070A6  1043 _X_T2MOVF2	=	0x70a6
+                           0070A7  1044 _X_T2IRQM	=	0x70a7
+                           0070AB  1045 _X_P0IEN	=	0x70ab
+                           0070AC  1046 _X_P2IEN	=	0x70ac
+                           0070AD  1047 _X_STLOAD	=	0x70ad
+                           0070AE  1048 _X_PMUX	=	0x70ae
+                           0070AF  1049 _X_T1STAT	=	0x70af
+                           0070B1  1050 _X_ENCDI	=	0x70b1
+                           0070B2  1051 _X_ENCDO	=	0x70b2
+                           0070B3  1052 _X_ENCCS	=	0x70b3
+                           0070B4  1053 _X_ADCCON1	=	0x70b4
+                           0070B5  1054 _X_ADCCON2	=	0x70b5
+                           0070B6  1055 _X_ADCCON3	=	0x70b6
+                           0070BA  1056 _X_ADCL	=	0x70ba
+                           0070BB  1057 _X_ADCH	=	0x70bb
+                           0070BC  1058 _X_RNDL	=	0x70bc
+                           0070BD  1059 _X_RNDH	=	0x70bd
+                           0070BE  1060 _X_SLEEPCMD	=	0x70be
+                           0070BF  1061 _X_RFERRF	=	0x70bf
+                           0070C1  1062 _X_U0DBUF	=	0x70c1
+                           0070C2  1063 _X_U0BAUD	=	0x70c2
+                           0070C3  1064 _X_T2MSEL	=	0x70c3
+                           0070C4  1065 _X_U0UCR	=	0x70c4
+                           0070C5  1066 _X_U0GCR	=	0x70c5
+                           0070C6  1067 _X_CLKCONCMD	=	0x70c6
+                           0070C7  1068 _X_MEMCTR	=	0x70c7
+                           0070C9  1069 _X_WDCTL	=	0x70c9
+                           0070CA  1070 _X_T3CNT	=	0x70ca
+                           0070CB  1071 _X_T3CTL	=	0x70cb
+                           0070CC  1072 _X_T3CCTL0	=	0x70cc
+                           0070CD  1073 _X_T3CC0	=	0x70cd
+                           0070CE  1074 _X_T3CCTL1	=	0x70ce
+                           0070CF  1075 _X_T3CC1	=	0x70cf
+                           0070D1  1076 _X_DMAIRQ	=	0x70d1
+                           0070D2  1077 _X_DMA1CFGL	=	0x70d2
+                           0070D3  1078 _X_DMA1CFGH	=	0x70d3
+                           0070D4  1079 _X_DMA0CFGL	=	0x70d4
+                           0070D5  1080 _X_DMA0CFGH	=	0x70d5
+                           0070D6  1081 _X_DMAARM	=	0x70d6
+                           0070D7  1082 _X_DMAREQ	=	0x70d7
+                           0070D8  1083 _X_TIMIF	=	0x70d8
+                           0070D9  1084 _X_RFD	=	0x70d9
+                           0070DA  1085 _X_T1CC0L	=	0x70da
+                           0070DB  1086 _X_T1CC0H	=	0x70db
+                           0070DC  1087 _X_T1CC1L	=	0x70dc
+                           0070DD  1088 _X_T1CC1H	=	0x70dd
+                           0070DE  1089 _X_T1CC2L	=	0x70de
+                           0070DF  1090 _X_T1CC2H	=	0x70df
+                           0070E1  1091 _X_RFST	=	0x70e1
+                           0070E2  1092 _X_T1CNTL	=	0x70e2
+                           0070E3  1093 _X_T1CNTH	=	0x70e3
+                           0070E4  1094 _X_T1CTL	=	0x70e4
+                           0070E5  1095 _X_T1CCTL0	=	0x70e5
+                           0070E6  1096 _X_T1CCTL1	=	0x70e6
+                           0070E7  1097 _X_T1CCTL2	=	0x70e7
+                           0070E9  1098 _X_RFIRQF0	=	0x70e9
+                           0070EA  1099 _X_T4CNT	=	0x70ea
+                           0070EB  1100 _X_T4CTL	=	0x70eb
+                           0070EC  1101 _X_T4CCTL0	=	0x70ec
+                           0070ED  1102 _X_T4CC0	=	0x70ed
+                           0070EE  1103 _X_T4CCTL1	=	0x70ee
+                           0070EF  1104 _X_T4CC1	=	0x70ef
+                           0070F1  1105 _X_PERCFG	=	0x70f1
+                           0070F2  1106 _X_APCFG	=	0x70f2
+                           0070F3  1107 _X_P0SEL	=	0x70f3
+                           0070F4  1108 _X_P1SEL	=	0x70f4
+                           0070F5  1109 _X_P2SEL	=	0x70f5
+                           0070F6  1110 _X_P1INP	=	0x70f6
+                           0070F7  1111 _X_P2INP	=	0x70f7
+                           0070F8  1112 _X_U1CSR	=	0x70f8
+                           0070F9  1113 _X_U1DBUF	=	0x70f9
+                           0070FA  1114 _X_U1BAUD	=	0x70fa
+                           0070FB  1115 _X_U1UCR	=	0x70fb
+                           0070FC  1116 _X_U1GCR	=	0x70fc
+                           0070FD  1117 _X_P0DIR	=	0x70fd
+                           0070FE  1118 _X_P1DIR	=	0x70fe
+                           0070FF  1119 _X_P2DIR	=	0x70ff
+                           007800  1120 _X_INFOPAGE	=	0x7800
+                           00780C  1121 _X_IEEE_ADDR	=	0x780c
+      000000                       1122 _slip_active::
+      000000                       1123 	.ds 1
+      000001                       1124 _begin:
+      000001                       1125 	.ds 2
+      000003                       1126 _end:
+      000003                       1127 	.ds 2
+      000005                       1128 _rxbuf:
+      000005                       1129 	.ds 256
+      000105                       1130 _pkt_end:
+      000105                       1131 	.ds 2
+                                   1132 ;--------------------------------------------------------
+                                   1133 ; absolute external ram data
+                                   1134 ;--------------------------------------------------------
+                                   1135 	.area XABS    (ABS,XDATA)
+                                   1136 ;--------------------------------------------------------
+                                   1137 ; external initialized ram data
+                                   1138 ;--------------------------------------------------------
+                                   1139 	.area XISEG   (XDATA)
+      000000                       1140 _slip_process::
+      000000                       1141 	.ds 10
+      00000A                       1142 _state:
+      00000A                       1143 	.ds 1
+      00000B                       1144 _input_callback:
+      00000B                       1145 	.ds 3
+                                   1146 	.area HOME    (CODE)
+                                   1147 	.area GSINIT0 (CODE)
+                                   1148 	.area GSINIT1 (CODE)
+                                   1149 	.area GSINIT2 (CODE)
+                                   1150 	.area GSINIT3 (CODE)
+                                   1151 	.area GSINIT4 (CODE)
+                                   1152 	.area GSINIT5 (CODE)
+                                   1153 	.area GSINIT  (CODE)
+                                   1154 	.area GSFINAL (CODE)
+                                   1155 	.area CSEG    (CODE)
+                                   1156 ;--------------------------------------------------------
+                                   1157 ; global & static initialisations
+                                   1158 ;--------------------------------------------------------
+                                   1159 	.area HOME    (CODE)
+                                   1160 	.area GSINIT  (CODE)
+                                   1161 	.area GSFINAL (CODE)
+                                   1162 	.area GSINIT  (CODE)
+                                   1163 ;--------------------------------------------------------
+                                   1164 ; Home
+                                   1165 ;--------------------------------------------------------
+                                   1166 	.area HOME    (CODE)
+                                   1167 	.area HOME    (CODE)
+                                   1168 ;--------------------------------------------------------
+                                   1169 ; code
+                                   1170 ;--------------------------------------------------------
+                                   1171 	.area BANK1   (CODE)
+                                   1172 ;------------------------------------------------------------
+                                   1173 ;Allocation info for local variables in function 'slip_set_input_callback'
+                                   1174 ;------------------------------------------------------------
+                                   1175 ;c                         Allocated to registers 
+                                   1176 ;------------------------------------------------------------
+                                   1177 ;	../../../core/dev/slip.c:91: slip_set_input_callback(void (*c)(void))
+                                   1178 ;	-----------------------------------------
+                                   1179 ;	 function slip_set_input_callback
+                                   1180 ;	-----------------------------------------
+      000000                       1181 _slip_set_input_callback:
+                           000007  1182 	ar7 = 0x07
+                           000006  1183 	ar6 = 0x06
+                           000005  1184 	ar5 = 0x05
+                           000004  1185 	ar4 = 0x04
+                           000003  1186 	ar3 = 0x03
+                           000002  1187 	ar2 = 0x02
+                           000001  1188 	ar1 = 0x01
+                           000000  1189 	ar0 = 0x00
+      000000 AF F0            [24] 1190 	mov	r7,b
+      000002 AE 83            [24] 1191 	mov	r6,dph
+      000004 E5 82            [12] 1192 	mov	a,dpl
+      000006 90r00r0B         [24] 1193 	mov	dptr,#_input_callback
+      000009 F0               [24] 1194 	movx	@dptr,a
+      00000A EE               [12] 1195 	mov	a,r6
+      00000B A3               [24] 1196 	inc	dptr
+      00000C F0               [24] 1197 	movx	@dptr,a
+      00000D EF               [12] 1198 	mov	a,r7
+      00000E A3               [24] 1199 	inc	dptr
+      00000F F0               [24] 1200 	movx	@dptr,a
+                                   1201 ;	../../../core/dev/slip.c:93: input_callback = c;
+                                   1202 ;	../../../core/dev/slip.c:94: }
+      000010 02r00r00         [24] 1203 	ljmp	__sdcc_banked_ret
+                                   1204 ;------------------------------------------------------------
+                                   1205 ;Allocation info for local variables in function 'slip_send'
+                                   1206 ;------------------------------------------------------------
+                                   1207 ;i                         Allocated to stack - sp -1
+                                   1208 ;ptr                       Allocated to registers r5 r6 r7 
+                                   1209 ;c                         Allocated to registers r4 
+                                   1210 ;------------------------------------------------------------
+                                   1211 ;	../../../core/dev/slip.c:101: slip_send(void)
+                                   1212 ;	-----------------------------------------
+                                   1213 ;	 function slip_send
+                                   1214 ;	-----------------------------------------
+      000013                       1215 _slip_send:
+      000013 05 81            [12] 1216 	inc	sp
+      000015 05 81            [12] 1217 	inc	sp
+                                   1218 ;	../../../core/dev/slip.c:107: slip_arch_writeb(SLIP_END);
+      000017 75 82 C0         [24] 1219 	mov	dpl,#0xc0
+      00001A 78r00            [12] 1220 	mov	r0,#_slip_arch_writeb
+      00001C 79s00            [12] 1221 	mov	r1,#(_slip_arch_writeb >> 8)
+      00001E 7As00            [12] 1222 	mov	r2,#(_slip_arch_writeb >> 16)
+      000020 12r00r00         [24] 1223 	lcall	__sdcc_banked_call
+                                   1224 ;	../../../core/dev/slip.c:109: ptr = &uip_buf[UIP_LLH_LEN];
+      000023 7Dr00            [12] 1225 	mov	r5,#_uip_aligned_buf
+      000025 7Es00            [12] 1226 	mov	r6,#(_uip_aligned_buf >> 8)
+      000027 7F 00            [12] 1227 	mov	r7,#0x00
+                                   1228 ;	../../../core/dev/slip.c:110: for(i = 0; i < uip_len; ++i) {
+      000029 A8 81            [24] 1229 	mov	r0,sp
+      00002B 18               [12] 1230 	dec	r0
+      00002C E4               [12] 1231 	clr	a
+      00002D F6               [12] 1232 	mov	@r0,a
+      00002E 08               [12] 1233 	inc	r0
+      00002F F6               [12] 1234 	mov	@r0,a
+      000030                       1235 00110$:
+      000030 C0 05            [24] 1236 	push	ar5
+      000032 C0 06            [24] 1237 	push	ar6
+      000034 C0 07            [24] 1238 	push	ar7
+      000036 90r00r00         [24] 1239 	mov	dptr,#_uip_len
+      000039 E0               [24] 1240 	movx	a,@dptr
+      00003A FA               [12] 1241 	mov	r2,a
+      00003B A3               [24] 1242 	inc	dptr
+      00003C E0               [24] 1243 	movx	a,@dptr
+      00003D FF               [12] 1244 	mov	r7,a
+      00003E E5 81            [12] 1245 	mov	a,sp
+      000040 24 FC            [12] 1246 	add	a,#0xfc
+      000042 F8               [12] 1247 	mov	r0,a
+      000043 C3               [12] 1248 	clr	c
+      000044 E6               [12] 1249 	mov	a,@r0
+      000045 9A               [12] 1250 	subb	a,r2
+      000046 08               [12] 1251 	inc	r0
+      000047 E6               [12] 1252 	mov	a,@r0
+      000048 9F               [12] 1253 	subb	a,r7
+      000049 D0 07            [24] 1254 	pop	ar7
+      00004B D0 06            [24] 1255 	pop	ar6
+      00004D D0 05            [24] 1256 	pop	ar5
+      00004F 40 03            [24] 1257 	jc	00135$
+      000051 02r00rDD         [24] 1258 	ljmp	00108$
+      000054                       1259 00135$:
+                                   1260 ;	../../../core/dev/slip.c:111: if(i == UIP_TCPIP_HLEN) {
+      000054 A8 81            [24] 1261 	mov	r0,sp
+      000056 18               [12] 1262 	dec	r0
+      000057 B6 3C 15         [24] 1263 	cjne	@r0,#0x3c,00102$
+      00005A 08               [12] 1264 	inc	r0
+      00005B B6 00 11         [24] 1265 	cjne	@r0,#0x00,00102$
+                                   1266 ;	../../../core/dev/slip.c:112: ptr = (uint8_t *)uip_appdata;
+      00005E 90r00r00         [24] 1267 	mov	dptr,#_uip_appdata
+      000061 E0               [24] 1268 	movx	a,@dptr
+      000062 FA               [12] 1269 	mov	r2,a
+      000063 A3               [24] 1270 	inc	dptr
+      000064 E0               [24] 1271 	movx	a,@dptr
+      000065 FB               [12] 1272 	mov	r3,a
+      000066 A3               [24] 1273 	inc	dptr
+      000067 E0               [24] 1274 	movx	a,@dptr
+      000068 FC               [12] 1275 	mov	r4,a
+      000069 8A 05            [24] 1276 	mov	ar5,r2
+      00006B 8B 06            [24] 1277 	mov	ar6,r3
+      00006D 8C 07            [24] 1278 	mov	ar7,r4
+      00006F                       1279 00102$:
+                                   1280 ;	../../../core/dev/slip.c:114: c = *ptr++;
+      00006F 8D 82            [24] 1281 	mov	dpl,r5
+      000071 8E 83            [24] 1282 	mov	dph,r6
+      000073 8F F0            [24] 1283 	mov	b,r7
+      000075 12r00r00         [24] 1284 	lcall	__gptrget
+      000078 FC               [12] 1285 	mov	r4,a
+      000079 A3               [24] 1286 	inc	dptr
+      00007A AD 82            [24] 1287 	mov	r5,dpl
+      00007C AE 83            [24] 1288 	mov	r6,dph
+                                   1289 ;	../../../core/dev/slip.c:115: if(c == SLIP_END) {
+      00007E BC C0 1C         [24] 1290 	cjne	r4,#0xc0,00106$
+                                   1291 ;	../../../core/dev/slip.c:116: slip_arch_writeb(SLIP_ESC);
+      000081 75 82 DB         [24] 1292 	mov	dpl,#0xdb
+      000084 C0 07            [24] 1293 	push	ar7
+      000086 C0 06            [24] 1294 	push	ar6
+      000088 C0 05            [24] 1295 	push	ar5
+      00008A 78r00            [12] 1296 	mov	r0,#_slip_arch_writeb
+      00008C 79s00            [12] 1297 	mov	r1,#(_slip_arch_writeb >> 8)
+      00008E 7As00            [12] 1298 	mov	r2,#(_slip_arch_writeb >> 16)
+      000090 12r00r00         [24] 1299 	lcall	__sdcc_banked_call
+      000093 D0 05            [24] 1300 	pop	ar5
+      000095 D0 06            [24] 1301 	pop	ar6
+      000097 D0 07            [24] 1302 	pop	ar7
+                                   1303 ;	../../../core/dev/slip.c:117: c = SLIP_ESC_END;
+      000099 7C DC            [12] 1304 	mov	r4,#0xdc
+      00009B 80 1D            [24] 1305 	sjmp	00107$
+      00009D                       1306 00106$:
+                                   1307 ;	../../../core/dev/slip.c:118: } else if(c == SLIP_ESC) {
+      00009D BC DB 1A         [24] 1308 	cjne	r4,#0xdb,00107$
+                                   1309 ;	../../../core/dev/slip.c:119: slip_arch_writeb(SLIP_ESC);
+      0000A0 75 82 DB         [24] 1310 	mov	dpl,#0xdb
+      0000A3 C0 07            [24] 1311 	push	ar7
+      0000A5 C0 06            [24] 1312 	push	ar6
+      0000A7 C0 05            [24] 1313 	push	ar5
+      0000A9 78r00            [12] 1314 	mov	r0,#_slip_arch_writeb
+      0000AB 79s00            [12] 1315 	mov	r1,#(_slip_arch_writeb >> 8)
+      0000AD 7As00            [12] 1316 	mov	r2,#(_slip_arch_writeb >> 16)
+      0000AF 12r00r00         [24] 1317 	lcall	__sdcc_banked_call
+      0000B2 D0 05            [24] 1318 	pop	ar5
+      0000B4 D0 06            [24] 1319 	pop	ar6
+      0000B6 D0 07            [24] 1320 	pop	ar7
+                                   1321 ;	../../../core/dev/slip.c:120: c = SLIP_ESC_ESC;
+      0000B8 7C DD            [12] 1322 	mov	r4,#0xdd
+      0000BA                       1323 00107$:
+                                   1324 ;	../../../core/dev/slip.c:122: slip_arch_writeb(c);
+      0000BA 8C 82            [24] 1325 	mov	dpl,r4
+      0000BC C0 07            [24] 1326 	push	ar7
+      0000BE C0 06            [24] 1327 	push	ar6
+      0000C0 C0 05            [24] 1328 	push	ar5
+      0000C2 78r00            [12] 1329 	mov	r0,#_slip_arch_writeb
+      0000C4 79s00            [12] 1330 	mov	r1,#(_slip_arch_writeb >> 8)
+      0000C6 7As00            [12] 1331 	mov	r2,#(_slip_arch_writeb >> 16)
+      0000C8 12r00r00         [24] 1332 	lcall	__sdcc_banked_call
+      0000CB D0 05            [24] 1333 	pop	ar5
+      0000CD D0 06            [24] 1334 	pop	ar6
+      0000CF D0 07            [24] 1335 	pop	ar7
+                                   1336 ;	../../../core/dev/slip.c:110: for(i = 0; i < uip_len; ++i) {
+      0000D1 A8 81            [24] 1337 	mov	r0,sp
+      0000D3 18               [12] 1338 	dec	r0
+      0000D4 06               [12] 1339 	inc	@r0
+      0000D5 B6 00 02         [24] 1340 	cjne	@r0,#0x00,00142$
+      0000D8 08               [12] 1341 	inc	r0
+      0000D9 06               [12] 1342 	inc	@r0
+      0000DA                       1343 00142$:
+      0000DA 02r00r30         [24] 1344 	ljmp	00110$
+      0000DD                       1345 00108$:
+                                   1346 ;	../../../core/dev/slip.c:124: slip_arch_writeb(SLIP_END);
+      0000DD 75 82 C0         [24] 1347 	mov	dpl,#0xc0
+      0000E0 78r00            [12] 1348 	mov	r0,#_slip_arch_writeb
+      0000E2 79s00            [12] 1349 	mov	r1,#(_slip_arch_writeb >> 8)
+      0000E4 7As00            [12] 1350 	mov	r2,#(_slip_arch_writeb >> 16)
+      0000E6 12r00r00         [24] 1351 	lcall	__sdcc_banked_call
+                                   1352 ;	../../../core/dev/slip.c:126: return UIP_FW_OK;
+      0000E9 75 82 00         [24] 1353 	mov	dpl,#0x00
+                                   1354 ;	../../../core/dev/slip.c:127: }
+      0000EC 15 81            [12] 1355 	dec	sp
+      0000EE 15 81            [12] 1356 	dec	sp
+      0000F0 02r00r00         [24] 1357 	ljmp	__sdcc_banked_ret
+                                   1358 ;------------------------------------------------------------
+                                   1359 ;Allocation info for local variables in function 'slip_write'
+                                   1360 ;------------------------------------------------------------
+                                   1361 ;len                       Allocated to stack - sp -4
+                                   1362 ;_ptr                      Allocated to registers r5 r6 r7 
+                                   1363 ;ptr                       Allocated to registers r5 r6 r7 
+                                   1364 ;i                         Allocated to registers r3 r4 
+                                   1365 ;c                         Allocated to registers r2 
+                                   1366 ;------------------------------------------------------------
+                                   1367 ;	../../../core/dev/slip.c:131: slip_write(const void *_ptr, int len)
+                                   1368 ;	-----------------------------------------
+                                   1369 ;	 function slip_write
+                                   1370 ;	-----------------------------------------
+      0000F3                       1371 _slip_write:
+      0000F3 AD 82            [24] 1372 	mov	r5,dpl
+      0000F5 AE 83            [24] 1373 	mov	r6,dph
+      0000F7 AF F0            [24] 1374 	mov	r7,b
+                                   1375 ;	../../../core/dev/slip.c:133: const uint8_t *ptr = _ptr;
+                                   1376 ;	../../../core/dev/slip.c:137: slip_arch_writeb(SLIP_END);
+      0000F9 75 82 C0         [24] 1377 	mov	dpl,#0xc0
+      0000FC C0 07            [24] 1378 	push	ar7
+      0000FE C0 06            [24] 1379 	push	ar6
+      000100 C0 05            [24] 1380 	push	ar5
+      000102 78r00            [12] 1381 	mov	r0,#_slip_arch_writeb
+      000104 79s00            [12] 1382 	mov	r1,#(_slip_arch_writeb >> 8)
+      000106 7As00            [12] 1383 	mov	r2,#(_slip_arch_writeb >> 16)
+      000108 12r00r00         [24] 1384 	lcall	__sdcc_banked_call
+      00010B D0 05            [24] 1385 	pop	ar5
+      00010D D0 06            [24] 1386 	pop	ar6
+      00010F D0 07            [24] 1387 	pop	ar7
+                                   1388 ;	../../../core/dev/slip.c:139: for(i = 0; i < len; ++i) {
+      000111 7B 00            [12] 1389 	mov	r3,#0x00
+      000113 7C 00            [12] 1390 	mov	r4,#0x00
+      000115                       1391 00108$:
+      000115 C0 05            [24] 1392 	push	ar5
+      000117 C0 06            [24] 1393 	push	ar6
+      000119 C0 07            [24] 1394 	push	ar7
+      00011B 8B 02            [24] 1395 	mov	ar2,r3
+      00011D 8C 07            [24] 1396 	mov	ar7,r4
+      00011F E5 81            [12] 1397 	mov	a,sp
+      000121 24 F9            [12] 1398 	add	a,#0xf9
+      000123 F8               [12] 1399 	mov	r0,a
+      000124 86 05            [24] 1400 	mov	ar5,@r0
+      000126 08               [12] 1401 	inc	r0
+      000127 86 06            [24] 1402 	mov	ar6,@r0
+      000129 C3               [12] 1403 	clr	c
+      00012A EA               [12] 1404 	mov	a,r2
+      00012B 9D               [12] 1405 	subb	a,r5
+      00012C EF               [12] 1406 	mov	a,r7
+      00012D 9E               [12] 1407 	subb	a,r6
+      00012E D0 07            [24] 1408 	pop	ar7
+      000130 D0 06            [24] 1409 	pop	ar6
+      000132 D0 05            [24] 1410 	pop	ar5
+      000134 40 03            [24] 1411 	jc	00129$
+      000136 02r01rBB         [24] 1412 	ljmp	00106$
+      000139                       1413 00129$:
+                                   1414 ;	../../../core/dev/slip.c:140: c = *ptr++;
+      000139 8D 82            [24] 1415 	mov	dpl,r5
+      00013B 8E 83            [24] 1416 	mov	dph,r6
+      00013D 8F F0            [24] 1417 	mov	b,r7
+      00013F 12r00r00         [24] 1418 	lcall	__gptrget
+      000142 FA               [12] 1419 	mov	r2,a
+      000143 A3               [24] 1420 	inc	dptr
+      000144 AD 82            [24] 1421 	mov	r5,dpl
+      000146 AE 83            [24] 1422 	mov	r6,dph
+                                   1423 ;	../../../core/dev/slip.c:141: if(c == SLIP_END) {
+      000148 BA C0 24         [24] 1424 	cjne	r2,#0xc0,00104$
+                                   1425 ;	../../../core/dev/slip.c:142: slip_arch_writeb(SLIP_ESC);
+      00014B 75 82 DB         [24] 1426 	mov	dpl,#0xdb
+      00014E C0 07            [24] 1427 	push	ar7
+      000150 C0 06            [24] 1428 	push	ar6
+      000152 C0 05            [24] 1429 	push	ar5
+      000154 C0 04            [24] 1430 	push	ar4
+      000156 C0 03            [24] 1431 	push	ar3
+      000158 78r00            [12] 1432 	mov	r0,#_slip_arch_writeb
+      00015A 79s00            [12] 1433 	mov	r1,#(_slip_arch_writeb >> 8)
+      00015C 7As00            [12] 1434 	mov	r2,#(_slip_arch_writeb >> 16)
+      00015E 12r00r00         [24] 1435 	lcall	__sdcc_banked_call
+      000161 D0 03            [24] 1436 	pop	ar3
+      000163 D0 04            [24] 1437 	pop	ar4
+      000165 D0 05            [24] 1438 	pop	ar5
+      000167 D0 06            [24] 1439 	pop	ar6
+      000169 D0 07            [24] 1440 	pop	ar7
+                                   1441 ;	../../../core/dev/slip.c:143: c = SLIP_ESC_END;
+      00016B 7A DC            [12] 1442 	mov	r2,#0xdc
+      00016D 80 25            [24] 1443 	sjmp	00105$
+      00016F                       1444 00104$:
+                                   1445 ;	../../../core/dev/slip.c:144: } else if(c == SLIP_ESC) {
+      00016F BA DB 22         [24] 1446 	cjne	r2,#0xdb,00105$
+                                   1447 ;	../../../core/dev/slip.c:145: slip_arch_writeb(SLIP_ESC);
+      000172 75 82 DB         [24] 1448 	mov	dpl,#0xdb
+      000175 C0 07            [24] 1449 	push	ar7
+      000177 C0 06            [24] 1450 	push	ar6
+      000179 C0 05            [24] 1451 	push	ar5
+      00017B C0 04            [24] 1452 	push	ar4
+      00017D C0 03            [24] 1453 	push	ar3
+      00017F 78r00            [12] 1454 	mov	r0,#_slip_arch_writeb
+      000181 79s00            [12] 1455 	mov	r1,#(_slip_arch_writeb >> 8)
+      000183 7As00            [12] 1456 	mov	r2,#(_slip_arch_writeb >> 16)
+      000185 12r00r00         [24] 1457 	lcall	__sdcc_banked_call
+      000188 D0 03            [24] 1458 	pop	ar3
+      00018A D0 04            [24] 1459 	pop	ar4
+      00018C D0 05            [24] 1460 	pop	ar5
+      00018E D0 06            [24] 1461 	pop	ar6
+      000190 D0 07            [24] 1462 	pop	ar7
+                                   1463 ;	../../../core/dev/slip.c:146: c = SLIP_ESC_ESC;
+      000192 7A DD            [12] 1464 	mov	r2,#0xdd
+      000194                       1465 00105$:
+                                   1466 ;	../../../core/dev/slip.c:148: slip_arch_writeb(c);
+      000194 8A 82            [24] 1467 	mov	dpl,r2
+      000196 C0 07            [24] 1468 	push	ar7
+      000198 C0 06            [24] 1469 	push	ar6
+      00019A C0 05            [24] 1470 	push	ar5
+      00019C C0 04            [24] 1471 	push	ar4
+      00019E C0 03            [24] 1472 	push	ar3
+      0001A0 78r00            [12] 1473 	mov	r0,#_slip_arch_writeb
+      0001A2 79s00            [12] 1474 	mov	r1,#(_slip_arch_writeb >> 8)
+      0001A4 7As00            [12] 1475 	mov	r2,#(_slip_arch_writeb >> 16)
+      0001A6 12r00r00         [24] 1476 	lcall	__sdcc_banked_call
+      0001A9 D0 03            [24] 1477 	pop	ar3
+      0001AB D0 04            [24] 1478 	pop	ar4
+      0001AD D0 05            [24] 1479 	pop	ar5
+      0001AF D0 06            [24] 1480 	pop	ar6
+      0001B1 D0 07            [24] 1481 	pop	ar7
+                                   1482 ;	../../../core/dev/slip.c:139: for(i = 0; i < len; ++i) {
+      0001B3 0B               [12] 1483 	inc	r3
+      0001B4 BB 00 01         [24] 1484 	cjne	r3,#0x00,00134$
+      0001B7 0C               [12] 1485 	inc	r4
+      0001B8                       1486 00134$:
+      0001B8 02r01r15         [24] 1487 	ljmp	00108$
+      0001BB                       1488 00106$:
+                                   1489 ;	../../../core/dev/slip.c:150: slip_arch_writeb(SLIP_END);
+      0001BB 75 82 C0         [24] 1490 	mov	dpl,#0xc0
+      0001BE 78r00            [12] 1491 	mov	r0,#_slip_arch_writeb
+      0001C0 79s00            [12] 1492 	mov	r1,#(_slip_arch_writeb >> 8)
+      0001C2 7As00            [12] 1493 	mov	r2,#(_slip_arch_writeb >> 16)
+      0001C4 12r00r00         [24] 1494 	lcall	__sdcc_banked_call
+                                   1495 ;	../../../core/dev/slip.c:152: return len;
+      0001C7 E5 81            [12] 1496 	mov	a,sp
+      0001C9 24 FC            [12] 1497 	add	a,#0xfc
+      0001CB F8               [12] 1498 	mov	r0,a
+      0001CC 86 07            [24] 1499 	mov	ar7,@r0
+      0001CE 8F 82            [24] 1500 	mov	dpl,r7
+                                   1501 ;	../../../core/dev/slip.c:153: }
+      0001D0 02r00r00         [24] 1502 	ljmp	__sdcc_banked_ret
+                                   1503 ;------------------------------------------------------------
+                                   1504 ;Allocation info for local variables in function 'rxbuf_init'
+                                   1505 ;------------------------------------------------------------
+                                   1506 ;	../../../core/dev/slip.c:156: rxbuf_init(void)
+                                   1507 ;	-----------------------------------------
+                                   1508 ;	 function rxbuf_init
+                                   1509 ;	-----------------------------------------
+      0001D3                       1510 _rxbuf_init:
+                                   1511 ;	../../../core/dev/slip.c:158: begin = end = pkt_end = 0;
+      0001D3 90r01r05         [24] 1512 	mov	dptr,#_pkt_end
+      0001D6 E4               [12] 1513 	clr	a
+      0001D7 F0               [24] 1514 	movx	@dptr,a
+      0001D8 A3               [24] 1515 	inc	dptr
+      0001D9 F0               [24] 1516 	movx	@dptr,a
+      0001DA 90r00r03         [24] 1517 	mov	dptr,#_end
+      0001DD F0               [24] 1518 	movx	@dptr,a
+      0001DE A3               [24] 1519 	inc	dptr
+      0001DF F0               [24] 1520 	movx	@dptr,a
+      0001E0 90r00r01         [24] 1521 	mov	dptr,#_begin
+      0001E3 F0               [24] 1522 	movx	@dptr,a
+      0001E4 A3               [24] 1523 	inc	dptr
+      0001E5 F0               [24] 1524 	movx	@dptr,a
+                                   1525 ;	../../../core/dev/slip.c:159: state = STATE_OK;
+      0001E6 90r00r0A         [24] 1526 	mov	dptr,#_state
+      0001E9 04               [12] 1527 	inc	a
+      0001EA F0               [24] 1528 	movx	@dptr,a
+                                   1529 ;	../../../core/dev/slip.c:160: }
+      0001EB 02r00r00         [24] 1530 	ljmp	__sdcc_banked_ret
+                                   1531 ;------------------------------------------------------------
+                                   1532 ;Allocation info for local variables in function 'slip_poll_handler'
+                                   1533 ;------------------------------------------------------------
+                                   1534 ;blen                      Allocated to stack - sp -11
+                                   1535 ;outbuf                    Allocated to stack - sp -6
+                                   1536 ;i                         Allocated to registers r3 r4 
+                                   1537 ;len                       Allocated to stack - sp -1
+                                   1538 ;i                         Allocated to registers 
+                                   1539 ;sloc0                     Allocated to stack - sp -3
+                                   1540 ;sloc1                     Allocated to stack - sp +5
+                                   1541 ;sloc2                     Allocated to stack - sp +7
+                                   1542 ;------------------------------------------------------------
+                                   1543 ;	../../../core/dev/slip.c:164: slip_poll_handler(uint8_t *outbuf, uint16_t blen)
+                                   1544 ;	-----------------------------------------
+                                   1545 ;	 function slip_poll_handler
+                                   1546 ;	-----------------------------------------
+      0001EE                       1547 _slip_poll_handler:
+      0001EE C0 82            [24] 1548 	push	dpl
+      0001F0 C0 83            [24] 1549 	push	dph
+      0001F2 C0 F0            [24] 1550 	push	b
+      0001F4 E5 81            [12] 1551 	mov	a,sp
+      0001F6 24 04            [12] 1552 	add	a,#0x04
+      0001F8 F5 81            [12] 1553 	mov	sp,a
+                                   1554 ;	../../../core/dev/slip.c:167: if(rxbuf[begin] == 'C') {
+      0001FA 90r00r01         [24] 1555 	mov	dptr,#_begin
+      0001FD E0               [24] 1556 	movx	a,@dptr
+      0001FE FB               [12] 1557 	mov	r3,a
+      0001FF A3               [24] 1558 	inc	dptr
+      000200 E0               [24] 1559 	movx	a,@dptr
+      000201 FC               [12] 1560 	mov	r4,a
+      000202 EB               [12] 1561 	mov	a,r3
+      000203 24r05            [12] 1562 	add	a,#_rxbuf
+      000205 FF               [12] 1563 	mov	r7,a
+      000206 EC               [12] 1564 	mov	a,r4
+      000207 34s00            [12] 1565 	addc	a,#(_rxbuf >> 8)
+      000209 FE               [12] 1566 	mov	r6,a
+      00020A 8F 82            [24] 1567 	mov	dpl,r7
+      00020C 8E 83            [24] 1568 	mov	dph,r6
+      00020E E0               [24] 1569 	movx	a,@dptr
+      00020F FA               [12] 1570 	mov	r2,a
+      000210 BA 43 02         [24] 1571 	cjne	r2,#0x43,00196$
+      000213 80 03            [24] 1572 	sjmp	00197$
+      000215                       1573 00196$:
+      000215 02r02rED         [24] 1574 	ljmp	00107$
+      000218                       1575 00197$:
+                                   1576 ;	../../../core/dev/slip.c:169: if(begin < end && (end - begin) >= 6
+      000218 90r00r03         [24] 1577 	mov	dptr,#_end
+      00021B E0               [24] 1578 	movx	a,@dptr
+      00021C FD               [12] 1579 	mov	r5,a
+      00021D A3               [24] 1580 	inc	dptr
+      00021E E0               [24] 1581 	movx	a,@dptr
+      00021F FA               [12] 1582 	mov	r2,a
+      000220 C3               [12] 1583 	clr	c
+      000221 EB               [12] 1584 	mov	a,r3
+      000222 9D               [12] 1585 	subb	a,r5
+      000223 EC               [12] 1586 	mov	a,r4
+      000224 9A               [12] 1587 	subb	a,r2
+      000225 40 03            [24] 1588 	jc	00198$
+      000227 02r02rED         [24] 1589 	ljmp	00107$
+      00022A                       1590 00198$:
+      00022A ED               [12] 1591 	mov	a,r5
+      00022B C3               [12] 1592 	clr	c
+      00022C 9B               [12] 1593 	subb	a,r3
+      00022D FB               [12] 1594 	mov	r3,a
+      00022E EA               [12] 1595 	mov	a,r2
+      00022F 9C               [12] 1596 	subb	a,r4
+      000230 FC               [12] 1597 	mov	r4,a
+      000231 C3               [12] 1598 	clr	c
+      000232 EB               [12] 1599 	mov	a,r3
+      000233 94 06            [12] 1600 	subb	a,#0x06
+      000235 EC               [12] 1601 	mov	a,r4
+      000236 94 00            [12] 1602 	subb	a,#0x00
+      000238 50 03            [24] 1603 	jnc	00199$
+      00023A 02r02rED         [24] 1604 	ljmp	00107$
+      00023D                       1605 00199$:
+                                   1606 ;	../../../core/dev/slip.c:170: && memcmp(&rxbuf[begin], "CLIENT", 6) == 0) {
+      00023D 8F 03            [24] 1607 	mov	ar3,r7
+      00023F 8E 04            [24] 1608 	mov	ar4,r6
+      000241 7A 00            [12] 1609 	mov	r2,#0x00
+      000243 74 06            [12] 1610 	mov	a,#0x06
+      000245 C0 E0            [24] 1611 	push	acc
+      000247 E4               [12] 1612 	clr	a
+      000248 C0 E0            [24] 1613 	push	acc
+      00024A 74r00            [12] 1614 	mov	a,#___str_0
+      00024C C0 E0            [24] 1615 	push	acc
+      00024E 74s00            [12] 1616 	mov	a,#(___str_0 >> 8)
+      000250 C0 E0            [24] 1617 	push	acc
+      000252 74 80            [12] 1618 	mov	a,#0x80
+      000254 C0 E0            [24] 1619 	push	acc
+      000256 8B 82            [24] 1620 	mov	dpl,r3
+      000258 8C 83            [24] 1621 	mov	dph,r4
+      00025A 8A F0            [24] 1622 	mov	b,r2
+      00025C 78r00            [12] 1623 	mov	r0,#_memcmp
+      00025E 79s00            [12] 1624 	mov	r1,#(_memcmp >> 8)
+      000260 7As00            [12] 1625 	mov	r2,#(_memcmp >> 16)
+      000262 12r00r00         [24] 1626 	lcall	__sdcc_banked_call
+      000265 AB 82            [24] 1627 	mov	r3,dpl
+      000267 AC 83            [24] 1628 	mov	r4,dph
+      000269 E5 81            [12] 1629 	mov	a,sp
+      00026B 24 FB            [12] 1630 	add	a,#0xfb
+      00026D F5 81            [12] 1631 	mov	sp,a
+      00026F EB               [12] 1632 	mov	a,r3
+      000270 4C               [12] 1633 	orl	a,r4
+      000271 60 03            [24] 1634 	jz	00200$
+      000273 02r02rED         [24] 1635 	ljmp	00107$
+      000276                       1636 00200$:
+                                   1637 ;	../../../core/dev/slip.c:171: state = STATE_TWOPACKETS;	/* Interrupts do nothing. */
+      000276 90r00r0A         [24] 1638 	mov	dptr,#_state
+      000279 E4               [12] 1639 	clr	a
+      00027A F0               [24] 1640 	movx	@dptr,a
+                                   1641 ;	../../../core/dev/slip.c:172: memset(&rxbuf[begin], 0x0, 6);
+      00027B 90r00r01         [24] 1642 	mov	dptr,#_begin
+      00027E E0               [24] 1643 	movx	a,@dptr
+      00027F FB               [12] 1644 	mov	r3,a
+      000280 A3               [24] 1645 	inc	dptr
+      000281 E0               [24] 1646 	movx	a,@dptr
+      000282 FC               [12] 1647 	mov	r4,a
+      000283 EB               [12] 1648 	mov	a,r3
+      000284 24r05            [12] 1649 	add	a,#_rxbuf
+      000286 FB               [12] 1650 	mov	r3,a
+      000287 EC               [12] 1651 	mov	a,r4
+      000288 34s00            [12] 1652 	addc	a,#(_rxbuf >> 8)
+      00028A FC               [12] 1653 	mov	r4,a
+      00028B 7A 00            [12] 1654 	mov	r2,#0x00
+      00028D 74 06            [12] 1655 	mov	a,#0x06
+      00028F C0 E0            [24] 1656 	push	acc
+      000291 E4               [12] 1657 	clr	a
+      000292 C0 E0            [24] 1658 	push	acc
+      000294 C0 E0            [24] 1659 	push	acc
+      000296 8B 82            [24] 1660 	mov	dpl,r3
+      000298 8C 83            [24] 1661 	mov	dph,r4
+      00029A 8A F0            [24] 1662 	mov	b,r2
+      00029C 78r00            [12] 1663 	mov	r0,#_memset
+      00029E 79s00            [12] 1664 	mov	r1,#(_memset >> 8)
+      0002A0 7As00            [12] 1665 	mov	r2,#(_memset >> 16)
+      0002A2 12r00r00         [24] 1666 	lcall	__sdcc_banked_call
+      0002A5 15 81            [12] 1667 	dec	sp
+      0002A7 15 81            [12] 1668 	dec	sp
+      0002A9 15 81            [12] 1669 	dec	sp
+                                   1670 ;	../../../core/dev/slip.c:174: rxbuf_init();
+      0002AB 78rD3            [12] 1671 	mov	r0,#_rxbuf_init
+      0002AD 79s01            [12] 1672 	mov	r1,#(_rxbuf_init >> 8)
+      0002AF 7As00            [12] 1673 	mov	r2,#(_rxbuf_init >> 16)
+      0002B1 12r00r00         [24] 1674 	lcall	__sdcc_banked_call
+                                   1675 ;	../../../core/dev/slip.c:176: for(i = 0; i < 13; i++) {
+      0002B4 7B 00            [12] 1676 	mov	r3,#0x00
+      0002B6 7C 00            [12] 1677 	mov	r4,#0x00
+      0002B8                       1678 00123$:
+                                   1679 ;	../../../core/dev/slip.c:177: slip_arch_writeb("CLIENTSERVER\300"[i]);
+      0002B8 EB               [12] 1680 	mov	a,r3
+      0002B9 24r07            [12] 1681 	add	a,#___str_1
+      0002BB F5 82            [12] 1682 	mov	dpl,a
+      0002BD EC               [12] 1683 	mov	a,r4
+      0002BE 34s00            [12] 1684 	addc	a,#(___str_1 >> 8)
+      0002C0 F5 83            [12] 1685 	mov	dph,a
+      0002C2 E4               [12] 1686 	clr	a
+      0002C3 93               [24] 1687 	movc	a,@a+dptr
+      0002C4 F5 82            [12] 1688 	mov	dpl,a
+      0002C6 C0 04            [24] 1689 	push	ar4
+      0002C8 C0 03            [24] 1690 	push	ar3
+      0002CA 78r00            [12] 1691 	mov	r0,#_slip_arch_writeb
+      0002CC 79s00            [12] 1692 	mov	r1,#(_slip_arch_writeb >> 8)
+      0002CE 7As00            [12] 1693 	mov	r2,#(_slip_arch_writeb >> 16)
+      0002D0 12r00r00         [24] 1694 	lcall	__sdcc_banked_call
+      0002D3 D0 03            [24] 1695 	pop	ar3
+      0002D5 D0 04            [24] 1696 	pop	ar4
+                                   1697 ;	../../../core/dev/slip.c:176: for(i = 0; i < 13; i++) {
+      0002D7 0B               [12] 1698 	inc	r3
+      0002D8 BB 00 01         [24] 1699 	cjne	r3,#0x00,00201$
+      0002DB 0C               [12] 1700 	inc	r4
+      0002DC                       1701 00201$:
+      0002DC C3               [12] 1702 	clr	c
+      0002DD EB               [12] 1703 	mov	a,r3
+      0002DE 94 0D            [12] 1704 	subb	a,#0x0d
+      0002E0 EC               [12] 1705 	mov	a,r4
+      0002E1 64 80            [12] 1706 	xrl	a,#0x80
+      0002E3 94 80            [12] 1707 	subb	a,#0x80
+      0002E5 40 D1            [24] 1708 	jc	00123$
+                                   1709 ;	../../../core/dev/slip.c:179: return 0;
+      0002E7 90 00 00         [24] 1710 	mov	dptr,#0x0000
+      0002EA 02r04r8A         [24] 1711 	ljmp	00131$
+      0002ED                       1712 00107$:
+                                   1713 ;	../../../core/dev/slip.c:213: if(begin != pkt_end) {
+      0002ED 90r00r01         [24] 1714 	mov	dptr,#_begin
+      0002F0 E0               [24] 1715 	movx	a,@dptr
+      0002F1 FB               [12] 1716 	mov	r3,a
+      0002F2 A3               [24] 1717 	inc	dptr
+      0002F3 E0               [24] 1718 	movx	a,@dptr
+      0002F4 FC               [12] 1719 	mov	r4,a
+      0002F5 90r01r05         [24] 1720 	mov	dptr,#_pkt_end
+      0002F8 E0               [24] 1721 	movx	a,@dptr
+      0002F9 FF               [12] 1722 	mov	r7,a
+      0002FA A3               [24] 1723 	inc	dptr
+      0002FB E0               [24] 1724 	movx	a,@dptr
+      0002FC FA               [12] 1725 	mov	r2,a
+      0002FD EB               [12] 1726 	mov	a,r3
+      0002FE B5 07 07         [24] 1727 	cjne	a,ar7,00203$
+      000301 EC               [12] 1728 	mov	a,r4
+      000302 B5 02 03         [24] 1729 	cjne	a,ar2,00203$
+      000305 02r04r87         [24] 1730 	ljmp	00122$
+      000308                       1731 00203$:
+                                   1732 ;	../../../core/dev/slip.c:216: if(begin < pkt_end) {
+      000308 C3               [12] 1733 	clr	c
+      000309 EB               [12] 1734 	mov	a,r3
+      00030A 9F               [12] 1735 	subb	a,r7
+      00030B EC               [12] 1736 	mov	a,r4
+      00030C 9A               [12] 1737 	subb	a,r2
+      00030D 50 79            [24] 1738 	jnc	00117$
+                                   1739 ;	../../../core/dev/slip.c:217: len = pkt_end - begin;
+      00030F EF               [12] 1740 	mov	a,r7
+      000310 C3               [12] 1741 	clr	c
+      000311 9B               [12] 1742 	subb	a,r3
+      000312 FE               [12] 1743 	mov	r6,a
+      000313 EA               [12] 1744 	mov	a,r2
+      000314 9C               [12] 1745 	subb	a,r4
+      000315 FD               [12] 1746 	mov	r5,a
+      000316 A8 81            [24] 1747 	mov	r0,sp
+      000318 18               [12] 1748 	dec	r0
+      000319 A6 06            [24] 1749 	mov	@r0,ar6
+      00031B 08               [12] 1750 	inc	r0
+      00031C A6 05            [24] 1751 	mov	@r0,ar5
+                                   1752 ;	../../../core/dev/slip.c:218: if(len > blen) {
+      00031E A8 81            [24] 1753 	mov	r0,sp
+      000320 18               [12] 1754 	dec	r0
+      000321 E5 81            [12] 1755 	mov	a,sp
+      000323 24 F5            [12] 1756 	add	a,#0xf5
+      000325 F9               [12] 1757 	mov	r1,a
+      000326 C3               [12] 1758 	clr	c
+      000327 E7               [12] 1759 	mov	a,@r1
+      000328 96               [12] 1760 	subb	a,@r0
+      000329 09               [12] 1761 	inc	r1
+      00032A E7               [12] 1762 	mov	a,@r1
+      00032B 08               [12] 1763 	inc	r0
+      00032C 96               [12] 1764 	subb	a,@r0
+      00032D 50 0A            [24] 1765 	jnc	00109$
+                                   1766 ;	../../../core/dev/slip.c:219: len = 0;
+      00032F A8 81            [24] 1767 	mov	r0,sp
+      000331 18               [12] 1768 	dec	r0
+      000332 E4               [12] 1769 	clr	a
+      000333 F6               [12] 1770 	mov	@r0,a
+      000334 08               [12] 1771 	inc	r0
+      000335 F6               [12] 1772 	mov	@r0,a
+      000336 02r04r42         [24] 1773 	ljmp	00118$
+      000339                       1774 00109$:
+                                   1775 ;	../../../core/dev/slip.c:221: memcpy(outbuf, &rxbuf[begin], len);
+      000339 A8 81            [24] 1776 	mov	r0,sp
+      00033B 18               [12] 1777 	dec	r0
+      00033C E5 81            [12] 1778 	mov	a,sp
+      00033E 24 FD            [12] 1779 	add	a,#0xfd
+      000340 F9               [12] 1780 	mov	r1,a
+      000341 E6               [12] 1781 	mov	a,@r0
+      000342 F7               [12] 1782 	mov	@r1,a
+      000343 08               [12] 1783 	inc	r0
+      000344 09               [12] 1784 	inc	r1
+      000345 E6               [12] 1785 	mov	a,@r0
+      000346 F7               [12] 1786 	mov	@r1,a
+      000347 EB               [12] 1787 	mov	a,r3
+      000348 24r05            [12] 1788 	add	a,#_rxbuf
+      00034A FA               [12] 1789 	mov	r2,a
+      00034B EC               [12] 1790 	mov	a,r4
+      00034C 34s00            [12] 1791 	addc	a,#(_rxbuf >> 8)
+      00034E FC               [12] 1792 	mov	r4,a
+      00034F 7B 00            [12] 1793 	mov	r3,#0x00
+      000351 E5 81            [12] 1794 	mov	a,sp
+      000353 24 FA            [12] 1795 	add	a,#0xfa
+      000355 F8               [12] 1796 	mov	r0,a
+      000356 86 05            [24] 1797 	mov	ar5,@r0
+      000358 08               [12] 1798 	inc	r0
+      000359 86 06            [24] 1799 	mov	ar6,@r0
+      00035B 08               [12] 1800 	inc	r0
+      00035C 86 07            [24] 1801 	mov	ar7,@r0
+      00035E E5 81            [12] 1802 	mov	a,sp
+      000360 24 FD            [12] 1803 	add	a,#0xfd
+      000362 F8               [12] 1804 	mov	r0,a
+      000363 E6               [12] 1805 	mov	a,@r0
+      000364 C0 E0            [24] 1806 	push	acc
+      000366 08               [12] 1807 	inc	r0
+      000367 E6               [12] 1808 	mov	a,@r0
+      000368 C0 E0            [24] 1809 	push	acc
+      00036A C0 02            [24] 1810 	push	ar2
+      00036C C0 04            [24] 1811 	push	ar4
+      00036E C0 03            [24] 1812 	push	ar3
+      000370 8D 82            [24] 1813 	mov	dpl,r5
+      000372 8E 83            [24] 1814 	mov	dph,r6
+      000374 8F F0            [24] 1815 	mov	b,r7
+      000376 78r00            [12] 1816 	mov	r0,#___memcpy
+      000378 79s00            [12] 1817 	mov	r1,#(___memcpy >> 8)
+      00037A 7As00            [12] 1818 	mov	r2,#(___memcpy >> 16)
+      00037C 12r00r00         [24] 1819 	lcall	__sdcc_banked_call
+      00037F E5 81            [12] 1820 	mov	a,sp
+      000381 24 FB            [12] 1821 	add	a,#0xfb
+      000383 F5 81            [12] 1822 	mov	sp,a
+      000385 02r04r42         [24] 1823 	ljmp	00118$
+      000388                       1824 00117$:
+                                   1825 ;	../../../core/dev/slip.c:224: len = (RX_BUFSIZE - begin) + (pkt_end - 0);
+      000388 E4               [12] 1826 	clr	a
+      000389 C3               [12] 1827 	clr	c
+      00038A 9B               [12] 1828 	subb	a,r3
+      00038B FD               [12] 1829 	mov	r5,a
+      00038C 74 01            [12] 1830 	mov	a,#0x01
+      00038E 9C               [12] 1831 	subb	a,r4
+      00038F FE               [12] 1832 	mov	r6,a
+      000390 C0 03            [24] 1833 	push	ar3
+      000392 C0 04            [24] 1834 	push	ar4
+      000394 8F 03            [24] 1835 	mov	ar3,r7
+      000396 8A 04            [24] 1836 	mov	ar4,r2
+      000398 EB               [12] 1837 	mov	a,r3
+      000399 2D               [12] 1838 	add	a,r5
+      00039A FB               [12] 1839 	mov	r3,a
+      00039B EC               [12] 1840 	mov	a,r4
+      00039C 3E               [12] 1841 	addc	a,r6
+      00039D FC               [12] 1842 	mov	r4,a
+      00039E E5 81            [12] 1843 	mov	a,sp
+      0003A0 24 FD            [12] 1844 	add	a,#0xfd
+      0003A2 F8               [12] 1845 	mov	r0,a
+      0003A3 A6 03            [24] 1846 	mov	@r0,ar3
+      0003A5 08               [12] 1847 	inc	r0
+      0003A6 A6 04            [24] 1848 	mov	@r0,ar4
+                                   1849 ;	../../../core/dev/slip.c:225: if(len > blen) {
+      0003A8 E5 81            [12] 1850 	mov	a,sp
+      0003AA 24 FD            [12] 1851 	add	a,#0xfd
+      0003AC F8               [12] 1852 	mov	r0,a
+      0003AD E5 81            [12] 1853 	mov	a,sp
+      0003AF 24 F3            [12] 1854 	add	a,#0xf3
+      0003B1 F9               [12] 1855 	mov	r1,a
+      0003B2 C3               [12] 1856 	clr	c
+      0003B3 E7               [12] 1857 	mov	a,@r1
+      0003B4 96               [12] 1858 	subb	a,@r0
+      0003B5 09               [12] 1859 	inc	r1
+      0003B6 E7               [12] 1860 	mov	a,@r1
+      0003B7 08               [12] 1861 	inc	r0
+      0003B8 96               [12] 1862 	subb	a,@r0
+      0003B9 D0 04            [24] 1863 	pop	ar4
+      0003BB D0 03            [24] 1864 	pop	ar3
+      0003BD 50 0A            [24] 1865 	jnc	00114$
+                                   1866 ;	../../../core/dev/slip.c:226: len = 0;
+      0003BF A8 81            [24] 1867 	mov	r0,sp
+      0003C1 18               [12] 1868 	dec	r0
+      0003C2 E4               [12] 1869 	clr	a
+      0003C3 F6               [12] 1870 	mov	@r0,a
+      0003C4 08               [12] 1871 	inc	r0
+      0003C5 F6               [12] 1872 	mov	@r0,a
+      0003C6 02r04r42         [24] 1873 	ljmp	00118$
+      0003C9                       1874 00114$:
+                                   1875 ;	../../../core/dev/slip.c:229: for(i = begin; i < RX_BUFSIZE; i++) {
+      0003C9 E5 81            [12] 1876 	mov	a,sp
+      0003CB 24 FA            [12] 1877 	add	a,#0xfa
+      0003CD F8               [12] 1878 	mov	r0,a
+      0003CE 86 07            [24] 1879 	mov	ar7,@r0
+      0003D0 08               [12] 1880 	inc	r0
+      0003D1 86 05            [24] 1881 	mov	ar5,@r0
+      0003D3 08               [12] 1882 	inc	r0
+      0003D4 86 02            [24] 1883 	mov	ar2,@r0
+      0003D6                       1884 00126$:
+      0003D6 74 FF            [12] 1885 	mov	a,#0x100 - 0x01
+      0003D8 2C               [12] 1886 	add	a,r4
+      0003D9 40 20            [24] 1887 	jc	00111$
+                                   1888 ;	../../../core/dev/slip.c:230: *outbuf++ = rxbuf[i];
+      0003DB EB               [12] 1889 	mov	a,r3
+      0003DC 24r05            [12] 1890 	add	a,#_rxbuf
+      0003DE F5 82            [12] 1891 	mov	dpl,a
+      0003E0 EC               [12] 1892 	mov	a,r4
+      0003E1 34s00            [12] 1893 	addc	a,#(_rxbuf >> 8)
+      0003E3 F5 83            [12] 1894 	mov	dph,a
+      0003E5 E0               [24] 1895 	movx	a,@dptr
+      0003E6 8F 82            [24] 1896 	mov	dpl,r7
+      0003E8 8D 83            [24] 1897 	mov	dph,r5
+      0003EA 8A F0            [24] 1898 	mov	b,r2
+      0003EC 12r00r00         [24] 1899 	lcall	__gptrput
+      0003EF A3               [24] 1900 	inc	dptr
+      0003F0 AF 82            [24] 1901 	mov	r7,dpl
+      0003F2 AD 83            [24] 1902 	mov	r5,dph
+                                   1903 ;	../../../core/dev/slip.c:229: for(i = begin; i < RX_BUFSIZE; i++) {
+      0003F4 0B               [12] 1904 	inc	r3
+      0003F5 BB 00 DE         [24] 1905 	cjne	r3,#0x00,00126$
+      0003F8 0C               [12] 1906 	inc	r4
+      0003F9 80 DB            [24] 1907 	sjmp	00126$
+      0003FB                       1908 00111$:
+                                   1909 ;	../../../core/dev/slip.c:232: for(i = 0; i < pkt_end; i++) {
+      0003FB 8F 04            [24] 1910 	mov	ar4,r7
+      0003FD 8A 06            [24] 1911 	mov	ar6,r2
+      0003FF 7B 00            [12] 1912 	mov	r3,#0x00
+      000401 7F 00            [12] 1913 	mov	r7,#0x00
+      000403                       1914 00129$:
+      000403 C0 04            [24] 1915 	push	ar4
+      000405 C0 05            [24] 1916 	push	ar5
+      000407 C0 06            [24] 1917 	push	ar6
+      000409 90r01r05         [24] 1918 	mov	dptr,#_pkt_end
+      00040C E0               [24] 1919 	movx	a,@dptr
+      00040D FA               [12] 1920 	mov	r2,a
+      00040E A3               [24] 1921 	inc	dptr
+      00040F E0               [24] 1922 	movx	a,@dptr
+      000410 FE               [12] 1923 	mov	r6,a
+      000411 8B 04            [24] 1924 	mov	ar4,r3
+      000413 8F 05            [24] 1925 	mov	ar5,r7
+      000415 C3               [12] 1926 	clr	c
+      000416 EC               [12] 1927 	mov	a,r4
+      000417 9A               [12] 1928 	subb	a,r2
+      000418 ED               [12] 1929 	mov	a,r5
+      000419 9E               [12] 1930 	subb	a,r6
+      00041A D0 06            [24] 1931 	pop	ar6
+      00041C D0 05            [24] 1932 	pop	ar5
+      00041E D0 04            [24] 1933 	pop	ar4
+      000420 50 20            [24] 1934 	jnc	00118$
+                                   1935 ;	../../../core/dev/slip.c:233: *outbuf++ = rxbuf[i];
+      000422 EB               [12] 1936 	mov	a,r3
+      000423 24r05            [12] 1937 	add	a,#_rxbuf
+      000425 F5 82            [12] 1938 	mov	dpl,a
+      000427 EF               [12] 1939 	mov	a,r7
+      000428 34s00            [12] 1940 	addc	a,#(_rxbuf >> 8)
+      00042A F5 83            [12] 1941 	mov	dph,a
+      00042C E0               [24] 1942 	movx	a,@dptr
+      00042D 8C 82            [24] 1943 	mov	dpl,r4
+      00042F 8D 83            [24] 1944 	mov	dph,r5
+      000431 8E F0            [24] 1945 	mov	b,r6
+      000433 12r00r00         [24] 1946 	lcall	__gptrput
+      000436 A3               [24] 1947 	inc	dptr
+      000437 AC 82            [24] 1948 	mov	r4,dpl
+      000439 AD 83            [24] 1949 	mov	r5,dph
+                                   1950 ;	../../../core/dev/slip.c:232: for(i = 0; i < pkt_end; i++) {
+      00043B 0B               [12] 1951 	inc	r3
+      00043C BB 00 C4         [24] 1952 	cjne	r3,#0x00,00129$
+      00043F 0F               [12] 1953 	inc	r7
+      000440 80 C1            [24] 1954 	sjmp	00129$
+      000442                       1955 00118$:
+                                   1956 ;	../../../core/dev/slip.c:239: begin = pkt_end;
+      000442 90r01r05         [24] 1957 	mov	dptr,#_pkt_end
+      000445 E0               [24] 1958 	movx	a,@dptr
+      000446 FE               [12] 1959 	mov	r6,a
+      000447 A3               [24] 1960 	inc	dptr
+      000448 E0               [24] 1961 	movx	a,@dptr
+      000449 FF               [12] 1962 	mov	r7,a
+      00044A 90r00r01         [24] 1963 	mov	dptr,#_begin
+      00044D EE               [12] 1964 	mov	a,r6
+      00044E F0               [24] 1965 	movx	@dptr,a
+      00044F EF               [12] 1966 	mov	a,r7
+      000450 A3               [24] 1967 	inc	dptr
+      000451 F0               [24] 1968 	movx	@dptr,a
+                                   1969 ;	../../../core/dev/slip.c:240: if(state == STATE_TWOPACKETS) {
+      000452 90r00r0A         [24] 1970 	mov	dptr,#_state
+      000455 E0               [24] 1971 	movx	a,@dptr
+      000456 70 25            [24] 1972 	jnz	00120$
+                                   1973 ;	../../../core/dev/slip.c:241: pkt_end = end;
+      000458 90r00r03         [24] 1974 	mov	dptr,#_end
+      00045B E0               [24] 1975 	movx	a,@dptr
+      00045C FE               [12] 1976 	mov	r6,a
+      00045D A3               [24] 1977 	inc	dptr
+      00045E E0               [24] 1978 	movx	a,@dptr
+      00045F FF               [12] 1979 	mov	r7,a
+      000460 90r01r05         [24] 1980 	mov	dptr,#_pkt_end
+      000463 EE               [12] 1981 	mov	a,r6
+      000464 F0               [24] 1982 	movx	@dptr,a
+      000465 EF               [12] 1983 	mov	a,r7
+      000466 A3               [24] 1984 	inc	dptr
+      000467 F0               [24] 1985 	movx	@dptr,a
+                                   1986 ;	../../../core/dev/slip.c:242: state = STATE_OK;		/* Assume no bytes where lost! */
+      000468 90r00r0A         [24] 1987 	mov	dptr,#_state
+      00046B 74 01            [12] 1988 	mov	a,#0x01
+      00046D F0               [24] 1989 	movx	@dptr,a
+                                   1990 ;	../../../core/dev/slip.c:245: process_poll(&slip_process);
+      00046E 90r00r00         [24] 1991 	mov	dptr,#_slip_process
+      000471 75 F0 00         [24] 1992 	mov	b,#0x00
+      000474 78r00            [12] 1993 	mov	r0,#_process_poll
+      000476 79s00            [12] 1994 	mov	r1,#(_process_poll >> 8)
+      000478 7As00            [12] 1995 	mov	r2,#(_process_poll >> 16)
+      00047A 12r00r00         [24] 1996 	lcall	__sdcc_banked_call
+      00047D                       1997 00120$:
+                                   1998 ;	../../../core/dev/slip.c:247: return len;
+      00047D A8 81            [24] 1999 	mov	r0,sp
+      00047F 18               [12] 2000 	dec	r0
+      000480 86 82            [24] 2001 	mov	dpl,@r0
+      000482 08               [12] 2002 	inc	r0
+      000483 86 83            [24] 2003 	mov	dph,@r0
+      000485 80 03            [24] 2004 	sjmp	00131$
+      000487                       2005 00122$:
+                                   2006 ;	../../../core/dev/slip.c:250: return 0;
+      000487 90 00 00         [24] 2007 	mov	dptr,#0x0000
+      00048A                       2008 00131$:
+                                   2009 ;	../../../core/dev/slip.c:251: }
+      00048A E5 81            [12] 2010 	mov	a,sp
+      00048C 24 F9            [12] 2011 	add	a,#0xf9
+      00048E F5 81            [12] 2012 	mov	sp,a
+      000490 02r00r00         [24] 2013 	ljmp	__sdcc_banked_ret
+                                   2014 ;------------------------------------------------------------
+                                   2015 ;Allocation info for local variables in function 'process_thread_slip_process'
+                                   2016 ;------------------------------------------------------------
+                                   2017 ;ev                        Allocated to stack - sp -3
+                                   2018 ;data                      Allocated to stack - sp -6
+                                   2019 ;process_pt                Allocated to registers r5 r6 r7 
+                                   2020 ;PT_YIELD_FLAG             Allocated to registers r4 
+                                   2021 ;------------------------------------------------------------
+                                   2022 ;	../../../core/dev/slip.c:253: PROCESS_THREAD(slip_process, ev, data)
+                                   2023 ;	-----------------------------------------
+                                   2024 ;	 function process_thread_slip_process
+                                   2025 ;	-----------------------------------------
+      000493                       2026 _process_thread_slip_process:
+                                   2027 ;	../../../core/dev/slip.c:255: PROCESS_BEGIN();
+      000493 AD 82            [24] 2028 	mov	r5,dpl
+      000495 AE 83            [24] 2029 	mov	r6,dph
+      000497 AF F0            [24] 2030 	mov	r7,b
+      000499 7C 01            [12] 2031 	mov	r4,#0x01
+      00049B 12r00r00         [24] 2032 	lcall	__gptrget
+      00049E FA               [12] 2033 	mov	r2,a
+      00049F A3               [24] 2034 	inc	dptr
+      0004A0 12r00r00         [24] 2035 	lcall	__gptrget
+      0004A3 FB               [12] 2036 	mov	r3,a
+      0004A4 BA 00 05         [24] 2037 	cjne	r2,#0x00,00143$
+      0004A7 BB 00 02         [24] 2038 	cjne	r3,#0x00,00143$
+      0004AA 80 0B            [24] 2039 	sjmp	00101$
+      0004AC                       2040 00143$:
+      0004AC BA 04 05         [24] 2041 	cjne	r2,#0x04,00144$
+      0004AF BB 01 02         [24] 2042 	cjne	r3,#0x01,00144$
+      0004B2 80 2B            [24] 2043 	sjmp	00102$
+      0004B4                       2044 00144$:
+      0004B4 02r05r75         [24] 2045 	ljmp	00116$
+      0004B7                       2046 00101$:
+                                   2047 ;	../../../core/dev/slip.c:257: rxbuf_init();
+      0004B7 C0 07            [24] 2048 	push	ar7
+      0004B9 C0 06            [24] 2049 	push	ar6
+      0004BB C0 05            [24] 2050 	push	ar5
+      0004BD 78rD3            [12] 2051 	mov	r0,#_rxbuf_init
+      0004BF 79s01            [12] 2052 	mov	r1,#(_rxbuf_init >> 8)
+      0004C1 7As00            [12] 2053 	mov	r2,#(_rxbuf_init >> 16)
+      0004C3 12r00r00         [24] 2054 	lcall	__sdcc_banked_call
+      0004C6 D0 05            [24] 2055 	pop	ar5
+      0004C8 D0 06            [24] 2056 	pop	ar6
+      0004CA D0 07            [24] 2057 	pop	ar7
+                                   2058 ;	../../../core/dev/slip.c:259: while(1) {
+      0004CC                       2059 00114$:
+                                   2060 ;	../../../core/dev/slip.c:260: PROCESS_YIELD_UNTIL(ev == PROCESS_EVENT_POLL);
+      0004CC 7C 00            [12] 2061 	mov	r4,#0x00
+      0004CE 8D 82            [24] 2062 	mov	dpl,r5
+      0004D0 8E 83            [24] 2063 	mov	dph,r6
+      0004D2 8F F0            [24] 2064 	mov	b,r7
+      0004D4 74 04            [12] 2065 	mov	a,#0x04
+      0004D6 12r00r00         [24] 2066 	lcall	__gptrput
+      0004D9 A3               [24] 2067 	inc	dptr
+      0004DA 74 01            [12] 2068 	mov	a,#0x01
+      0004DC 12r00r00         [24] 2069 	lcall	__gptrput
+      0004DF                       2070 00102$:
+      0004DF EC               [12] 2071 	mov	a,r4
+      0004E0 60 0A            [24] 2072 	jz	00103$
+      0004E2 E5 81            [12] 2073 	mov	a,sp
+      0004E4 24 FD            [12] 2074 	add	a,#0xfd
+      0004E6 F8               [12] 2075 	mov	r0,a
+      0004E7 B6 82 02         [24] 2076 	cjne	@r0,#0x82,00146$
+      0004EA 80 06            [24] 2077 	sjmp	00107$
+      0004EC                       2078 00146$:
+      0004EC                       2079 00103$:
+      0004EC 75 82 01         [24] 2080 	mov	dpl,#0x01
+      0004EF 02r00r00         [24] 2081 	ljmp	__sdcc_banked_ret
+      0004F2                       2082 00107$:
+                                   2083 ;	../../../core/dev/slip.c:262: slip_active = 1;
+      0004F2 90r00r00         [24] 2084 	mov	dptr,#_slip_active
+      0004F5 74 01            [12] 2085 	mov	a,#0x01
+      0004F7 F0               [24] 2086 	movx	@dptr,a
+                                   2087 ;	../../../core/dev/slip.c:265: uip_len = slip_poll_handler(&uip_buf[UIP_LLH_LEN],
+      0004F8 C0 07            [24] 2088 	push	ar7
+      0004FA C0 06            [24] 2089 	push	ar6
+      0004FC C0 05            [24] 2090 	push	ar5
+      0004FE 74 F0            [12] 2091 	mov	a,#0xf0
+      000500 C0 E0            [24] 2092 	push	acc
+      000502 E4               [12] 2093 	clr	a
+      000503 C0 E0            [24] 2094 	push	acc
+      000505 90r00r00         [24] 2095 	mov	dptr,#_uip_aligned_buf
+      000508 75 F0 00         [24] 2096 	mov	b,#0x00
+      00050B 78rEE            [12] 2097 	mov	r0,#_slip_poll_handler
+      00050D 79s01            [12] 2098 	mov	r1,#(_slip_poll_handler >> 8)
+      00050F 7As00            [12] 2099 	mov	r2,#(_slip_poll_handler >> 16)
+      000511 12r00r00         [24] 2100 	lcall	__sdcc_banked_call
+      000514 AB 82            [24] 2101 	mov	r3,dpl
+      000516 AC 83            [24] 2102 	mov	r4,dph
+      000518 15 81            [12] 2103 	dec	sp
+      00051A 15 81            [12] 2104 	dec	sp
+      00051C D0 05            [24] 2105 	pop	ar5
+      00051E D0 06            [24] 2106 	pop	ar6
+      000520 D0 07            [24] 2107 	pop	ar7
+      000522 90r00r00         [24] 2108 	mov	dptr,#_uip_len
+      000525 EB               [12] 2109 	mov	a,r3
+      000526 F0               [24] 2110 	movx	@dptr,a
+      000527 EC               [12] 2111 	mov	a,r4
+      000528 A3               [24] 2112 	inc	dptr
+      000529 F0               [24] 2113 	movx	@dptr,a
+                                   2114 ;	../../../core/dev/slip.c:302: if(uip_len > 0) {
+      00052A EB               [12] 2115 	mov	a,r3
+      00052B 4C               [12] 2116 	orl	a,r4
+      00052C 60 9E            [24] 2117 	jz	00114$
+                                   2118 ;	../../../core/dev/slip.c:303: if(input_callback) {
+      00052E 90r00r0B         [24] 2119 	mov	dptr,#_input_callback
+      000531 E0               [24] 2120 	movx	a,@dptr
+      000532 F5 F0            [12] 2121 	mov	b,a
+      000534 A3               [24] 2122 	inc	dptr
+      000535 E0               [24] 2123 	movx	a,@dptr
+      000536 45 F0            [12] 2124 	orl	a,b
+      000538 60 23            [24] 2125 	jz	00110$
+                                   2126 ;	../../../core/dev/slip.c:304: input_callback();
+      00053A C0 07            [24] 2127 	push	ar7
+      00053C C0 06            [24] 2128 	push	ar6
+      00053E C0 05            [24] 2129 	push	ar5
+      000540 90r00r0B         [24] 2130 	mov	dptr,#_input_callback
+      000543 E0               [24] 2131 	movx	a,@dptr
+      000544 C0 E0            [24] 2132 	push	acc
+      000546 A3               [24] 2133 	inc	dptr
+      000547 E0               [24] 2134 	movx	a,@dptr
+      000548 C0 E0            [24] 2135 	push	acc
+      00054A A3               [24] 2136 	inc	dptr
+      00054B E0               [24] 2137 	movx	a,@dptr
+      00054C C0 E0            [24] 2138 	push	acc
+      00054E D0 02            [24] 2139 	pop	ar2
+      000550 D0 01            [24] 2140 	pop	ar1
+      000552 D0 00            [24] 2141 	pop	ar0
+      000554 12r00r00         [24] 2142 	lcall	__sdcc_banked_call
+      000557 D0 05            [24] 2143 	pop	ar5
+      000559 D0 06            [24] 2144 	pop	ar6
+      00055B D0 07            [24] 2145 	pop	ar7
+      00055D                       2146 00110$:
+                                   2147 ;	../../../core/dev/slip.c:309: tcpip_input();
+      00055D C0 07            [24] 2148 	push	ar7
+      00055F C0 06            [24] 2149 	push	ar6
+      000561 C0 05            [24] 2150 	push	ar5
+      000563 78r00            [12] 2151 	mov	r0,#_tcpip_input
+      000565 79s00            [12] 2152 	mov	r1,#(_tcpip_input >> 8)
+      000567 7As00            [12] 2153 	mov	r2,#(_tcpip_input >> 16)
+      000569 12r00r00         [24] 2154 	lcall	__sdcc_banked_call
+      00056C D0 05            [24] 2155 	pop	ar5
+      00056E D0 06            [24] 2156 	pop	ar6
+      000570 D0 07            [24] 2157 	pop	ar7
+      000572 02r04rCC         [24] 2158 	ljmp	00114$
+                                   2159 ;	../../../core/dev/slip.c:315: PROCESS_END();
+      000575                       2160 00116$:
+      000575 8D 82            [24] 2161 	mov	dpl,r5
+      000577 8E 83            [24] 2162 	mov	dph,r6
+      000579 8F F0            [24] 2163 	mov	b,r7
+      00057B E4               [12] 2164 	clr	a
+      00057C 12r00r00         [24] 2165 	lcall	__gptrput
+      00057F A3               [24] 2166 	inc	dptr
+      000580 12r00r00         [24] 2167 	lcall	__gptrput
+      000583 75 82 03         [24] 2168 	mov	dpl,#0x03
+                                   2169 ;	../../../core/dev/slip.c:316: }
+      000586 02r00r00         [24] 2170 	ljmp	__sdcc_banked_ret
+                                   2171 ;------------------------------------------------------------
+                                   2172 ;Allocation info for local variables in function 'slip_input_byte'
+                                   2173 ;------------------------------------------------------------
+                                   2174 ;c                         Allocated to registers r7 
+                                   2175 ;next                      Allocated to registers r3 r4 
+                                   2176 ;sloc0                     Allocated to stack - sp +4
+                                   2177 ;------------------------------------------------------------
+                                   2178 ;	../../../core/dev/slip.c:319: slip_input_byte(unsigned char c)
+                                   2179 ;	-----------------------------------------
+                                   2180 ;	 function slip_input_byte
+                                   2181 ;	-----------------------------------------
+      000589                       2182 _slip_input_byte:
+      000589 AF 82            [24] 2183 	mov	r7,dpl
+                                   2184 ;	../../../core/dev/slip.c:321: switch(state) {
+      00058B 90r00r0A         [24] 2185 	mov	dptr,#_state
+      00058E E0               [24] 2186 	movx	a,@dptr
+      00058F FE               [12] 2187 	mov  r6,a
+      000590 24 FC            [12] 2188 	add	a,#0xff - 0x03
+      000592 50 03            [24] 2189 	jnc	00181$
+      000594 02r06r64         [24] 2190 	ljmp	00123$
+      000597                       2191 00181$:
+      000597 EE               [12] 2192 	mov	a,r6
+      000598 2E               [12] 2193 	add	a,r6
+      000599 2E               [12] 2194 	add	a,r6
+      00059A 90r05r9E         [24] 2195 	mov	dptr,#00182$
+      00059D 73               [24] 2196 	jmp	@a+dptr
+      00059E                       2197 00182$:
+      00059E 02r05rB6         [24] 2198 	ljmp	00104$
+      0005A1 02r05rEE         [24] 2199 	ljmp	00112$
+      0005A4 02r05rBC         [24] 2200 	ljmp	00105$
+                                   2201 ;	../../../core/dev/slip.c:322: case STATE_RUBBISH:
+                                   2202 ;	../../../core/dev/slip.c:323: if(c == SLIP_END) {
+      0005A7 BF C0 06         [24] 2203 	cjne	r7,#0xc0,00103$
+                                   2204 ;	../../../core/dev/slip.c:324: state = STATE_OK;
+      0005AA 90r00r0A         [24] 2205 	mov	dptr,#_state
+      0005AD 74 01            [12] 2206 	mov	a,#0x01
+      0005AF F0               [24] 2207 	movx	@dptr,a
+      0005B0                       2208 00103$:
+                                   2209 ;	../../../core/dev/slip.c:326: return 0;
+      0005B0 90 00 00         [24] 2210 	mov	dptr,#0x0000
+      0005B3 02r00r00         [24] 2211 	ljmp	__sdcc_banked_ret
+                                   2212 ;	../../../core/dev/slip.c:328: case STATE_TWOPACKETS:       /* Two packets are already buffered! */
+      0005B6                       2213 00104$:
+                                   2214 ;	../../../core/dev/slip.c:329: return 0;
+      0005B6 90 00 00         [24] 2215 	mov	dptr,#0x0000
+      0005B9 02r00r00         [24] 2216 	ljmp	__sdcc_banked_ret
+                                   2217 ;	../../../core/dev/slip.c:331: case STATE_ESC:
+      0005BC                       2218 00105$:
+                                   2219 ;	../../../core/dev/slip.c:332: if(c == SLIP_ESC_END) {
+      0005BC BF DC 04         [24] 2220 	cjne	r7,#0xdc,00110$
+                                   2221 ;	../../../core/dev/slip.c:333: c = SLIP_END;
+      0005BF 7F C0            [12] 2222 	mov	r7,#0xc0
+      0005C1 80 23            [24] 2223 	sjmp	00111$
+      0005C3                       2224 00110$:
+                                   2225 ;	../../../core/dev/slip.c:334: } else if(c == SLIP_ESC_ESC) {
+      0005C3 BF DD 04         [24] 2226 	cjne	r7,#0xdd,00107$
+                                   2227 ;	../../../core/dev/slip.c:335: c = SLIP_ESC;
+      0005C6 7F DB            [12] 2228 	mov	r7,#0xdb
+      0005C8 80 1C            [24] 2229 	sjmp	00111$
+      0005CA                       2230 00107$:
+                                   2231 ;	../../../core/dev/slip.c:337: state = STATE_RUBBISH;
+      0005CA 90r00r0A         [24] 2232 	mov	dptr,#_state
+      0005CD 74 03            [12] 2233 	mov	a,#0x03
+      0005CF F0               [24] 2234 	movx	@dptr,a
+                                   2235 ;	../../../core/dev/slip.c:339: end = pkt_end;		/* remove rubbish */
+      0005D0 90r01r05         [24] 2236 	mov	dptr,#_pkt_end
+      0005D3 E0               [24] 2237 	movx	a,@dptr
+      0005D4 FD               [12] 2238 	mov	r5,a
+      0005D5 A3               [24] 2239 	inc	dptr
+      0005D6 E0               [24] 2240 	movx	a,@dptr
+      0005D7 FE               [12] 2241 	mov	r6,a
+      0005D8 90r00r03         [24] 2242 	mov	dptr,#_end
+      0005DB ED               [12] 2243 	mov	a,r5
+      0005DC F0               [24] 2244 	movx	@dptr,a
+      0005DD EE               [12] 2245 	mov	a,r6
+      0005DE A3               [24] 2246 	inc	dptr
+      0005DF F0               [24] 2247 	movx	@dptr,a
+                                   2248 ;	../../../core/dev/slip.c:340: return 0;
+      0005E0 90 00 00         [24] 2249 	mov	dptr,#0x0000
+      0005E3 02r00r00         [24] 2250 	ljmp	__sdcc_banked_ret
+      0005E6                       2251 00111$:
+                                   2252 ;	../../../core/dev/slip.c:342: state = STATE_OK;
+      0005E6 90r00r0A         [24] 2253 	mov	dptr,#_state
+      0005E9 74 01            [12] 2254 	mov	a,#0x01
+      0005EB F0               [24] 2255 	movx	@dptr,a
+                                   2256 ;	../../../core/dev/slip.c:343: break;
+                                   2257 ;	../../../core/dev/slip.c:345: case STATE_OK:
+      0005EC 80 76            [24] 2258 	sjmp	00123$
+      0005EE                       2259 00112$:
+                                   2260 ;	../../../core/dev/slip.c:346: if(c == SLIP_ESC) {
+      0005EE BF DB 0C         [24] 2261 	cjne	r7,#0xdb,00121$
+                                   2262 ;	../../../core/dev/slip.c:347: state = STATE_ESC;
+      0005F1 90r00r0A         [24] 2263 	mov	dptr,#_state
+      0005F4 74 02            [12] 2264 	mov	a,#0x02
+      0005F6 F0               [24] 2265 	movx	@dptr,a
+                                   2266 ;	../../../core/dev/slip.c:348: return 0;
+      0005F7 90 00 00         [24] 2267 	mov	dptr,#0x0000
+      0005FA 02r00r00         [24] 2268 	ljmp	__sdcc_banked_ret
+      0005FD                       2269 00121$:
+                                   2270 ;	../../../core/dev/slip.c:349: } else if(c == SLIP_END) {
+      0005FD BF C0 64         [24] 2271 	cjne	r7,#0xc0,00123$
+                                   2272 ;	../../../core/dev/slip.c:355: if(end != pkt_end) {	/* Non zero length. */
+      000600 90r00r03         [24] 2273 	mov	dptr,#_end
+      000603 E0               [24] 2274 	movx	a,@dptr
+      000604 FD               [12] 2275 	mov	r5,a
+      000605 A3               [24] 2276 	inc	dptr
+      000606 E0               [24] 2277 	movx	a,@dptr
+      000607 FE               [12] 2278 	mov	r6,a
+      000608 90r01r05         [24] 2279 	mov	dptr,#_pkt_end
+      00060B E0               [24] 2280 	movx	a,@dptr
+      00060C FB               [12] 2281 	mov	r3,a
+      00060D A3               [24] 2282 	inc	dptr
+      00060E E0               [24] 2283 	movx	a,@dptr
+      00060F FC               [12] 2284 	mov	r4,a
+      000610 ED               [12] 2285 	mov	a,r5
+      000611 B5 03 06         [24] 2286 	cjne	a,ar3,00193$
+      000614 EE               [12] 2287 	mov	a,r6
+      000615 B5 04 02         [24] 2288 	cjne	a,ar4,00193$
+      000618 80 44            [24] 2289 	sjmp	00117$
+      00061A                       2290 00193$:
+                                   2291 ;	../../../core/dev/slip.c:356: if(begin == pkt_end) {	/* None buffered. */
+      00061A C0 05            [24] 2292 	push	ar5
+      00061C C0 06            [24] 2293 	push	ar6
+      00061E 90r00r01         [24] 2294 	mov	dptr,#_begin
+      000621 E0               [24] 2295 	movx	a,@dptr
+      000622 FA               [12] 2296 	mov	r2,a
+      000623 A3               [24] 2297 	inc	dptr
+      000624 E0               [24] 2298 	movx	a,@dptr
+      000625 FE               [12] 2299 	mov	r6,a
+      000626 EA               [12] 2300 	mov	a,r2
+      000627 B5 03 06         [24] 2301 	cjne	a,ar3,00194$
+      00062A EE               [12] 2302 	mov	a,r6
+      00062B B5 04 02         [24] 2303 	cjne	a,ar4,00194$
+      00062E 80 06            [24] 2304 	sjmp	00195$
+      000630                       2305 00194$:
+      000630 D0 06            [24] 2306 	pop	ar6
+      000632 D0 05            [24] 2307 	pop	ar5
+      000634 80 0E            [24] 2308 	sjmp	00114$
+      000636                       2309 00195$:
+      000636 D0 06            [24] 2310 	pop	ar6
+      000638 D0 05            [24] 2311 	pop	ar5
+                                   2312 ;	../../../core/dev/slip.c:357: pkt_end = end;
+      00063A 90r01r05         [24] 2313 	mov	dptr,#_pkt_end
+      00063D ED               [12] 2314 	mov	a,r5
+      00063E F0               [24] 2315 	movx	@dptr,a
+      00063F EE               [12] 2316 	mov	a,r6
+      000640 A3               [24] 2317 	inc	dptr
+      000641 F0               [24] 2318 	movx	@dptr,a
+      000642 80 05            [24] 2319 	sjmp	00115$
+      000644                       2320 00114$:
+                                   2321 ;	../../../core/dev/slip.c:359: state = STATE_TWOPACKETS;
+      000644 90r00r0A         [24] 2322 	mov	dptr,#_state
+      000647 E4               [12] 2323 	clr	a
+      000648 F0               [24] 2324 	movx	@dptr,a
+      000649                       2325 00115$:
+                                   2326 ;	../../../core/dev/slip.c:362: process_poll(&slip_process);
+      000649 90r00r00         [24] 2327 	mov	dptr,#_slip_process
+      00064C 75 F0 00         [24] 2328 	mov	b,#0x00
+      00064F 78r00            [12] 2329 	mov	r0,#_process_poll
+      000651 79s00            [12] 2330 	mov	r1,#(_process_poll >> 8)
+      000653 7As00            [12] 2331 	mov	r2,#(_process_poll >> 16)
+      000655 12r00r00         [24] 2332 	lcall	__sdcc_banked_call
+                                   2333 ;	../../../core/dev/slip.c:363: return 1;
+      000658 90 00 01         [24] 2334 	mov	dptr,#0x0001
+      00065B 02r00r00         [24] 2335 	ljmp	__sdcc_banked_ret
+      00065E                       2336 00117$:
+                                   2337 ;	../../../core/dev/slip.c:365: return 0;
+      00065E 90 00 00         [24] 2338 	mov	dptr,#0x0000
+      000661 02r00r00         [24] 2339 	ljmp	__sdcc_banked_ret
+                                   2340 ;	../../../core/dev/slip.c:368: }
+      000664                       2341 00123$:
+                                   2342 ;	../../../core/dev/slip.c:373: next = end + 1;
+      000664 90r00r03         [24] 2343 	mov	dptr,#_end
+      000667 E0               [24] 2344 	movx	a,@dptr
+      000668 FD               [12] 2345 	mov	r5,a
+      000669 A3               [24] 2346 	inc	dptr
+      00066A E0               [24] 2347 	movx	a,@dptr
+      00066B FE               [12] 2348 	mov	r6,a
+      00066C 8D 03            [24] 2349 	mov	ar3,r5
+      00066E 8E 04            [24] 2350 	mov	ar4,r6
+      000670 0B               [12] 2351 	inc	r3
+      000671 BB 00 01         [24] 2352 	cjne	r3,#0x00,00196$
+      000674 0C               [12] 2353 	inc	r4
+      000675                       2354 00196$:
+                                   2355 ;	../../../core/dev/slip.c:374: if(next == RX_BUFSIZE) {
+      000675 BB 00 07         [24] 2356 	cjne	r3,#0x00,00125$
+      000678 BC 01 04         [24] 2357 	cjne	r4,#0x01,00125$
+                                   2358 ;	../../../core/dev/slip.c:375: next = 0;
+      00067B 7B 00            [12] 2359 	mov	r3,#0x00
+      00067D 7C 00            [12] 2360 	mov	r4,#0x00
+      00067F                       2361 00125$:
+                                   2362 ;	../../../core/dev/slip.c:377: if(next == begin) {		/* rxbuf is full */
+      00067F C0 05            [24] 2363 	push	ar5
+      000681 C0 06            [24] 2364 	push	ar6
+      000683 90r00r01         [24] 2365 	mov	dptr,#_begin
+      000686 E0               [24] 2366 	movx	a,@dptr
+      000687 FA               [12] 2367 	mov	r2,a
+      000688 A3               [24] 2368 	inc	dptr
+      000689 E0               [24] 2369 	movx	a,@dptr
+      00068A FE               [12] 2370 	mov	r6,a
+      00068B EB               [12] 2371 	mov	a,r3
+      00068C B5 02 06         [24] 2372 	cjne	a,ar2,00199$
+      00068F EC               [12] 2373 	mov	a,r4
+      000690 B5 06 02         [24] 2374 	cjne	a,ar6,00199$
+      000693 80 06            [24] 2375 	sjmp	00200$
+      000695                       2376 00199$:
+      000695 D0 06            [24] 2377 	pop	ar6
+      000697 D0 05            [24] 2378 	pop	ar5
+      000699 80 1F            [24] 2379 	sjmp	00127$
+      00069B                       2380 00200$:
+      00069B D0 06            [24] 2381 	pop	ar6
+      00069D D0 05            [24] 2382 	pop	ar5
+                                   2383 ;	../../../core/dev/slip.c:378: state = STATE_RUBBISH;
+      00069F 90r00r0A         [24] 2384 	mov	dptr,#_state
+      0006A2 74 03            [12] 2385 	mov	a,#0x03
+      0006A4 F0               [24] 2386 	movx	@dptr,a
+                                   2387 ;	../../../core/dev/slip.c:380: end = pkt_end;		/* remove rubbish */
+      0006A5 90r01r05         [24] 2388 	mov	dptr,#_pkt_end
+      0006A8 E0               [24] 2389 	movx	a,@dptr
+      0006A9 FB               [12] 2390 	mov	r3,a
+      0006AA A3               [24] 2391 	inc	dptr
+      0006AB E0               [24] 2392 	movx	a,@dptr
+      0006AC FC               [12] 2393 	mov	r4,a
+      0006AD 90r00r03         [24] 2394 	mov	dptr,#_end
+      0006B0 EB               [12] 2395 	mov	a,r3
+      0006B1 F0               [24] 2396 	movx	@dptr,a
+      0006B2 EC               [12] 2397 	mov	a,r4
+      0006B3 A3               [24] 2398 	inc	dptr
+      0006B4 F0               [24] 2399 	movx	@dptr,a
+                                   2400 ;	../../../core/dev/slip.c:381: return 0;
+      0006B5 90 00 00         [24] 2401 	mov	dptr,#0x0000
+      0006B8 80 45            [24] 2402 	sjmp	00131$
+      0006BA                       2403 00127$:
+                                   2404 ;	../../../core/dev/slip.c:383: rxbuf[end] = c;
+      0006BA ED               [12] 2405 	mov	a,r5
+      0006BB 24r05            [12] 2406 	add	a,#_rxbuf
+      0006BD F5 82            [12] 2407 	mov	dpl,a
+      0006BF EE               [12] 2408 	mov	a,r6
+      0006C0 34s00            [12] 2409 	addc	a,#(_rxbuf >> 8)
+      0006C2 F5 83            [12] 2410 	mov	dph,a
+      0006C4 EF               [12] 2411 	mov	a,r7
+      0006C5 F0               [24] 2412 	movx	@dptr,a
+                                   2413 ;	../../../core/dev/slip.c:384: end = next;
+      0006C6 90r00r03         [24] 2414 	mov	dptr,#_end
+      0006C9 EB               [12] 2415 	mov	a,r3
+      0006CA F0               [24] 2416 	movx	@dptr,a
+      0006CB EC               [12] 2417 	mov	a,r4
+      0006CC A3               [24] 2418 	inc	dptr
+      0006CD F0               [24] 2419 	movx	@dptr,a
+                                   2420 ;	../../../core/dev/slip.c:388: if(c == 'T' && rxbuf[begin] == 'C') {
+      0006CE BF 54 2B         [24] 2421 	cjne	r7,#0x54,00129$
+      0006D1 90r00r01         [24] 2422 	mov	dptr,#_begin
+      0006D4 E0               [24] 2423 	movx	a,@dptr
+      0006D5 FE               [12] 2424 	mov	r6,a
+      0006D6 A3               [24] 2425 	inc	dptr
+      0006D7 E0               [24] 2426 	movx	a,@dptr
+      0006D8 FF               [12] 2427 	mov	r7,a
+      0006D9 EE               [12] 2428 	mov	a,r6
+      0006DA 24r05            [12] 2429 	add	a,#_rxbuf
+      0006DC F5 82            [12] 2430 	mov	dpl,a
+      0006DE EF               [12] 2431 	mov	a,r7
+      0006DF 34s00            [12] 2432 	addc	a,#(_rxbuf >> 8)
+      0006E1 F5 83            [12] 2433 	mov	dph,a
+      0006E3 E0               [24] 2434 	movx	a,@dptr
+      0006E4 FF               [12] 2435 	mov	r7,a
+      0006E5 BF 43 14         [24] 2436 	cjne	r7,#0x43,00129$
+                                   2437 ;	../../../core/dev/slip.c:389: process_poll(&slip_process);
+      0006E8 90r00r00         [24] 2438 	mov	dptr,#_slip_process
+      0006EB 75 F0 00         [24] 2439 	mov	b,#0x00
+      0006EE 78r00            [12] 2440 	mov	r0,#_process_poll
+      0006F0 79s00            [12] 2441 	mov	r1,#(_process_poll >> 8)
+      0006F2 7As00            [12] 2442 	mov	r2,#(_process_poll >> 16)
+      0006F4 12r00r00         [24] 2443 	lcall	__sdcc_banked_call
+                                   2444 ;	../../../core/dev/slip.c:390: return 1;
+      0006F7 90 00 01         [24] 2445 	mov	dptr,#0x0001
+      0006FA 80 03            [24] 2446 	sjmp	00131$
+      0006FC                       2447 00129$:
+                                   2448 ;	../../../core/dev/slip.c:393: return 0;
+      0006FC 90 00 00         [24] 2449 	mov	dptr,#0x0000
+      0006FF                       2450 00131$:
+                                   2451 ;	../../../core/dev/slip.c:394: }
+      0006FF 02r00r00         [24] 2452 	ljmp	__sdcc_banked_ret
+                                   2453 	.area CSEG    (CODE)
+                                   2454 	.area CONST   (CODE)
+                                   2455 	.area CONST   (CODE)
+      000000                       2456 ___str_0:
+      000000 43 4C 49 45 4E 54     2457 	.ascii "CLIENT"
+      000006 00                    2458 	.db 0x00
+                                   2459 	.area BANK1   (CODE)
+                                   2460 	.area CONST   (CODE)
+      000007                       2461 ___str_1:
+      000007 43 4C 49 45 4E 54 53  2462 	.ascii "CLIENTSERVER"
+             45 52 56 45 52
+      000013 C0                    2463 	.db 0xc0
+      000014 00                    2464 	.db 0x00
+                                   2465 	.area BANK1   (CODE)
+                                   2466 	.area XINIT   (CODE)
+      000000                       2467 __xinit__slip_process:
+                                   2468 ; generic printIvalPtr
+      000000 00 00 00              2469 	.byte #0x00,#0x00,#0x00
+      000003r93s04s00              2470 	.byte _process_thread_slip_process, (_process_thread_slip_process >> 8), (_process_thread_slip_process >> 16)
+      000006 00 00                 2471 	.byte #0x00, #0x00
+      000008 00                    2472 	.db #0x00	; 0
+      000009 00                    2473 	.db #0x00	; 0
+      00000A                       2474 __xinit__state:
+      00000A 00                    2475 	.db #0x00	; 0
+      00000B                       2476 __xinit__input_callback:
+      00000B 00 00 00              2477 	.byte #0x00,#0x00,#0x00
+                                   2478 	.area CABS    (ABS,CODE)
